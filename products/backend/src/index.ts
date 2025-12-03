@@ -26,7 +26,7 @@ const app = new OpenAPIHono<{
 app.use(
   '*',
   cors({
-    origin: ['https://pay-crew.yukiosada.work', 'http://localhost:5173'],
+    origin: ['https://pay-crew2.yukiosada.work', 'http://localhost:5173'],
     allowHeaders: ['Content-Type', 'baggage', 'sentry-trace'],
     allowMethods: ['POST', 'PUT', 'GET', 'DELETE', 'OPTIONS'],
   })

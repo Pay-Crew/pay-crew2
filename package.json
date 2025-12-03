@@ -1,5 +1,5 @@
 {
-  "name": "pay-crew",
+  "name": "pay-crew2",
   "version": "0.0.0",
   "description": "This product is a debt management service for Discord and Slack.",
   "scripts": {
@@ -18,6 +18,7 @@
     "backend:coverage": "pnpm -C products/backend coverage",
     "backend:ui": "pnpm -C products/backend ui",
     "frontend:dev": "pnpm -C products/frontend dev",
+    "frontend:wrangler": "pnpm -C products/notify wrangler",
     "frontend:build": "pnpm -C products/frontend build",
     "frontend:preview": "pnpm -C products/frontend preview",
     "frontend:openapi": "pnpm -C products/frontend openapi",
@@ -48,10 +49,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Myxogastria0808/pay-crew.git"
+    "url": "git+https://github.com/Myxogastria0808/pay-crew2.git"
   },
   "keywords": [
-    "pay-crew",
+    "pay-crew2",
     "debt",
     "management",
     "discord",
@@ -65,9 +66,9 @@
   "author": "Myxogastria0808",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Myxogastria0808/pay-crew/issues"
+    "url": "https://github.com/Myxogastria0808/pay-crew2/issues"
   },
-  "homepage": "https://github.com/Myxogastria0808/pay-crew/",
+  "homepage": "https://github.com/Myxogastria0808/pay-crew2/",
   "packageManager": "pnpm@10.13.1",
   "pnpm": {
     "onlyBuiltDependencies": [

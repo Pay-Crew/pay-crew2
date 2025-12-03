@@ -1,4 +1,4 @@
-# pay-crew Validator
+# pay-crew2 Validator
 
 ## 概要
 

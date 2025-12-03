@@ -1,8 +1,8 @@
-# pay-crew Setup
+# pay-crew2 Setup
 
 ## 概要
 
-setupは、pay-crewのシークレットファイルを
+setupは、pay-crew2のシークレットファイルを
 生成するためのプログラムが書かれている。
 
 ## 仕組み

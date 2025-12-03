@@ -1,4 +1,4 @@
-# pay-crew Notify
+# pay-crew2 Notify
 
 ## 概要
 
@@ -19,9 +19,9 @@ cronジョブを設定することで、Cloudflare Workers上で
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "pay-crew-notify",
+  "name": "pay-crew2-notify",
   "main": "src/index.ts",
-  "compatibility_date": "2025-11-19",
+  "compatibility_date": "2025-12-04",
   "observability": {
     "enabled": true,
   },
