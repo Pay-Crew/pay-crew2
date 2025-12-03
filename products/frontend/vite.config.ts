@@ -12,7 +12,7 @@ export default defineConfig({
   preview: {
     port: 5173,
     strictPort: true,
-    allowedHosts: ['localhost', 'pay-crew.yukiosada.work'],
+    allowedHosts: ['localhost', 'pay-crew2.yukiosada.work'],
   },
   plugins: [
     react(),

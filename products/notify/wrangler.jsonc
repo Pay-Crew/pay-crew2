@@ -4,18 +4,16 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "pay-crew-notify",
+  "name": "pay-crew2-notify",
   "main": "src/index.ts",
-  "compatibility_date": "2025-11-19",
+  "compatibility_date": "2025-12-03",
   "observability": {
     "enabled": true,
   },
   "vars": {
-    "API_URL": "",
+    "API_URL": "dummy",
   },
   "triggers": {
-    "crons": [
-      "00 3 * * MON"
-    ],
+    "crons": ["00 3 * * MON"],
   },
 }

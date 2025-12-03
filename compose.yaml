@@ -1,9 +1,9 @@
 services:
-  pay-crew-postgres:
-    container_name: pay-crew-postgres
+  pay-crew2-postgres:
+    container_name: pay-crew2-postgres
     image: postgres:latest
     volumes:
-      - pay-crew-postgres:/var/lib/postgresql
+      - pay-crew2-postgres:/var/lib/postgresql
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -17,5 +17,5 @@ services:
       retries: 5
 
 volumes:
-  pay-crew-postgres:
-    name: pay-crew-postgres
+  pay-crew2-postgres:
+    name: pay-crew2-postgres

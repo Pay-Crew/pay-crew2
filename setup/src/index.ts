@@ -6,7 +6,7 @@ const main = () => {
   process.chdir('../');
 
   //* Check current directory is project root *//
-  if (!fs.existsSync('pay-crew')) {
+  if (!fs.existsSync('pay-crew2')) {
     throw new Error('This script must be run from the root directory of the project');
   }
 
@@ -29,9 +29,9 @@ SENTRY_PROJECT=${envConfig.frontendConfig.sentryProject}
     // backend
     const wranglerData = `{
     "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "pay-crew-backend",
+    "name": "pay-crew2-backend",
     "main": "src/index.ts",
-    "compatibility_date": "2025-09-21",
+    "compatibility_date": "2025-12-04",
     "compatibility_flags": [
         "nodejs_compat"
     ],
@@ -55,9 +55,9 @@ SENTRY_PROJECT=${envConfig.frontendConfig.sentryProject}
     // notify
     const wranglerData = `{
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "pay-crew-notify",
+  "name": "pay-crew2-notify",
   "main": "src/index.ts",
-  "compatibility_date": "2025-11-19",
+  "compatibility_date": "2025-12-04",
   "observability": {
     "enabled": true,
   },

@@ -1,5 +1,5 @@
-# pay-crew Docs
+# pay-crew2 Docs
 
-pay-crewのドキュメントです。
+pay-crew2のドキュメントです。
 
 Astroで構築されています。
