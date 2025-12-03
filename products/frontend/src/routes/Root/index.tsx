@@ -9,7 +9,7 @@ const Root: FC = () => {
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.backgroundAlpha}>
-            <h1 className={styles.title}>PayCrew</h1>
+            <h1 className={styles.title}>PayCrew2</h1>
 
             <p className={styles.description}>
               まとめ払いの際の支払いをスムーズにするアプリです。
