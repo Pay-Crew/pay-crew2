@@ -1,0 +1,48 @@
+# nix
+/.direnv
+
+# drizzle
+drizzle/
+
+# postgres
+postgres/
+
+# deps
+node_modules/
+
+# prod
+dist/
+.wrangler/
+
+# misc
+.DS_Store
+
+# env
+.env
+
+# logs
+logs/
+*.log
+pnpm-debug.log*
+lerna-debug.log*
+
+# idea
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# turbo
+.turbo/
+
+# vitest
+html/
+coverage/
+
+# astro
+.astro/
+
+# wrangler
+wrangler.local.jsonc

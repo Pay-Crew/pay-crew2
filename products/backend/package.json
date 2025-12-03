@@ -1,0 +1,35 @@
+{
+  "name": "backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --config wrangler.local.jsonc",
+    "wrangler": "wrangler",
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate",
+    "openapi": "tsx src/openapi/index.ts",
+    "studio": "drizzle-kit studio",
+    "test": "vitest run --typecheck",
+    "coverage": "vitest run --coverage --typecheck",
+    "ui": "vitest run --ui --typecheck"
+  },
+  "dependencies": {
+    "@hono/zod-openapi": "catalog:backend",
+    "@scalar/hono-api-reference": "catalog:backend",
+    "drizzle-orm": "catalog:backend",
+    "hono": "catalog:backend",
+    "pg": "catalog:backend"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "catalog:backend",
+    "@types/pg": "catalog:backend",
+    "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "catalog:",
+    "tsx": "catalog:node",
+    "drizzle-kit": "catalog:backend",
+    "validator": "workspace:*",
+    "wrangler": "catalog:backend",
+    "vitest": "catalog:",
+    "zod-openapi-share": "catalog:backend"
+  }
+}

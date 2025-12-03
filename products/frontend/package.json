@@ -1,0 +1,50 @@
+{
+  "name": "frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "openapi": "npx openapi-typescript ./openapi.json -o ./src/api/openapi.d.ts",
+    "fmt": "prettier --write .",
+    "test": "vitest run --typecheck",
+    "coverage": "vitest run --coverage --typecheck",
+    "ui": "vitest run --ui --typecheck"
+  },
+  "dependencies": {
+    "@hookform/error-message": "catalog:frontend",
+    "@hookform/resolvers": "catalog:frontend",
+    "@sentry/react": "catalog:frontend",
+    "@sentry/vite-plugin": "catalog:frontend",
+    "react": "catalog:frontend",
+    "react-dom": "catalog:frontend",
+    "react-hook-form": "catalog:frontend",
+    "react-router": "catalog:frontend",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@eslint/js": "catalog:frontend",
+    "@tanstack/react-query": "catalog:frontend",
+    "@types/react": "catalog:frontend",
+    "@types/react-dom": "catalog:frontend",
+    "@vitejs/plugin-react-swc": "catalog:frontend",
+    "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "catalog:",
+    "eslint": "catalog:frontend",
+    "eslint-plugin-react-hooks": "catalog:frontend",
+    "eslint-plugin-react-refresh": "catalog:frontend",
+    "globals": "catalog:frontend",
+    "happy-dom": "catalog:frontend",
+    "openapi-fetch": "catalog:frontend",
+    "openapi-react-query": "catalog:frontend",
+    "openapi-typescript": "catalog:frontend",
+    "validator": "workspace:*",
+    "prettier": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:frontend",
+    "vite": "catalog:frontend",
+    "vitest": "catalog:"
+  }
+}

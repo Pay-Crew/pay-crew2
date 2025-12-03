@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "pay-crew-backend",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-09-21",
+  "compatibility_flags": ["nodejs_compat"],
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "",
+    },
+  ],
+}

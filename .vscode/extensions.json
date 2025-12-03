@@ -1,0 +1,8 @@
+{
+  // recommended extensions for pay-crew
+  "recommendations": [
+    "astro-build.astro-vscode",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint"
+  ],
+}

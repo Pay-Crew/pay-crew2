@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>レシート返金メモ（試作）</title>
+  <style>
+    body {
+      font-family: "Segoe UI", "Hiragino Sans", "Meiryo", sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 2rem;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+      color: #444;
+    }
+
+    /* ===== ボタンエリア ===== */
+    .person-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .person-button {
+      background-color: #e9ecef;
+      border: none;
+      border-radius: 10px;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .person-button:hover {
+      background-color: #dbe4ff;
+      transform: translateY(-2px);
+    }
+
+    .person-button.active {
+      background-color: #0078d7;
+      color: white;
+      font-weight: bold;
+    }
+
+    /* ===== 項目リスト ===== */
+    .item-list {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .item-card {
+      display: flex;
+      align-items: center;
+      background: white;
+      border-radius: 12px;
+      padding: 0.8rem 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .item-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .item-checkbox {
+      margin-right: 1rem;
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+
+    .item-info {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-name {
+      font-size: 1rem;
+    }
+
+    .item-price {
+      font-weight: bold;
+      color: #0078d7;
+    }
+
+    /* ===== 支払いテーブル ===== */
+    .payment-table {
+      margin: 2.5rem auto 0;
+      border-collapse: collapse;
+      width: 80%;
+      max-width: 600px;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .payment-table th, .payment-table td {
+      border: 1px solid #dee2e6;
+      padding: 0.8rem 1rem;
+      text-align: center;
+    }
+
+    .payment-table th {
+      background-color: #f1f3f5;
+      color: #333;
+    }
+
+    .payment-table td {
+      font-size: 0.95rem;
+    }
+
+    /* スマホ対応 */
+    @media (max-width: 480px) {
+      .item-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+      }
+      .item-price {
+        align-self: flex-end;
+      }
+      .payment-table {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>レシート返金メモ（試作）</h1>
+
+  <!-- 支払い対象選択ボタン -->
+  <div class="person-buttons">
+    <button class="person-button">Aさん</button>
+    <button class="person-button">Bさん</button>
+    <button class="person-button">Cさん</button>
+    <button class="person-button">Dさん</button>
+    <button class="person-button">割り勘</button>
+  </div>
+
+  <!-- 項目リスト -->
+  <div class="item-list">
+    <div class="item-card">
+      <input type="checkbox" class="item-checkbox">
+      <div class="item-info">
+        <span class="item-name">ハンバーグ定食</span>
+        <span class="item-price">¥980</span>
+      </div>
+    </div>
+
+    <div class="item-card">
+      <input type="checkbox" class="item-checkbox">
+      <div class="item-info">
+        <span class="item-name">ドリンクバー</span>
+        <span class="item-price">¥200</span>
+      </div>
+    </div>
+
+    <div class="item-card">
+      <input type="checkbox" class="item-checkbox">
+      <div class="item-info">
+        <span class="item-name">デザートプレート</span>
+        <span class="item-price">¥450</span>
+      </div>
+    </div>
+
+    <div class="item-card">
+      <input type="checkbox" class="item-checkbox">
+      <div class="item-info">
+        <span class="item-name">チーズトッピング</span>
+        <span class="item-price">¥120</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 支払い関係のテーブル -->
+  <table class="payment-table">
+    <thead>
+      <tr>
+        <th>支払う人</th>
+        <th>受け取る人</th>
+        <th>金額</th>
+        <th>内訳</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Bさん</td>
+        <td>Aさん</td>
+        <td>¥1,180</td>
+        <td>ハンバーグ定食＋ドリンクバー</td>
+      </tr>
+      <tr>
+        <td>Cさん</td>
+        <td>Aさん</td>
+        <td>¥450</td>
+        <td>デザートプレート</td>
+      </tr>
+      <tr>
+        <td>Dさん</td>
+        <td>Aさん</td>
+        <td>¥120</td>
+        <td>チーズトッピング</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

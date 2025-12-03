@@ -1,0 +1,21 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "pay-crew-notify",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-11-19",
+  "observability": {
+    "enabled": true,
+  },
+  "vars": {
+    "API_URL": "",
+  },
+  "triggers": {
+    "crons": [
+      "00 3 * * MON"
+    ],
+  },
+}

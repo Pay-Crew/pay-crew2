@@ -1,0 +1,24 @@
+name: main-branch-protection
+
+permissions:
+  contents: read
+  pull-requests: read
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize, edited, auto_merge_enabled, auto_merge_disabled, converted_to_draft, ready_for_review, locked, unlocked, review_requested, review_request_removed]
+  workflow_dispatch:
+
+jobs:
+  main-branch-protection:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Block PR from main branch to dev branch
+        if: ${{ github.event.pull_request.head.ref != 'dev' && github.event.pull_request.base.ref == 'main' }}
+        run: |
+          echo "Error: Only 'dev' branch can open PRs into 'main'. Got '${{ github.event.pull_request.head.ref }}'."
+          exit 1
+      - name: Passed "main branch protection"
+        if: ${{ github.event.pull_request.head.ref == 'dev' && github.event.pull_request.base.ref == 'main' }}
+        run: echo "Passed \"main branch protection\"!"

@@ -1,0 +1,21 @@
+services:
+  pay-crew-postgres:
+    container_name: pay-crew-postgres
+    image: postgres:latest
+    volumes:
+      - pay-crew-postgres:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    healthcheck:
+      test: pg_isready -U "${POSTGRES_USER}" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pay-crew-postgres:
+    name: pay-crew-postgres

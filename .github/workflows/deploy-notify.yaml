@@ -1,0 +1,37 @@
+name: deploy-notify
+
+permissions:
+  contents: read
+  pull-requests: read
+
+on:
+  push:
+    branches: ['main']
+  workflow_dispatch:
+
+jobs:
+  deploy-notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      # Install Nix
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      # Install Dependencies
+      - name: Install Dependencies
+        run: nix develop --command bash -c "pnpm i"
+      # Replace API_URL in ./products/notify/wrangler.jsonc
+      - name: Replace API_URL
+        run: |
+          sed -i 's|"API_URL": "",|"API_URL": "${{ secrets.VITE_API_URL }}",|' ./products/notify/wrangler.jsonc
+      # Deploy Frontend to Cloudflare Workers
+      - name: Deploy Frontend to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          wranglerVersion: "4.45.3"
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: "products/notify"

@@ -1,0 +1,79 @@
+name: docs
+
+permissions:
+  contents: read
+  pull-requests: read
+
+on:
+  push:
+    branches: ['dev']
+  workflow_dispatch:
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      # Install Nix
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      # Build pay-crew (include docs)
+      - name: Build pay-crew (include docs)
+        run: nix develop --command bash -c "pnpm i && pnpm run build"
+      # Test pay-crew
+      - name: Test pay-crew
+        run: nix develop --command bash -c "pnpm run test"
+      # Build Vitest UI Report
+      - name: Build Vitest UI Report
+        run: nix develop --command bash -c "pnpm i && pnpm run ui"
+      # Build Coverage Report
+      - name: Build Coverage Report
+        run: nix develop --command bash -c "pnpm i && pnpm run coverage"
+      # Move Vitest UI Report
+      - name: Move Vitest UI Report (backend)
+        run: |
+          mkdir -p ./docs/dist/vitest/backend/
+          mv ./products/backend/html/* ./docs/dist/vitest/backend/
+      - name: Move Vitest UI Report (frontend)
+        run: |
+          mkdir -p ./docs/dist/vitest/frontend/
+          mv ./products/frontend/html/* ./docs/dist/vitest/frontend/
+      - name: Move Vitest UI Report (validator)
+        run: |
+          mkdir -p ./docs/dist/vitest/validator/
+          mv ./products/validator/html/* ./docs/dist/vitest/validator/
+      - name: Move Vitest UI Report (setup)
+        run: |
+          mkdir -p ./docs/dist/vitest/setup/
+          mv ./setup/html/* ./docs/dist/vitest/setup/
+      # Move Coverage Report
+      - name: Move Coverage Report (backend)
+        run: |
+          mkdir -p ./docs/dist/coverage/backend/
+          mv ./products/backend/coverage/* ./docs/dist/coverage/backend/
+      - name: Move Coverage Report (frontend)
+        run: |
+          mkdir -p ./docs/dist/coverage/frontend/
+          mv ./products/frontend/coverage/* ./docs/dist/coverage/frontend/
+      - name: Move Coverage Report (validator)
+        run: |
+          mkdir -p ./docs/dist/coverage/validator/
+          mv ./products/validator/coverage/* ./docs/dist/coverage/validator/
+      - name: Move Coverage Report (setup)
+        run: |
+          mkdir -p ./docs/dist/coverage/setup/
+          mv ./setup/coverage/* ./docs/dist/coverage/setup/
+      # Move _config.yml
+      - name: Move _config.yml
+        run: mv ./docs/_config.yml ./docs/dist/_config.yml
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/dist

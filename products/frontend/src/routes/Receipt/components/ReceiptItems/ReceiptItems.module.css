@@ -1,0 +1,112 @@
+.itemList {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.paymentTable {
+  margin: 2.5rem auto 0;
+  border-collapse: collapse;
+  width: 80%;
+  max-width: 600px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.paymentTable th, .paymentTable td {
+  border: 1px solid #dee2e6;
+  padding: 0.8rem 1rem;
+  text-align: center;
+}
+
+.paymentTable th {
+  background-color: #f1f3f5;
+  color: #333;
+}
+
+.paymentTable td {
+  font-size: 0.95rem;
+}
+
+/* スマホ対応 */
+@media (max-width: 480px) {
+  .itemInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+  .itemPrice {
+    align-self: flex-end;
+  }
+  .paymentTable {
+    width: 100%;
+  }
+}
+
+.unvisible {
+  display: none;
+}
+
+
+.personButtonsBlock {
+  display: block;
+}
+
+.personButtonsTitle {
+  font-size: 20px;
+  text-align: center;
+}
+
+.personButtons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1.8rem;
+}
+
+.personButton {
+  color: black;
+  background-color: #e9ecef;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.personButton:hover {
+  background-color: #a6b6e6;
+  transform: translateY(-2px);
+}
+
+.personButton.active {
+  background-color: #0078d7;
+  color: white;
+  font-weight: bold;
+}
+
+.inputButton {
+  text-align: center;
+}
+
+.buttonAdd:hover {
+  background-color: #45a049;
+}
+
+.buttonAdd {
+  padding: 12px;
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 50%;
+  margin-top: 5px;
+}
