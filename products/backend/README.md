@@ -1,5 +1,50 @@
 # pay-crew2 Backend
 
+## Xata LiteへのMigration方法
+
+1. `products/backend/.env`の`POSTGRES_URL`の値に対象のXata Liteのデータベースの`DATABASE_URL_POSTGRES`を設定する。
+
+2. `pnpm run backend:migrate`を実行する。
+
+※ 事前に`pnpm i && pnpm run backend:generate`を実行しておくこと。
+
+```sh
+pnpm run backend:migrate
+```
+
+3. マイグレーションが完了したら、`products/backend/.env`の`POSTGRES_URL`の値を元の状態に戻す (削除する) 。
+
+## Workersと接続するHyperdriveを変更する方法
+
+1. `products/backend/wrangler.jsonc`の`HYPERDRIVE`の`ID`を変更する。
+
+```jsonc
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "pay-crew2-backend",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-12-03",
+  "compatibility_flags": ["nodejs_compat"],
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "", // <- ここを変更する
+    },
+  ],
+}
+
+```
+
+2. `pnpm run backend:deploy`を実行する。
+
+```sh
+pnpm run backend:deploy
+```
+
+3. デプロイが完了したら、`products/backend/wrangler.jsonc`の`HYPERDRIVE`の`ID`を`""` (元の状態) に戻す。
+
+※ HyperdriveのIDが漏洩すると、他者にデータベースを操作される可能性があるため、デプロイ完了後は必ず元に戻してからステージング (`git add`) をすること。
+
 ## 構造
 
 この構造は、レイヤードアーキテクチャから着想を得て定義している。
