@@ -2,7 +2,7 @@
 
 ## 概要
 
-`products/frontend`、`products/backend`、`products/notify`で使用する
+`products/frontend`、`products/backend`で使用する
 Zodのスキーマを定義する。
 FrontendとBackend共にこのpackageを参照することで、
 スキーマの定義の揺れを防いでいる。
@@ -13,10 +13,8 @@ FrontendとBackend共にこのpackageを参照することで、
 flowchart TD
     frontend["products/frontend"]
     backend["products/backend"]
-    notify["products/notify"]
     validator["products/validator"]
 
     frontend --> validator
     backend --> validator
-    notify --> validator
 ```

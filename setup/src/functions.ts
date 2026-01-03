@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import { DotEnvCaster } from 'dotenv-caster';
 import fs from 'fs';
-import { BackendConfig, EnvConfig, FrontendConfig, NotifyConfig } from './types';
+import { BackendConfig, EnvConfig, FrontendConfig } from './types';
 
 export const dotenvLoader = (): EnvConfig => {
   dotenv.config();
@@ -47,14 +47,10 @@ export const dotenvLoader = (): EnvConfig => {
     postgresDb,
     postgresPort,
   };
-  const notifyConfig: NotifyConfig = {
-    apiUrl: viteApiUrl,
-  };
 
   const envConfig = {
     frontendConfig,
     backendConfig,
-    notifyConfig,
   };
 
   return envConfig;

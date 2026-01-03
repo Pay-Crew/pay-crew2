@@ -50,24 +50,6 @@ SENTRY_PROJECT=${envConfig.frontendConfig.sentryProject}
 `;
     fileWriter('./products/backend/.env', backendDotenvData);
   }
-
-  {
-    // notify
-    const wranglerData = `{
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "pay-crew2-notify",
-  "main": "src/index.ts",
-  "compatibility_date": "2025-12-04",
-  "observability": {
-    "enabled": true,
-  },
-  "vars": {
-    "API_URL": "${envConfig.notifyConfig.apiUrl}",
-  },
-}
-`;
-    fileWriter('./products/notify/wrangler.local.jsonc', wranglerData);
-  }
 };
 
 main();

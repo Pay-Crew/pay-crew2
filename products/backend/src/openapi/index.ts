@@ -5,9 +5,9 @@ try {
   const doc = app.getOpenAPI31Document({
     openapi: '3.1.0',
     info: {
-      title: 'Echo API',
-      version: '1.0.0',
-      description: '受け取った入力値をそのまま応答するAPI',
+      title: 'Pay Crew2 API',
+      version: '0.0.1',
+      description: 'API documentation for Pay Crew2 backend',
     },
   });
   fs.writeFileSync('../frontend/openapi.json', JSON.stringify(doc, null, 2));

@@ -1,7 +1,6 @@
 export type EnvConfig = {
   frontendConfig: FrontendConfig;
   backendConfig: BackendConfig;
-  notifyConfig: NotifyConfig;
 };
 
 export type FrontendConfig = {
@@ -17,8 +16,4 @@ export type BackendConfig = {
   postgresPassword: string;
   postgresDb: string;
   postgresPort: number;
-};
-
-export type NotifyConfig = {
-  apiUrl: string;
 };
