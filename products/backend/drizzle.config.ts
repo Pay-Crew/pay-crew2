@@ -5,6 +5,9 @@ export default {
   schema: './src/db/schema.ts',
   out: './drizzle',
   dbCredentials: {
-    url: `${process.env.POSTGRES_URL}`,
+    url: `${process.env.DATABASE_URL}`,
+    // ssl: {
+    //   rejectUnauthorized: false,
+    // },
   },
 } satisfies Config;

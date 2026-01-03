@@ -17,8 +17,7 @@
   "dependencies": {
     "@hookform/error-message": "catalog:frontend",
     "@hookform/resolvers": "catalog:frontend",
-    "@sentry/react": "catalog:frontend",
-    "@sentry/vite-plugin": "catalog:frontend",
+    "better-auth": "catalog:",
     "react": "catalog:frontend",
     "react-dom": "catalog:frontend",
     "react-hook-form": "catalog:frontend",
