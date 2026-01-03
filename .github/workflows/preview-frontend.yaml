@@ -26,6 +26,7 @@ jobs:
         id: build
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_REDIRECT_URL: ${{ secrets.VITE_REDIRECT_URL }}
         run: nix develop --command bash -c "pnpm i && pnpm run frontend:build"
       # Deploy Preview to Cloudflare Workers
       # Ref: https://zenn.dev/lalalatotoro/articles/b8fa632b53d332
