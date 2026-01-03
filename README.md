@@ -1,4 +1,4 @@
-# pay-crew2
+# pay-crew2 (Archive)
 
 [![Test](https://github.com/Pay-Crew/pay-crew2/actions/workflows/test.yaml/badge.svg)](https://github.com/Pay-Crew/pay-crew2/actions/workflows/test.yaml)
 [![Docs](https://github.com/Pay-Crew/pay-crew2/actions/workflows/docs.yaml/badge.svg)](https://github.com/Pay-Crew/pay-crew2/actions/workflows/docs.yaml)
