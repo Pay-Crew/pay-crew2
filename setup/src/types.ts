@@ -5,6 +5,7 @@ export type EnvConfig = {
 
 export type FrontendConfig = {
   viteApiUrl: string;
+  viteRedirectUrl: string;
 };
 
 export type BackendConfig = {

@@ -25,7 +25,7 @@ export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET as string,
   baseURL: process.env.BETTER_AUTH_URL as string,
   // allow requests from the frontend development server
-  trustedOrigins: ['http://localhost:5173'],
+  trustedOrigins: ['https://pay-crew2.yukiosada.work', 'http://localhost:5173'],
   socialProviders: {
     discord: {
       clientId: process.env.DISCORD_CLIENT_ID as string,
