@@ -31,7 +31,7 @@ export const auth = (env: Bindings) => {
     secret: env.BETTER_AUTH_SECRET,
     baseURL: env.BETTER_AUTH_URL,
     // allow requests from the frontend development server
-    trustedOrigins: ['http://localhost:5173'],
+    trustedOrigins: ['https://pay-crew2.yukiosada.work', 'http://localhost:5173'],
     socialProviders: {
       discord: {
         clientId: env.DISCORD_CLIENT_ID,

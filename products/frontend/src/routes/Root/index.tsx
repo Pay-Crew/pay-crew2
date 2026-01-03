@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { authClient } from '../..//lib/auth';
+import { authClient } from '../../lib/auth';
 //tmp
 import { $api } from '../../api/fetchClient';
 
@@ -12,7 +12,7 @@ const Root: FC = () => {
   const handleDiscordSignin = async () => {
     await authClient.signIn.social({
       provider: 'discord',
-      callbackURL: 'http://localhost:5173/',
+      callbackURL: import.meta.env.VITE_REDIRECT_URL satisfies string,
     });
   };
 
