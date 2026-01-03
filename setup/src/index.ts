@@ -17,10 +17,6 @@ const main = () => {
   {
     // frontend
     const frontendDotenvData = `VITE_API_URL=${envConfig.frontendConfig.viteApiUrl}
-VITE_SENTRY_DSN=${envConfig.frontendConfig.viteSentryDsn}
-SENTRY_AUTH_TOKEN=${envConfig.frontendConfig.sentryAuthToken}
-SENTRY_ORG=${envConfig.frontendConfig.sentryOrg}
-SENTRY_PROJECT=${envConfig.frontendConfig.sentryProject}
 `;
     fileWriter('./products/frontend/.env', frontendDotenvData);
   }
@@ -41,12 +37,22 @@ SENTRY_PROJECT=${envConfig.frontendConfig.sentryProject}
             "id": "dummy",
             "localConnectionString": "postgresql://${envConfig.backendConfig.postgresUser}:${envConfig.backendConfig.postgresPassword}@localhost:${envConfig.backendConfig.postgresPort}/${envConfig.backendConfig.postgresDb}"
         }
-    ]
+    ],
+    "vars": {
+        "BETTER_AUTH_URL": "${envConfig.backendConfig.betterAuthUrl}",
+        "BETTER_AUTH_SECRET": "${envConfig.backendConfig.betterAuthSecret}",
+        "DISCORD_CLIENT_ID": "${envConfig.backendConfig.discordClientId}",
+        "DISCORD_CLIENT_SECRET": "${envConfig.backendConfig.discordClientSecret}"
+    }
 }
 `;
     fileWriter('./products/backend/wrangler.local.jsonc', wranglerData);
 
-    const backendDotenvData = `POSTGRES_URL=postgresql://${envConfig.backendConfig.postgresUser}:${envConfig.backendConfig.postgresPassword}@localhost:${envConfig.backendConfig.postgresPort}/${envConfig.backendConfig.postgresDb}
+    const backendDotenvData = `DATABASE_URL=postgresql://${envConfig.backendConfig.postgresUser}:${envConfig.backendConfig.postgresPassword}@localhost:${envConfig.backendConfig.postgresPort}/${envConfig.backendConfig.postgresDb}
+BETTER_AUTH_URL=${envConfig.backendConfig.betterAuthUrl}
+BETTER_AUTH_SECRET=${envConfig.backendConfig.betterAuthSecret}
+DISCORD_CLIENT_ID=${envConfig.backendConfig.discordClientId}
+DISCORD_CLIENT_SECRET=${envConfig.backendConfig.discordClientSecret}
 `;
     fileWriter('./products/backend/.env', backendDotenvData);
   }

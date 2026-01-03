@@ -1,18 +1,51 @@
 # pay-crew2 Backend
 
-## Xata LiteへのMigration方法
+## `better-auth`の生成するスキーマファイルの更新方法
 
-1. `products/backend/.env`の`POSTGRES_URL`の値に対象のXata Liteのデータベースの`DATABASE_URL_POSTGRES`を設定する。
+1. 設定ファイルの更新を行う。
 
-2. `pnpm run backend:migrate`を実行する。
+better-authの設定は、`src/auth.ts`と`src/auth.cli.ts`に記述されている。
+設定を更新するには、この2つのファイルに同じ設定内容を記述する必要がある。
 
-※ 事前に`pnpm i && pnpm run backend:generate`を実行しておくこと。
+- `src/auth.cli.ts`
+
+better-auth CLIが`src/db/auth-schema.ts`を生成する際に参照する設定ファイル。
+
+- `src/auth.ts`
+
+better-authが実行時に参照する設定ファイル。
+
+2. `pnpm run backend:better-auth:generate`を実行する。
+
+```sh
+pnpm run backend:better-auth:generate
+```
+
+3. `pnpm run backend:drizzle:generate`を実行する。
+
+```sh
+pnpm run backend:drizzle:generate
+```
+
+4. `pnpm run backend:migrate`を実行する。
 
 ```sh
 pnpm run backend:migrate
 ```
 
-3. マイグレーションが完了したら、`products/backend/.env`の`POSTGRES_URL`の値を元の状態に戻す (削除する) 。
+## Xata LiteへのMigration方法
+
+1. `products/backend/.env`の`DATABASE_URL`の値に対象のXata Liteのデータベースの`DATABASE_URL_POSTGRES`を設定する。
+
+2. `pnpm run backend:migrate`を実行する。
+
+※ 事前に`pnpm i && pnpm run backend:better-auth:generate`と`pnpm run backend:drizzle:generate`を実行しておくこと。
+
+```sh
+pnpm run backend:migrate
+```
+
+3. マイグレーションが完了したら、`products/backend/.env`の`DATABASE_URL`の値を元の状態に戻す (削除する) 。
 
 ## Workersと接続するHyperdriveを変更する方法
 

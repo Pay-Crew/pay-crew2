@@ -46,7 +46,7 @@ sudo docker compose up -d
 4. 以下のコマンドを実行
 
 ```sh
-pnpm i && pnpm run setup:generate && pnpm run backend:generate && pnpm run backend:migrate
+pnpm i && pnpm run setup:generate && pnpm run backend:drizzle:generate && pnpm run backend:migrate
 ```
 
 ## docker-compose の操作 (基本操作のみ掲載)

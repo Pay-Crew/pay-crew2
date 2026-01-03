@@ -1,6 +1,6 @@
 import type { FC } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router';
-import { NotFound, Root, Receipt } from './routes';
+import { BrowserRouter, Route, Routes } from 'react-router';
+import { NotFound, Root } from './routes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // 以下を追加することで、ページを追加できる
@@ -14,13 +14,12 @@ const App: FC = () => {
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Root />} />
-          <Route path="/receipt" element={<Receipt />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </Router>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 };

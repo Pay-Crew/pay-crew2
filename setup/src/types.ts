@@ -5,10 +5,6 @@ export type EnvConfig = {
 
 export type FrontendConfig = {
   viteApiUrl: string;
-  viteSentryDsn: string;
-  sentryAuthToken: string;
-  sentryOrg: string;
-  sentryProject: string;
 };
 
 export type BackendConfig = {
@@ -16,4 +12,8 @@ export type BackendConfig = {
   postgresPassword: string;
   postgresDb: string;
   postgresPort: number;
+  betterAuthUrl: string;
+  betterAuthSecret: string;
+  discordClientId: string;
+  discordClientSecret: string;
 };

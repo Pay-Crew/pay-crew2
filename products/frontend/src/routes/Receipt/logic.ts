@@ -1,1 +1,0 @@
-export type InputStep = "Image" | "PayUser" | "ReceiptItems";

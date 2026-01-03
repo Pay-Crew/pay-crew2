@@ -6,6 +6,10 @@ export const route = new ZodOpenAPISchema({
     description: 'Bad Request',
     content: { 'application/json': { schema: errorResponseSchema } },
   },
+  401: {
+    description: 'Unauthorized',
+    content: { 'application/json': { schema: errorResponseSchema } },
+  },
   500: {
     description: 'Internal Server Error',
     content: { 'application/json': { schema: errorResponseSchema } },
