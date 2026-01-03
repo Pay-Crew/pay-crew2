@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "wrangler dev --config wrangler.local.jsonc",
     "wrangler": "wrangler",
-    "generate": "drizzle-kit generate",
+    "drizzle:generate": "drizzle-kit generate",
+    "better-auth:generate": "pnpm dlx @better-auth/cli generate --config src/auth.cli.ts --output src/db/auth-schema.ts -y",
     "migrate": "drizzle-kit migrate",
     "openapi": "tsx src/openapi/index.ts",
     "studio": "drizzle-kit studio",
@@ -16,6 +17,7 @@
   "dependencies": {
     "@hono/zod-openapi": "catalog:backend",
     "@scalar/hono-api-reference": "catalog:backend",
+    "better-auth": "catalog:",
     "drizzle-orm": "catalog:backend",
     "hono": "catalog:backend",
     "pg": "catalog:backend"

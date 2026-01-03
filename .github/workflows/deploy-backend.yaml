@@ -27,6 +27,16 @@ jobs:
       - name: Inject hyperdrive id
         run: |
           sed -i 's|"id": ""|"id": "${{ secrets.CLOUDFLARE_HYPERDRIVE_ID }}"|' ./products/backend/wrangler.jsonc
+      # Inject BetterAuth url and secret in ./products/backend/wrangler.toml
+      - name: Inject BetterAuth url and secret
+        run: |
+          sed -i 's|"BETTER_AUTH_URL": "dummy"|"BETTER_AUTH_URL": "${{ secrets.BETTER_AUTH_URL }}"|' ./products/backend/wrangler.jsonc
+          sed -i 's|"BETTER_AUTH_SECRET": "dummy"|"BETTER_AUTH_SECRET": "${{ secrets.BETTER_AUTH_SECRET }}"|' ./products/backend/wrangler.jsonc
+      # Inject Discord client id and secret in ./products/backend/wrangler.toml
+      - name: Inject Discord client id and secret
+        run: |
+          sed -i 's|"DISCORD_CLIENT_ID": "dummy"|"DISCORD_CLIENT_ID": "${{ secrets.DISCORD_CLIENT_ID }}"|' ./products/backend/wrangler.jsonc
+          sed -i 's|"DISCORD_CLIENT_SECRET": "dummy"|"DISCORD_CLIENT_SECRET": "${{ secrets.DISCORD_CLIENT_SECRET }}"|' ./products/backend/wrangler.jsonc
       # Build & Deploy Backend to Cloudflare Workers
       - name: Build & Deploy Backend to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3

@@ -4,14 +4,14 @@
  */
 
 export interface paths {
-    "/api/history": {
+    "/api/session": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** @description 履歴の取得 */
+        /** @description sample endpoint to get session info */
         get: {
             parameters: {
                 query?: never;
@@ -28,15 +28,13 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            id: number;
-                            from: string;
-                            to: string;
-                            amount: number;
-                        }[];
+                            id: string;
+                            email: string;
+                        } | null;
                     };
                 };
-                /** @description Internal Server Error */
-                500: {
+                /** @description Unauthorized */
+                401: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -58,112 +56,8 @@ export interface paths {
             };
         };
         put?: never;
-        /** @description 履歴の追加 */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        from: string;
-                        to: string;
-                        amount: number;
-                    };
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            id: number;
-                            from: string;
-                            to: string;
-                            amount: number;
-                        }[] | null;
-                    };
-                };
-                /** @description Internal Server Error */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /**
-                             * @description HTTPステータスコード
-                             * @example 400
-                             */
-                            status: 100 | 102 | 103 | 200 | 201 | 202 | 203 | 206 | 207 | 208 | 226 | 300 | 301 | 302 | 303 | 305 | 306 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 418 | 421 | 422 | 423 | 424 | 425 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511 | -1;
-                            /**
-                             * @description エラーメッセージ
-                             * @example Bad Request
-                             */
-                            message: string;
-                        };
-                    };
-                };
-            };
-        };
-        /** @description 履歴の削除 */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        id: number;
-                    };
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            id: number;
-                            from: string;
-                            to: string;
-                            amount: number;
-                        } | null;
-                    };
-                };
-                /** @description Internal Server Error */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /**
-                             * @description HTTPステータスコード
-                             * @example 400
-                             */
-                            status: 100 | 102 | 103 | 200 | 201 | 202 | 203 | 206 | 207 | 208 | 226 | 300 | 301 | 302 | 303 | 305 | 306 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 418 | 421 | 422 | 423 | 424 | 425 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511 | -1;
-                            /**
-                             * @description エラーメッセージ
-                             * @example Bad Request
-                             */
-                            message: string;
-                        };
-                    };
-                };
-            };
-        };
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;

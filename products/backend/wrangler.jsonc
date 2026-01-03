@@ -10,4 +10,10 @@
       "id": "",
     },
   ],
+  "vars": {
+    "BETTER_AUTH_URL": "dummy",
+    "BETTER_AUTH_SECRET": "dummy",
+    "DISCORD_CLIENT_ID": "dummy",
+    "DISCORD_CLIENT_SECRET": "dummy",
+  },
 }

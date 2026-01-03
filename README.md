@@ -46,7 +46,7 @@ sudo docker compose up -d
 4. 以下のコマンドを実行
 
 ```sh
-pnpm i && pnpm run setup:generate && pnpm run backend:generate && pnpm run backend:migrate
+pnpm i && pnpm run setup:generate && pnpm run backend:drizzle:generate && pnpm run backend:migrate
 ```
 
 ## docker-compose の操作 (基本操作のみ掲載)
@@ -191,18 +191,6 @@ pnpm run backend:migrate
 #### [Coverage Report](https://pay-crew.github.io/pay-crew2/coverage/validator/)
 - https://pay-crew.github.io/pay-crew2/coverage/validator/
 
-### Notify (products/notify)
-
-- TypeScript
-- Cloudflare Workers
-- Discord Webhook
-
-#### [Source Code](https://github.com/Pay-Crew/pay-crew2/tree/dev/products/notify/)
-- https://github.com/Pay-Crew/pay-crew2/tree/dev/products/notify/
-
-#### [Details](https://github.com/Pay-Crew/pay-crew2/tree/dev/products/notify/README.md)
-- https://github.com/Pay-Crew/pay-crew2/tree/dev/products/notify/README.md
-
 ### Database
 
 - development
@@ -263,12 +251,8 @@ graph LR;
     db[("Database (PostgreSQL)")]
     drizzle["Drizzle (ORM)"]
     hono["Hono (Web API)"]
-    discord["Discord Webhook"]
-    slack["Slack Webhook"]
     frontend["Vite + React"]
     idp{{"Identity Provider (Google, GitHub, etc.)"}}
-    server(["Server (Discord)"])
-    workspace(["Workspace (Slack)"])
     user["User"]
 
     subgraph "Docker"
@@ -279,27 +263,15 @@ graph LR;
         drizzle
         drizzle <--> hono
     end
-    subgraph "Notify (Localhost)"
-        discord
-        slack
-    end
-    hono --> discord
-    discord --fetch--> hono
-    hono --> slack
-    slack --fetch--> hono
-    hono <--> frontend
+    hono <--with session--> frontend
     subgraph "Frontend (Localhost)"
         frontend
     end
     idp <-.authentication.-> user
-    idp <--check token--> hono
+    idp --.add authentication info.--> hono
     frontend -.redirect.-> idp
-    user <--with token--> frontend
-    user -.without token.-> frontend
-    discord --notification--> server
-    slack --notification--> workspace
-    server --notification--> user
-    workspace --notification--> user
+    user <--with session--> frontend
+    user -.without session.-> frontend
 ```
 
 ## システム構成図 ~ 本番環境 ~
@@ -310,12 +282,8 @@ graph LR;
     hyperdrive(("Hyperdrive"))
     drizzle["Drizzle (ORM)"]
     hono["Hono (Web API)"]
-    discord["Discord Webhook"]
-    slack["Slack Webhook"]
     frontend["Vite + React"]
     idp{{"Identity Provider (Google, GitHub, etc.)"}}
-    server(["Server (Discord)"])
-    workspace(["Workspace (Slack)"])
     user["User"]
 
     db <--> hyperdrive
@@ -324,27 +292,15 @@ graph LR;
         drizzle
         drizzle <--> hono
     end
-    subgraph "Notify (Cloudflare Workers)"
-        discord
-        slack
-    end
-    hono --> discord
-    discord --polling--> hono
-    hono --> slack
-    slack --polling--> hono
-    hono <--> frontend
+    hono <--with session--> frontend
     subgraph "Frontend (Cloudflare Workers)"
         frontend
     end
     idp <-.authentication.-> user
-    idp <--check token--> hono
+    idp --.add authentication info.--> hono
     frontend -.redirect.-> idp
-    user <--with token--> frontend
-    user -.without token.-> frontend
-    discord --notification--> server
-    slack --notification--> workspace
-    server --notification--> user
-    workspace --notification--> user
+    user <--with session--> frontend
+    user -.without session.-> frontend
 ```
 
 ## ER図
