@@ -88,7 +88,7 @@ const sampleGetSchema = route.createSchema(
 );
 
 app.openapi(sampleGetSchema, (c) => {
-  const session = c.get('session');
+  // const session = c.get('session');
   const user = c.get('user');
 
   // user authentication check
@@ -101,10 +101,6 @@ app.openapi(sampleGetSchema, (c) => {
       401
     );
   }
-
-  // NOTE:
-  // tmp
-  console.table({ session, user });
 
   return c.json(
     {
