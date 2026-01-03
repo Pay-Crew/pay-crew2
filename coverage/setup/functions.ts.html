@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -129,11 +129,7 @@
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -172,22 +168,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -206,7 +198,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import * as dotenv from 'dotenv';
 import { DotEnvCaster } from 'dotenv-caster';
 import fs from 'fs';
-import { BackendConfig, EnvConfig, FrontendConfig, NotifyConfig } from './types';
+import { BackendConfig, EnvConfig, FrontendConfig } from './types';
 &nbsp;
 export const dotenvLoader = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(): EnvConfig =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >  dotenv.config();</span>
@@ -214,14 +206,14 @@ export const dotenvLoader = <span class="cstat-no" title="statement not covered"
   const caster = <span class="cstat-no" title="statement not covered" >new DotEnvCaster();</span>
 &nbsp;
   const viteApiUrl = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.VITE_API_URL);</span>
-  const viteSentryDsn = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.VITE_SENTRY_DSN);</span>
-  const sentryAuthToken = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.SENTRY_AUTH_TOKEN);</span>
-  const sentryOrg = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.SENTRY_ORG);</span>
-  const sentryProject = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.SENTRY_PROJECT);</span>
   const postgresUser = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.POSTGRES_USER);</span>
   const postgresPassword = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.POSTGRES_PASSWORD);</span>
   const postgresDb = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.POSTGRES_DB);</span>
   const postgresPort = <span class="cstat-no" title="statement not covered" >parseInt(caster.castString(process.env.POSTGRES_PORT), 10);</span>
+  const betterAuthUrl = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.BETTER_AUTH_URL);</span>
+  const betterAuthSecret = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.BETTER_AUTH_SECRET);</span>
+  const discordClientId = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.DISCORD_CLIENT_ID);</span>
+  const discordClientSecret = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.DISCORD_CLIENT_SECRET);</span>
 <span class="cstat-no" title="statement not covered" >  if (Number.isNaN(postgresPort)) {</span>
 <span class="cstat-no" title="statement not covered" >    throw new Error('POSTGRES_PORT has to be a number');</span>
   }
@@ -229,37 +221,33 @@ export const dotenvLoader = <span class="cstat-no" title="statement not covered"
 <span class="cstat-no" title="statement not covered" >  console.info('Environment variables loaded from .env file');</span>
 <span class="cstat-no" title="statement not covered" >  console.table({</span>
     VITE_API_URL: viteApiUrl,
-    VITE_SENTRY_DSN: viteSentryDsn ? '*****' : '',
-    SENTRY_AUTH_TOKEN: sentryAuthToken ? '*****' : '',
-    SENTRY_ORG: sentryOrg,
-    SENTRY_PROJECT: sentryProject,
     POSTGRES_USER: postgresUser,
     POSTGRES_PASSWORD: postgresPassword ? '*****' : '',
     POSTGRES_DB: postgresDb,
     POSTGRES_PORT: postgresPort,
+    BETTER_AUTH_URL: betterAuthUrl,
+    BETTER_AUTH_SECRET: betterAuthSecret ? '*****' : '',
+    DISCORD_CLIENT_ID: discordClientId,
+    DISCORD_CLIENT_SECRET: discordClientSecret ? '*****' : '',
   });
 &nbsp;
   const frontendConfig: FrontendConfig = <span class="cstat-no" title="statement not covered" >{</span>
     viteApiUrl,
-    viteSentryDsn,
-    sentryAuthToken,
-    sentryOrg,
-    sentryProject,
   };
   const backendConfig: BackendConfig = <span class="cstat-no" title="statement not covered" >{</span>
     postgresUser,
     postgresPassword,
     postgresDb,
     postgresPort,
-  };
-  const notifyConfig: NotifyConfig = <span class="cstat-no" title="statement not covered" >{</span>
-    apiUrl: viteApiUrl,
+    betterAuthUrl,
+    betterAuthSecret,
+    discordClientId,
+    discordClientSecret,
   };
 &nbsp;
   const envConfig = <span class="cstat-no" title="statement not covered" >{</span>
     frontendConfig,
     backendConfig,
-    notifyConfig,
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return envConfig;</span>
@@ -280,7 +268,7 @@ export const fileWriter = <span class="cstat-no" title="statement not covered" >
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-03T17:35:49.384Z
+                at 2026-01-03T21:16:53.084Z
             </div>
         <script src="prettify.js"></script>
         <script>

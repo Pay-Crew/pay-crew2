@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -124,19 +124,7 @@
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -155,10 +143,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -182,23 +166,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -228,10 +204,6 @@ const main = <span class="cstat-no" title="statement not covered" ><span class="
   {
     // frontend
     const frontendDotenvData = <span class="cstat-no" title="statement not covered" >`VITE_API_URL=${envConfig.frontendConfig.viteApiUrl}</span>
-VITE_SENTRY_DSN=${envConfig.frontendConfig.viteSentryDsn}
-SENTRY_AUTH_TOKEN=${envConfig.frontendConfig.sentryAuthToken}
-SENTRY_ORG=${envConfig.frontendConfig.sentryOrg}
-SENTRY_PROJECT=${envConfig.frontendConfig.sentryProject}
 `;
 <span class="cstat-no" title="statement not covered" >    fileWriter('./products/frontend/.env', frontendDotenvData);</span>
   }
@@ -252,32 +224,24 @@ SENTRY_PROJECT=${envConfig.frontendConfig.sentryProject}
             "id": "dummy",
             "localConnectionString": "postgresql://${envConfig.backendConfig.postgresUser}:${envConfig.backendConfig.postgresPassword}@localhost:${envConfig.backendConfig.postgresPort}/${envConfig.backendConfig.postgresDb}"
         }
-    ]
+    ],
+    "vars": {
+        "BETTER_AUTH_URL": "${envConfig.backendConfig.betterAuthUrl}",
+        "BETTER_AUTH_SECRET": "${envConfig.backendConfig.betterAuthSecret}",
+        "DISCORD_CLIENT_ID": "${envConfig.backendConfig.discordClientId}",
+        "DISCORD_CLIENT_SECRET": "${envConfig.backendConfig.discordClientSecret}"
+    }
 }
 `;
 <span class="cstat-no" title="statement not covered" >    fileWriter('./products/backend/wrangler.local.jsonc', wranglerData);</span>
 &nbsp;
-    const backendDotenvData = <span class="cstat-no" title="statement not covered" >`POSTGRES_URL=postgresql://${envConfig.backendConfig.postgresUser}:${envConfig.backendConfig.postgresPassword}@localhost:${envConfig.backendConfig.postgresPort}/${envConfig.backendConfig.postgresDb}</span>
+    const backendDotenvData = <span class="cstat-no" title="statement not covered" >`DATABASE_URL=postgresql://${envConfig.backendConfig.postgresUser}:${envConfig.backendConfig.postgresPassword}@localhost:${envConfig.backendConfig.postgresPort}/${envConfig.backendConfig.postgresDb}</span>
+BETTER_AUTH_URL=${envConfig.backendConfig.betterAuthUrl}
+BETTER_AUTH_SECRET=${envConfig.backendConfig.betterAuthSecret}
+DISCORD_CLIENT_ID=${envConfig.backendConfig.discordClientId}
+DISCORD_CLIENT_SECRET=${envConfig.backendConfig.discordClientSecret}
 `;
 <span class="cstat-no" title="statement not covered" >    fileWriter('./products/backend/.env', backendDotenvData);</span>
-  }
-&nbsp;
-  {
-    // notify
-    const wranglerData = <span class="cstat-no" title="statement not covered" >`{</span>
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "pay-crew2-notify",
-  "main": "src/index.ts",
-  "compatibility_date": "2025-12-04",
-  "observability": {
-    "enabled": true,
-  },
-  "vars": {
-    "API_URL": "${envConfig.notifyConfig.apiUrl}",
-  },
-}
-`;
-<span class="cstat-no" title="statement not covered" >    fileWriter('./products/notify/wrangler.local.jsonc', wranglerData);</span>
   }
 };
 &nbsp;
@@ -289,7 +253,7 @@ SENTRY_PROJECT=${envConfig.frontendConfig.sentryProject}
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-03T17:35:49.384Z
+                at 2026-01-03T21:16:53.084Z
             </div>
         <script src="prettify.js"></script>
         <script>
