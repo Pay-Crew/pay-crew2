@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -132,7 +132,12 @@
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -149,15 +154,19 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -175,6 +184,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -217,6 +227,9 @@ export const dotenvLoader = <span class="cstat-no" title="statement not covered"
   const postgresPassword = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.POSTGRES_PASSWORD);</span>
   const postgresDb = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.POSTGRES_DB);</span>
   const postgresPort = <span class="cstat-no" title="statement not covered" >parseInt(caster.castString(process.env.POSTGRES_PORT), 10);</span>
+  const dbCredentialsSslRejectUnauthorized = <span class="cstat-no" title="statement not covered" >caster.castBoolean(</span>
+    process.env.DATABASE_CREDENTIALS_SSL_REJECT_UNAUTHORIZED
+  );
   const betterAuthUrl = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.BETTER_AUTH_URL);</span>
   const betterAuthSecret = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.BETTER_AUTH_SECRET);</span>
   const discordClientId = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.DISCORD_CLIENT_ID);</span>
@@ -233,6 +246,7 @@ export const dotenvLoader = <span class="cstat-no" title="statement not covered"
     POSTGRES_PASSWORD: postgresPassword ? '*****' : '',
     POSTGRES_DB: postgresDb,
     POSTGRES_PORT: postgresPort,
+    DATABASE_CREDENTIALS_SSL_REJECT_UNAUTHORIZED: dbCredentialsSslRejectUnauthorized,
     BETTER_AUTH_URL: betterAuthUrl,
     BETTER_AUTH_SECRET: betterAuthSecret ? '*****' : '',
     DISCORD_CLIENT_ID: discordClientId,
@@ -248,6 +262,7 @@ export const dotenvLoader = <span class="cstat-no" title="statement not covered"
     postgresPassword,
     postgresDb,
     postgresPort,
+    dbCredentialsSslRejectUnauthorized,
     betterAuthUrl,
     betterAuthSecret,
     discordClientId,
@@ -277,7 +292,7 @@ export const fileWriter = <span class="cstat-no" title="statement not covered" >
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-03T22:28:07.892Z
+                at 2026-01-04T20:31:08.222Z
             </div>
         <script src="prettify.js"></script>
         <script>

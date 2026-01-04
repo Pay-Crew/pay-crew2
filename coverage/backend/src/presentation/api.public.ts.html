@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/response/error.ts</title>
+    <title>Code coverage report for src/presentation/api.public.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/response</a> error.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/presentation</a> api.public.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
@@ -81,11 +81,7 @@
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
 <a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a>
-<a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L19'></a><a href='#L19'>19</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -95,34 +91,32 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { z } from '@hono/zod-openapi';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// better-auth object factory
+import { AuthFactoryType } from './factory/auth';
+// hono object factory
+import honoFactory from './factory/hono';
 &nbsp;
-const ContentfulStatusCodeArray = <span class="cstat-no" title="statement not covered" >[</span>
-  100, 102, 103, 200, 201, 202, 203, 206, 207, 208, 226, 300, 301, 302, 303, 305, 306, 307, 308, 400, 401, 402, 403,
-  404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 421, 422, 423, 424, 425, 426, 428, 429,
-  431, 451, 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, 511, -1,
-] as const;
+// public router without authentication
+const apiPublic = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>uth: AuthFactoryType) =&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" >app = honoFactory();</span>
 &nbsp;
-export const errorResponseSchema = <span class="cstat-no" title="statement not covered" >z.object({</span>
-  status: z.union(ContentfulStatusCodeArray.map(<span class="fstat-no" title="function not covered" >(c</span>ode) =&gt; <span class="cstat-no" title="statement not covered" >z.literal(code))</span>).meta({
-    example: 400,
-    description: 'HTTPステータスコード',
-  }),
-  message: z.string().min(1).meta({
-    example: 'Bad Request',
-    description: 'エラーメッセージ',
-  }),
-});
+  // better-auth endpoints: /api/auth/*
+<span class="cstat-no" title="statement not covered" >  app.on(['POST', 'GET'], '/api/auth/*', <span class="fstat-no" title="function not covered" >(c</span>) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return auth(c.env).handler(c.req.raw);</span>
+  });
 &nbsp;
-export type ErrorResponseSchemaType = z.infer&lt;typeof errorResponseSchema&gt;;
+<span class="cstat-no" title="statement not covered" >  return app;</span>
+};
+&nbsp;
+export default apiPublic;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -130,7 +124,7 @@ export type ErrorResponseSchemaType = z.infer&lt;typeof errorResponseSchema&gt;;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-04T20:31:08.239Z
+                at 2026-01-04T20:31:08.331Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
