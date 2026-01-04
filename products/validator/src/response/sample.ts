@@ -7,4 +7,4 @@ export const sampleSchema = z
   })
   .or(z.null());
 
-export type sampleSchemaType = z.infer<typeof sampleSchema>;
+export type SampleSchemaType = z.infer<typeof sampleSchema>;
