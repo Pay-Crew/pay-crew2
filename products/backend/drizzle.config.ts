@@ -1,13 +1,27 @@
+// drizzle
 import type { Config } from 'drizzle-kit';
+// dotenv
+import * as dotenv from 'dotenv';
+import { DotEnvCaster } from 'dotenv-caster';
+
+// load .env variables
+dotenv.config();
+const caster = new DotEnvCaster();
+
+// cast variables
+const databaseUrl = caster.castString(process.env.DATABASE_URL);
+const databaseCredentialsSslRejectUnauthorized = caster.castBoolean(
+  process.env.DATABASE_CREDENTIALS_SSL_REJECT_UNAUTHORIZED
+);
 
 export default {
   dialect: 'postgresql',
   schema: './src/db/schema.ts',
   out: './drizzle',
   dbCredentials: {
-    url: `${process.env.DATABASE_URL}`,
-    // ssl: {
-    //   rejectUnauthorized: false,
-    // },
+    url: databaseUrl,
+    ssl: {
+      rejectUnauthorized: databaseCredentialsSslRejectUnauthorized,
+    },
   },
 } satisfies Config;

@@ -13,6 +13,7 @@ export type BackendConfig = {
   postgresPassword: string;
   postgresDb: string;
   postgresPort: number;
+  dbCredentialsSslRejectUnauthorized: boolean;
   betterAuthUrl: string;
   betterAuthSecret: string;
   discordClientId: string;

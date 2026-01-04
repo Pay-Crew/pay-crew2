@@ -4,14 +4,29 @@
 
 1. 設定ファイルの更新を行う。
 
-better-authの設定は、`src/auth.ts`と`src/auth.cli.ts`に記述されている。
-設定を更新するには、この2つのファイルに同じ設定内容を記述する必要がある。
+better-authの設定は、`src/auth.config.ts`の`betterAuthConfig`関数に記述されている。
+設定を更新するには、このファイルを記述する必要がある。
 
-- `src/auth.cli.ts`
+以下に、better-authの設定ファイルの依存関係を示す。
+
+```mermaid
+flowchart LR
+  env[".env (環境変数)"]
+  wrangler["wrangler.local.jsonc (環境変数)"]
+  config["src/auth.config.ts (betterAuthConfig関数)"]
+  cli["auth.cli.ts"]
+  hono["src/presentation/share/auth.ts"]
+  cli --> env
+  cli --> config
+  hono --> wrangler
+  hono --> config
+```
+
+- `auth.cli.ts`
 
 better-auth CLIが`src/db/auth-schema.ts`を生成する際に参照する設定ファイル。
 
-- `src/auth.ts`
+- `src/presentation/share/auth.ts`
 
 better-authが実行時に参照する設定ファイル。
 
@@ -35,6 +50,13 @@ pnpm run backend:migrate
 
 ## Xata LiteへのMigration方法
 
+0. `products/backend/.env`の`DATABASE_CREDENTIALS_SSL_REJECT_UNAUTHORIZED`の値を`true`に設定しておくこと。
+
+> [!NOTE]
+> Drizzleが未認証のユーザ情報の操作を拒否する必要があるため。
+>
+> 開発時は`DATABASE_CREDENTIALS_SSL_REJECT_UNAUTHORIZED`の値を`false`に設定しないと、ローカルのPostgreSQLに書き込みができなくなるため注意。
+
 1. `products/backend/.env`の`DATABASE_URL`の値に対象のXata Liteのデータベースの`DATABASE_URL_POSTGRES`を設定する。
 
 2. `pnpm run backend:migrate`を実行する。
@@ -45,7 +67,7 @@ pnpm run backend:migrate
 pnpm run backend:migrate
 ```
 
-3. マイグレーションが完了したら、`products/backend/.env`の`DATABASE_URL`の値を元の状態に戻す (削除する) 。
+3. マイグレーションが完了したら、`products/backend/.env`の`DATABASE_CREDENTIALS_SSL_REJECT_UNAUTHORIZED`と`DATABASE_URL`の値を元の状態に戻す。
 
 ## Workersと接続するHyperdriveを変更する方法
 

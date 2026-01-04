@@ -14,6 +14,9 @@ export const dotenvLoader = (): EnvConfig => {
   const postgresPassword = caster.castString(process.env.POSTGRES_PASSWORD);
   const postgresDb = caster.castString(process.env.POSTGRES_DB);
   const postgresPort = parseInt(caster.castString(process.env.POSTGRES_PORT), 10);
+  const dbCredentialsSslRejectUnauthorized = caster.castBoolean(
+    process.env.DATABASE_CREDENTIALS_SSL_REJECT_UNAUTHORIZED
+  );
   const betterAuthUrl = caster.castString(process.env.BETTER_AUTH_URL);
   const betterAuthSecret = caster.castString(process.env.BETTER_AUTH_SECRET);
   const discordClientId = caster.castString(process.env.DISCORD_CLIENT_ID);
@@ -30,6 +33,7 @@ export const dotenvLoader = (): EnvConfig => {
     POSTGRES_PASSWORD: postgresPassword ? '*****' : '',
     POSTGRES_DB: postgresDb,
     POSTGRES_PORT: postgresPort,
+    DATABASE_CREDENTIALS_SSL_REJECT_UNAUTHORIZED: dbCredentialsSslRejectUnauthorized,
     BETTER_AUTH_URL: betterAuthUrl,
     BETTER_AUTH_SECRET: betterAuthSecret ? '*****' : '',
     DISCORD_CLIENT_ID: discordClientId,
@@ -45,6 +49,7 @@ export const dotenvLoader = (): EnvConfig => {
     postgresPassword,
     postgresDb,
     postgresPort,
+    dbCredentialsSslRejectUnauthorized,
     betterAuthUrl,
     betterAuthSecret,
     discordClientId,
