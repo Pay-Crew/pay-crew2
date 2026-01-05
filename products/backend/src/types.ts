@@ -8,6 +8,8 @@ export type Bindings = {
   BETTER_AUTH_URL: string;
   DISCORD_CLIENT_ID: string;
   DISCORD_CLIENT_SECRET: string;
+  GOOGLE_CLIENT_ID: string;
+  GOOGLE_CLIENT_SECRET: string;
   // hyperdrive
   HYPERDRIVE: Hyperdrive;
 };

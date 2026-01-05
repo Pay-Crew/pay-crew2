@@ -21,6 +21,8 @@ export const dotenvLoader = (): EnvConfig => {
   const betterAuthSecret = caster.castString(process.env.BETTER_AUTH_SECRET);
   const discordClientId = caster.castString(process.env.DISCORD_CLIENT_ID);
   const discordClientSecret = caster.castString(process.env.DISCORD_CLIENT_SECRET);
+  const googleClientId = caster.castString(process.env.GOOGLE_CLIENT_ID);
+  const googleClientSecret = caster.castString(process.env.GOOGLE_CLIENT_SECRET);
   if (Number.isNaN(postgresPort)) {
     throw new Error('POSTGRES_PORT has to be a number');
   }
@@ -38,6 +40,8 @@ export const dotenvLoader = (): EnvConfig => {
     BETTER_AUTH_SECRET: betterAuthSecret ? '*****' : '',
     DISCORD_CLIENT_ID: discordClientId,
     DISCORD_CLIENT_SECRET: discordClientSecret ? '*****' : '',
+    GOOGLE_CLIENT_ID: googleClientId,
+    GOOGLE_CLIENT_SECRET: googleClientSecret ? '*****' : '',
   });
 
   const frontendConfig: FrontendConfig = {
@@ -54,6 +58,8 @@ export const dotenvLoader = (): EnvConfig => {
     betterAuthSecret,
     discordClientId,
     discordClientSecret,
+    googleClientId,
+    googleClientSecret,
   };
 
   const envConfig = {
