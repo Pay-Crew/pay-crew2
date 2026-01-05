@@ -18,4 +18,6 @@ export type BackendConfig = {
   betterAuthSecret: string;
   discordClientId: string;
   discordClientSecret: string;
+  googleClientId: string;
+  googleClientSecret: string;
 };

@@ -22,6 +22,8 @@ export const authFactory = (env: Bindings): Auth => {
   const betterAuthUrl = env.BETTER_AUTH_URL;
   const discordClientId = env.DISCORD_CLIENT_ID;
   const discordClientSecret = env.DISCORD_CLIENT_SECRET;
+  const googleClientId = env.GOOGLE_CLIENT_ID;
+  const googleClientSecret = env.GOOGLE_CLIENT_SECRET;
 
   // better-auth instance
   const betterAuthInstance = betterAuthConfig(
@@ -30,7 +32,9 @@ export const authFactory = (env: Bindings): Auth => {
     betterAuthSecret,
     betterAuthUrl,
     discordClientId,
-    discordClientSecret
+    discordClientSecret,
+    googleClientId,
+    googleClientSecret
   );
 
   return betterAuthInstance;

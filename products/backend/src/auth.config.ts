@@ -1,5 +1,5 @@
 // better-auth
-import { betterAuth, type Auth } from 'better-auth';
+import { betterAuth, google, type Auth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 // drizzle
 import { type NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -11,7 +11,9 @@ export const betterAuthConfig = (
   betterAuthSecret: string,
   betterAuthUrl: string,
   discordClientId: string,
-  discordClientSecret: string
+  discordClientSecret: string,
+  googleClientId: string,
+  googleClientSecret: string
 ): Auth => {
   const auth = betterAuth({
     database: drizzleAdapter(db, {
@@ -27,6 +29,15 @@ export const betterAuthConfig = (
         clientId: discordClientId,
         clientSecret: discordClientSecret,
         scope: ['identify', 'email'],
+      },
+      google: {
+        clientId: googleClientId,
+        clientSecret: googleClientSecret,
+        scope: [
+          'openid',
+          'https://www.googleapis.com/auth/userinfo.profile',
+          'https://www.googleapis.com/auth/userinfo.email',
+        ],
       },
     },
     account: {
