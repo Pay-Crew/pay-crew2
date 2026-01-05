@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -137,7 +137,13 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -162,6 +168,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -179,11 +187,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -234,6 +246,8 @@ export const dotenvLoader = <span class="cstat-no" title="statement not covered"
   const betterAuthSecret = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.BETTER_AUTH_SECRET);</span>
   const discordClientId = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.DISCORD_CLIENT_ID);</span>
   const discordClientSecret = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.DISCORD_CLIENT_SECRET);</span>
+  const googleClientId = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.GOOGLE_CLIENT_ID);</span>
+  const googleClientSecret = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.GOOGLE_CLIENT_SECRET);</span>
 <span class="cstat-no" title="statement not covered" >  if (Number.isNaN(postgresPort)) {</span>
 <span class="cstat-no" title="statement not covered" >    throw new Error('POSTGRES_PORT has to be a number');</span>
   }
@@ -251,6 +265,8 @@ export const dotenvLoader = <span class="cstat-no" title="statement not covered"
     BETTER_AUTH_SECRET: betterAuthSecret ? '*****' : '',
     DISCORD_CLIENT_ID: discordClientId,
     DISCORD_CLIENT_SECRET: discordClientSecret ? '*****' : '',
+    GOOGLE_CLIENT_ID: googleClientId,
+    GOOGLE_CLIENT_SECRET: googleClientSecret ? '*****' : '',
   });
 &nbsp;
   const frontendConfig: FrontendConfig = <span class="cstat-no" title="statement not covered" >{</span>
@@ -267,6 +283,8 @@ export const dotenvLoader = <span class="cstat-no" title="statement not covered"
     betterAuthSecret,
     discordClientId,
     discordClientSecret,
+    googleClientId,
+    googleClientSecret,
   };
 &nbsp;
   const envConfig = <span class="cstat-no" title="statement not covered" >{</span>
@@ -292,7 +310,7 @@ export const fileWriter = <span class="cstat-no" title="statement not covered" >
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-04T20:31:08.222Z
+                at 2026-01-05T21:52:58.728Z
             </div>
         <script src="prettify.js"></script>
         <script>
