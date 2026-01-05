@@ -3,7 +3,7 @@ import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 // drizzle schema
-import * as schema from './src/db/schema';
+import * as schema from './src/db/relation';
 //dotenv
 import * as dotenv from 'dotenv';
 import { DotEnvCaster } from 'dotenv-caster';

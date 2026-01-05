@@ -1,5 +1,4 @@
 // drizzle
-import { relations } from 'drizzle-orm';
 import { pgTable, text, timestamp, index, uuid, uniqueIndex, integer } from 'drizzle-orm/pg-core';
 //auth-schema
 import { user } from './auth-schema';
@@ -72,42 +71,3 @@ export const debt = pgTable(
     index('debt_debtorId_idx').on(table.debtorId),
   ]
 );
-
-export const groupRelations = relations(group, ({ many, one }) => ({
-  creator: one(user, {
-    fields: [group.createdBy],
-    references: [user.id],
-  }),
-  memberships: many(groupMembership),
-  debts: many(debt),
-}));
-
-export const groupMembershipRelations = relations(groupMembership, ({ one }) => ({
-  group: one(group, {
-    fields: [groupMembership.groupId],
-    references: [group.id],
-  }),
-  user: one(user, {
-    fields: [groupMembership.userId],
-    references: [user.id],
-  }),
-}));
-
-export const debtRelations = relations(debt, ({ one }) => ({
-  group: one(group, {
-    fields: [debt.groupId],
-    references: [group.id],
-  }),
-  creditor: one(user, {
-    fields: [debt.creditorId],
-    references: [user.id],
-  }),
-  debtor: one(user, {
-    fields: [debt.debtorId],
-    references: [user.id],
-  }),
-  deletedByUser: one(user, {
-    fields: [debt.deletedBy],
-    references: [user.id],
-  }),
-}));

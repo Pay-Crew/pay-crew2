@@ -6,7 +6,7 @@
     "dev": "wrangler dev --config wrangler.local.jsonc",
     "wrangler": "wrangler",
     "drizzle:generate": "drizzle-kit generate",
-    "better-auth:generate": "pnpm dlx @better-auth/cli generate --config auth.cli.ts --output src/db/auth-schema.ts -y",
+    "better-auth:generate": "pnpm dlx @better-auth/cli generate --config auth.cli.ts --output src/db/auto-auth-schema.ts -y",
     "migrate": "drizzle-kit migrate",
     "openapi": "tsx src/openapi/index.ts",
     "studio": "drizzle-kit studio",
