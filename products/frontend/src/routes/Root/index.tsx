@@ -16,10 +16,18 @@ const Root: FC = () => {
     });
   };
 
+  const googleSignIn = async () => {
+    await authClient.signIn.social({
+      provider: 'google',
+      callbackURL: import.meta.env.VITE_REDIRECT_URL satisfies string,
+    });
+  };
+
   return (
     <div>
       <h1>Hello, World!</h1>
       <button onClick={handleDiscordSignin}>Sign in with Discord</button>
+      <button onClick={googleSignIn}>Sign in with Google</button>
       <h2>Result</h2>
       {isLoading ? (
         <p>Loading...</p>

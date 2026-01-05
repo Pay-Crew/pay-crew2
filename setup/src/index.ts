@@ -43,17 +43,22 @@ VITE_REDIRECT_URL=${envConfig.frontendConfig.viteRedirectUrl}
         "BETTER_AUTH_URL": "${envConfig.backendConfig.betterAuthUrl}",
         "BETTER_AUTH_SECRET": "${envConfig.backendConfig.betterAuthSecret}",
         "DISCORD_CLIENT_ID": "${envConfig.backendConfig.discordClientId}",
-        "DISCORD_CLIENT_SECRET": "${envConfig.backendConfig.discordClientSecret}"
+        "DISCORD_CLIENT_SECRET": "${envConfig.backendConfig.discordClientSecret}",
+        "GOOGLE_CLIENT_ID": "${envConfig.backendConfig.googleClientId}",
+        "GOOGLE_CLIENT_SECRET": "${envConfig.backendConfig.googleClientSecret}"
     }
 }
 `;
     fileWriter('./products/backend/wrangler.local.jsonc', wranglerData);
 
     const backendDotenvData = `DATABASE_URL=postgresql://${envConfig.backendConfig.postgresUser}:${envConfig.backendConfig.postgresPassword}@localhost:${envConfig.backendConfig.postgresPort}/${envConfig.backendConfig.postgresDb}
+DATABASE_CREDENTIALS_SSL_REJECT_UNAUTHORIZED=${envConfig.backendConfig.dbCredentialsSslRejectUnauthorized}
 BETTER_AUTH_URL=${envConfig.backendConfig.betterAuthUrl}
 BETTER_AUTH_SECRET=${envConfig.backendConfig.betterAuthSecret}
 DISCORD_CLIENT_ID=${envConfig.backendConfig.discordClientId}
 DISCORD_CLIENT_SECRET=${envConfig.backendConfig.discordClientSecret}
+GOOGLE_CLIENT_ID=${envConfig.backendConfig.googleClientId}
+GOOGLE_CLIENT_SECRET=${envConfig.backendConfig.googleClientSecret}
 `;
     fileWriter('./products/backend/.env', backendDotenvData);
   }

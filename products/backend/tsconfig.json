@@ -11,6 +11,6 @@
     "outDir": "./dist",
     "types": ["@cloudflare/workers-types/2023-07-01"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "auth.cli.ts"],
   "exclude": ["src/**/*.test.ts", "src/openapi/index.ts"]
 }
