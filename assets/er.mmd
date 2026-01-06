@@ -1,0 +1,96 @@
+erDiagram
+    User {
+        text id PK
+        text name
+        text email UK
+        boolean email_verified "false"
+        text image
+        created_at timestamp
+        updated_at timestamp
+    }
+
+    UserProfile {
+        text user_id "PK FK"
+        text display_name
+        text avatar_url
+        text bio
+        created_at timestamp
+        updated_at timestamp
+    }
+
+    Session {
+        text id PK
+        timestamp expires_at
+        text token UK
+        timestamp created_at
+        timestamp updated_at
+        text user_id FK
+    }
+
+    Account {
+        text id PK
+        text account_id
+        text provider_id
+        text user_id FK
+        text access_token
+        text refresh_token
+        text id_token
+        timestamp access_token_expires_at
+        timestamp refresh_token_expires_at
+        text scope
+        text password
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    Verification {
+        text id PK
+        text identifier
+        text value
+        timestamp expires_at
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    Group {
+        uuid id PK
+        text name
+        text created_by FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    GroupMembership {
+        uuid id PK
+        uuid group_id FK
+        text user_id FK
+        timestamp joined_at
+    }
+
+    Debt {
+        uuid id PK
+        uuid group_id FK
+        text creditor_id FK
+        text debtor_id FK
+        integer amount
+        text description
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+        text deleted_by FK
+    }
+
+    User ||--|{ Session : "id<->user_id"
+    User ||--|{ Account : "id<->user_id"
+
+    User ||--o| UserProfile : "id<->user_id"
+
+    User ||--o{ Group : "id<->created_by"
+
+    Group ||--o{ GroupMembership : "id<->group_id"
+    User ||--o{ GroupMembership : "id<->user_id"
+
+    Group ||--o{ Debt : "id<->group_id"
+    User ||--o{ Debt : "id<->creditor_id"
+    User ||--o{ Debt : "id<->debtor_id"
+    User ||--o{ Debt : "id<->deleted_by"
