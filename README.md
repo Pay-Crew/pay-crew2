@@ -389,11 +389,10 @@ erDiagram
         text deleted_by FK
     }
 
-    User ||--o{ Session : "id<->user_id"
-    User ||--o{ Account : "id<->user_id"
-    User ||--o{ Verification : "id<->identifier"
+    User ||--|{ Session : "id<->user_id"
+    User ||--|{ Account : "id<->user_id"
 
-    User ||--|| UserProfile : "id<->user_id"
+    User ||--o| UserProfile : "id<->user_id"
 
     User ||--o{ Group : "id<->created_by"
 
