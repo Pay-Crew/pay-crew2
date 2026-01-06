@@ -5,7 +5,7 @@ import { sampleSchema, type SampleSchemaType } from 'validator';
 // error schema
 import { route } from '../share/error';
 
-const sample = honoFactory();
+const hono = honoFactory();
 
 // サンプルエンドポイントの登録
 const sampleGetSchema = route.createSchema(
@@ -25,10 +25,10 @@ const sampleGetSchema = route.createSchema(
       },
     },
   },
-  [401] as const
+  [401, 500] as const
 );
 
-sample.openapi(sampleGetSchema, (c) => {
+hono.openapi(sampleGetSchema, (c) => {
   // const session = c.get('session');
   const user = c.get('user');
 
@@ -42,4 +42,4 @@ sample.openapi(sampleGetSchema, (c) => {
   );
 });
 
-export default sample;
+export default hono;
