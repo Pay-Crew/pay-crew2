@@ -1,0 +1,25 @@
+graph LR;
+    db[("Database (PostgreSQL)")]
+    drizzle["Drizzle (ORM)"]
+    hono["Hono (Web API)"]
+    frontend["Vite + React"]
+    idp{{"Identity Provider (Google, GitHub, etc.)"}}
+    user["User"]
+
+    subgraph "Docker"
+        db
+    end
+    db <--> drizzle
+    subgraph "Backend (Localhost)"
+        drizzle
+        drizzle <--> hono
+    end
+    hono <--with session--> frontend
+    subgraph "Frontend (Localhost)"
+        frontend
+    end
+    idp <-.authentication.-> user
+    idp --.add authentication info.--> hono
+    frontend -.redirect.-> idp
+    user <--with session--> frontend
+    user -.without session.-> frontend
