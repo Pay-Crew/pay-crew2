@@ -6,6 +6,7 @@ import honoFactory from './factory/hono';
 import { AuthFactoryType } from './factory/auth';
 // routes
 import sample from './routes/sample';
+import group from './routes/group';
 
 // protected router with authentication
 const apiProtected = (auth: AuthFactoryType) => {
@@ -29,6 +30,7 @@ const apiProtected = (auth: AuthFactoryType) => {
 
   //* endpoint registration *//
   app.route('/', sample);
+  app.route('/', group);
 
   return app;
 };

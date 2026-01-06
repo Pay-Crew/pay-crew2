@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { authClient } from '../../lib/auth';
 //tmp
 import { $api } from '../../api/fetchClient';
+import { Link } from 'react-router';
 
 const Root: FC = () => {
   //tmp
@@ -34,7 +35,11 @@ const Root: FC = () => {
       ) : isError ? (
         <p>Error: {error.message}</p>
       ) : (
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <>
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+          <Link to="/profile">プロフィール編集へ</Link>
+          <Link to="/group">グループ作成へ</Link>
+        </>
       )}
     </div>
   );

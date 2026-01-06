@@ -11,6 +11,6 @@ setupは、pay-crew2のシークレットファイルを
 
 1. プロジェクトのルートにある`.env`を読み込む
 
-2. `products/backend/.env`と`products/backend/wrangler.local.jsonc`を生成する。
+2. `products/frontend/.env` と `products/backend/.env`と`products/backend/wrangler.local.jsonc`を生成する。
 
 ※ 各ファイルの内容は、1. で読み込んだ`.env`の内容に依存する。
