@@ -30,6 +30,7 @@ const infoAboutGroupsTheUserBelongsToSchema = route.createSchema(
     path: '/api/info/group',
     method: 'get',
     description: 'get info about groups the user belongs to',
+    security: [{ SessionCookie: [] }],
     request: {},
     responses: {
       200: {
@@ -129,6 +130,7 @@ const infoAboutUserTransactionsSchema = route.createSchema(
     path: '/api/info/transaction',
     method: 'get',
     description: 'get info about user transactions',
+    security: [{ SessionCookie: [] }],
     request: {},
     responses: {
       200: {
@@ -247,6 +249,7 @@ const infoUserRepaymentSchema = route.createSchema(
     path: '/api/info/transaction',
     method: 'delete',
     description: 'do user repayment',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,

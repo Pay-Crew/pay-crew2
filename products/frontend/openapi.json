@@ -1,825 +1,35 @@
 {
   "openapi": "3.1.0",
+  "security": [
+    {
+      "SessionCookie": []
+    }
+  ],
   "info": {
     "title": "Pay Crew2 API",
     "version": "0.0.1",
     "description": "API documentation for Pay Crew2 backend"
   },
   "components": {
+    "securitySchemes": {
+      "SessionCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "better-auth.session_token"
+      }
+    },
     "schemas": {},
     "parameters": {}
   },
   "paths": {
-    "/api/session": {
-      "get": {
-        "description": "sample endpoint to get session info",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "email": {
-                      "type": "string",
-                      "minLength": 1
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "email"
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "anyOf": [
-                        {
-                          "type": "number",
-                          "enum": [
-                            100
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            102
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            103
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            200
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            201
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            202
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            203
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            206
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            207
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            208
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            226
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            300
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            301
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            302
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            303
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            305
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            306
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            307
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            308
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            400
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            401
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            402
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            403
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            404
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            405
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            406
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            407
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            408
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            409
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            410
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            411
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            412
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            413
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            414
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            415
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            416
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            417
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            418
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            421
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            422
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            423
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            424
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            425
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            426
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            428
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            429
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            431
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            451
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            500
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            501
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            502
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            503
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            504
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            505
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            506
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            507
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            508
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            510
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            511
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            -1
-                          ]
-                        }
-                      ],
-                      "example": 400,
-                      "description": "HTTPステータスコード"
-                    },
-                    "message": {
-                      "type": "string",
-                      "minLength": 1,
-                      "example": "Bad Request",
-                      "description": "エラーメッセージ"
-                    }
-                  },
-                  "required": [
-                    "status",
-                    "message"
-                  ]
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "anyOf": [
-                        {
-                          "type": "number",
-                          "enum": [
-                            100
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            102
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            103
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            200
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            201
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            202
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            203
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            206
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            207
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            208
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            226
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            300
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            301
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            302
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            303
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            305
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            306
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            307
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            308
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            400
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            401
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            402
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            403
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            404
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            405
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            406
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            407
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            408
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            409
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            410
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            411
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            412
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            413
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            414
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            415
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            416
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            417
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            418
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            421
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            422
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            423
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            424
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            425
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            426
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            428
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            429
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            431
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            451
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            500
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            501
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            502
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            503
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            504
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            505
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            506
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            507
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            508
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            510
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            511
-                          ]
-                        },
-                        {
-                          "type": "number",
-                          "enum": [
-                            -1
-                          ]
-                        }
-                      ],
-                      "example": 400,
-                      "description": "HTTPステータスコード"
-                    },
-                    "message": {
-                      "type": "string",
-                      "minLength": 1,
-                      "example": "Bad Request",
-                      "description": "エラーメッセージ"
-                    }
-                  },
-                  "required": [
-                    "status",
-                    "message"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/info/group": {
       "get": {
         "description": "get info about groups the user belongs to",
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1664,6 +874,11 @@
     "/api/info/transaction": {
       "get": {
         "description": "get info about user transactions",
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -2485,6 +1700,11 @@
       },
       "delete": {
         "description": "do user repayment",
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -3694,6 +2914,11 @@
     "/api/group/create": {
       "post": {
         "description": "create a new group",
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -4908,6 +4133,11 @@
     "/api/group/join": {
       "post": {
         "description": "join an existing group",
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -6117,6 +5347,11 @@
     "/api/group/info": {
       "post": {
         "description": "get group information",
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -7352,6 +6587,11 @@
     "/api/group/debt/history": {
       "post": {
         "description": "get group debt history",
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -8597,6 +7837,11 @@
     "/api/group/debt/register": {
       "post": {
         "description": "register group debt entry",
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -9842,6 +9087,11 @@
     "/api/group/debt/delete": {
       "delete": {
         "description": "delete group debt entry",
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -11056,6 +10306,11 @@
     "/api/profile": {
       "get": {
         "description": "get user profile",
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -12253,6 +11508,11 @@
       },
       "put": {
         "description": "update user profile",
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {

@@ -20,6 +20,13 @@ const honoFactory = () => {
     },
   });
 
+  // セキュリティスキームの登録
+  app.openAPIRegistry.registerComponent('securitySchemes', 'SessionCookie', {
+    type: 'apiKey',
+    in: 'cookie',
+    name: 'better-auth.session_token',
+  });
+
   return app;
 };
 

@@ -130,10 +130,9 @@ const GroupDetail: FC = () => {
 
   return (
     <>
-      <h1>グループ</h1>
-      <h2>グループ情報</h2>
+      <h1>グループ情報</h1>
       {groupInfoMutation.isSuccess && !isGroupInfoResultError && groupInfoResult ? (
-        <div>
+        <>
           <p>グループ名: {groupInfoResult.group_name}</p>
           <p>作成者: {groupInfoResult.created_by}</p>
           <h3>メンバー一覧</h3>
@@ -187,33 +186,24 @@ const GroupDetail: FC = () => {
                     : ''}
             </p>
           </form>
-        </div>
+        </>
       ) : isGroupInfoResultError ? (
-        <div>
-          <p>グループ情報の取得に失敗しました。再度お試しください。</p>
-        </div>
+        <p>グループ情報の取得に失敗しました。再度お試しください。</p>
       ) : null}
       <h2>グループの貸し借りの履歴</h2>
       {debtHistoryMutation.isSuccess && !isDebtHistoryResultError && debtHistoryResult ? (
-        <div>
-          <ul>
-            {debtHistoryResult.debts.map((debt, index) => (
-              <li key={index}>
-                {debt.debtor_name} さんが {debt.creditor_name} さんに {debt.amount} 円を負っています。
-                <button
-                  onClick={() => deleteGroupDebtHandler(debt.debt_id)}
-                  disabled={deleteGroupDebtMutation.isPending}
-                >
-                  {deleteGroupDebtMutation.isPending ? '処理中...' : '完済'}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul>
+          {debtHistoryResult.debts.map((debt, index) => (
+            <li key={index}>
+              {debt.debtor_name} さんが {debt.creditor_name} さんに {debt.amount} 円を負っています。
+              <button onClick={() => deleteGroupDebtHandler(debt.debt_id)} disabled={deleteGroupDebtMutation.isPending}>
+                {deleteGroupDebtMutation.isPending ? '処理中...' : '完済'}
+              </button>
+            </li>
+          ))}
+        </ul>
       ) : isDebtHistoryResultError ? (
-        <div>
-          <p>グループの履歴の取得に失敗しました。再度お試しください。</p>
-        </div>
+        <p>グループの履歴の取得に失敗しました。再度お試しください。</p>
       ) : null}
     </>
   );
