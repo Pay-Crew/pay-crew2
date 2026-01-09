@@ -680,7 +680,13 @@
 <a name='L615'></a><a href='#L615'>615</a>
 <a name='L616'></a><a href='#L616'>616</a>
 <a name='L617'></a><a href='#L617'>617</a>
-<a name='L618'></a><a href='#L618'>618</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L618'></a><a href='#L618'>618</a>
+<a name='L619'></a><a href='#L619'>619</a>
+<a name='L620'></a><a href='#L620'>620</a>
+<a name='L621'></a><a href='#L621'>621</a>
+<a name='L622'></a><a href='#L622'>622</a>
+<a name='L623'></a><a href='#L623'>623</a>
+<a name='L624'></a><a href='#L624'>624</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -746,6 +752,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -831,6 +838,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -875,6 +883,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1037,6 +1046,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1162,6 +1172,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1220,6 +1231,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1339,6 +1351,7 @@ const createGroupSchema = <span class="cstat-no" title="statement not covered" >
     path: '/api/group/create',
     method: 'post',
     description: 'create a new group',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,
@@ -1424,6 +1437,7 @@ const joinGroupSchema = <span class="cstat-no" title="statement not covered" >ro
     path: '/api/group/join',
     method: 'post',
     description: 'join an existing group',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,
@@ -1496,6 +1510,7 @@ const getGroupInfoSchema = <span class="cstat-no" title="statement not covered" 
     path: '/api/group/info',
     method: 'post',
     description: 'get group information',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,
@@ -1630,6 +1645,7 @@ const getGroupDebtHistorySchema = <span class="cstat-no" title="statement not co
     path: '/api/group/debt/history',
     method: 'post',
     description: 'get group debt history',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,
@@ -1755,6 +1771,7 @@ const registerGroupDebtSchema = <span class="cstat-no" title="statement not cove
     path: '/api/group/debt/register',
     method: 'post',
     description: 'register group debt entry',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,
@@ -1841,6 +1858,7 @@ const deleteGroupDebtSchema = <span class="cstat-no" title="statement not covere
     path: '/api/group/debt/delete',
     method: 'delete',
     description: 'delete group debt entry',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,
@@ -1921,7 +1939,7 @@ export default hono;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-09T20:03:29.700Z
+                at 2026-01-09T21:22:37.117Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
