@@ -21,7 +21,7 @@ const App: FC = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Root />} />
-          <Route path="/group" element={<GenerateGroup />} />
+          <Route path="/gen-group" element={<GenerateGroup />} />
           <Route path="/group/:groupId" element={<GroupDetail />} />
           <Route path="/invite/:inviteId" element={<Invite />} />
           <Route path="/profile" element={<Profile />} />

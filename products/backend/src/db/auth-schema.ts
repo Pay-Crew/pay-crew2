@@ -19,7 +19,7 @@ export const userProfile = pgTable(
     userId: text('user_id')
       .primaryKey()
       .references(() => user.id, { onDelete: 'cascade' }),
-    displayName: text('display_name').notNull(),
+    displayName: text('display_name'),
     avatarUrl: text('avatar_url'),
     bio: text('bio'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
