@@ -24,6 +24,7 @@ const getUserProfile = route.createSchema(
     path: '/api/profile',
     method: 'get',
     description: 'get user profile',
+    security: [{ SessionCookie: [] }],
     request: {},
     responses: {
       200: {
@@ -80,6 +81,7 @@ const updateUserProfile = route.createSchema(
     path: '/api/profile',
     method: 'put',
     description: 'update user profile',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,

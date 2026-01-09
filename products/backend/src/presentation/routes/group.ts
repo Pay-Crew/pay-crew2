@@ -40,6 +40,7 @@ const createGroupSchema = route.createSchema(
     path: '/api/group/create',
     method: 'post',
     description: 'create a new group',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,
@@ -125,6 +126,7 @@ const joinGroupSchema = route.createSchema(
     path: '/api/group/join',
     method: 'post',
     description: 'join an existing group',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,
@@ -197,6 +199,7 @@ const getGroupInfoSchema = route.createSchema(
     path: '/api/group/info',
     method: 'post',
     description: 'get group information',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,
@@ -331,6 +334,7 @@ const getGroupDebtHistorySchema = route.createSchema(
     path: '/api/group/debt/history',
     method: 'post',
     description: 'get group debt history',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,
@@ -456,6 +460,7 @@ const registerGroupDebtSchema = route.createSchema(
     path: '/api/group/debt/register',
     method: 'post',
     description: 'register group debt entry',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,
@@ -542,6 +547,7 @@ const deleteGroupDebtSchema = route.createSchema(
     path: '/api/group/debt/delete',
     method: 'delete',
     description: 'delete group debt entry',
+    security: [{ SessionCookie: [] }],
     request: {
       body: {
         required: true,
