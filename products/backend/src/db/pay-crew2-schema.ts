@@ -8,7 +8,10 @@ export const group = pgTable(
   {
     id: uuid('id').primaryKey(),
     name: text('name').notNull(),
-    createdBy: text('created_by').references(() => user.id, { onDelete: 'set null' }),
+    invite_id: text('invite_id').notNull().unique(),
+    createdBy: text('created_by')
+      .references(() => user.id, { onDelete: 'set null' })
+      .notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')
       .defaultNow()

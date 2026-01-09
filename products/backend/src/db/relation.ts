@@ -8,7 +8,7 @@ export { group, groupMembership, debt } from './pay-crew2-schema';
 
 // auth-schema
 export const userRelations = relations(user, ({ one, many }) => ({
-  userProfiles: one(userProfile, {
+  userProfile: one(userProfile, {
     fields: [user.id],
     references: [userProfile.userId],
   }),
@@ -24,13 +24,13 @@ export const userRelations = relations(user, ({ one, many }) => ({
   groupMemberships: many(groupMembership, {
     relationName: 'user__group_membership_userId',
   }),
-  debt_creditor: many(debt, {
+  debts_creditor: many(debt, {
     relationName: 'user__debt_creditor',
   }),
-  debt_debtor: many(debt, {
+  debts_debtor: many(debt, {
     relationName: 'user__debt_debtor',
   }),
-  debt_deletedByUser: many(debt, {
+  debts_deletedByUser: many(debt, {
     relationName: 'user__debt_deletedByUser',
   }),
 }));
@@ -60,12 +60,12 @@ export const accountRelations = relations(account, ({ one }) => ({
 
 // pay-crew2-schema
 export const groupRelations = relations(group, ({ many, one }) => ({
-  creator: one(user, {
+  user: one(user, {
     fields: [group.createdBy],
     references: [user.id],
     relationName: 'user__group_creator',
   }),
-  memberships: many(groupMembership, { relationName: 'group__group_membership_groupId' }),
+  groupMemberships: many(groupMembership, { relationName: 'group__group_membership_groupId' }),
   debts: many(debt, { relationName: 'group__debt_groupId' }),
 }));
 
@@ -88,17 +88,17 @@ export const debtRelations = relations(debt, ({ one }) => ({
     references: [group.id],
     relationName: 'group__debt_groupId',
   }),
-  creditor: one(user, {
+  user_creditor: one(user, {
     fields: [debt.creditorId],
     references: [user.id],
     relationName: 'user__debt_creditor',
   }),
-  debtor: one(user, {
+  user_debtor: one(user, {
     fields: [debt.debtorId],
     references: [user.id],
     relationName: 'user__debt_debtor',
   }),
-  deletedByUser: one(user, {
+  user_deletedByUser: one(user, {
     fields: [debt.deletedBy],
     references: [user.id],
     relationName: 'user__debt_deletedByUser',
