@@ -94,7 +94,7 @@ const updateUserProfile = route.createSchema(
     },
     responses: {
       200: {
-        description: 'OK',
+        description: 'Updated',
         content: {
           'application/json': {
             schema: updateUserProfileResponseSchema,

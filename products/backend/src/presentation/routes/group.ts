@@ -560,7 +560,7 @@ const deleteGroupDebtSchema = route.createSchema(
     },
     responses: {
       200: {
-        description: 'Created',
+        description: 'Deleted',
         content: {
           'application/json': {
             schema: deleteGroupDebtResponseSchema,
