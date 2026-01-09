@@ -33,16 +33,16 @@ const Invite: FC = () => {
       {result && <p>参加したグループID: {result}</p>}
       {isError && <p>エラーが発生しました: {error.message}</p>}
       {isSuccess && !isResultError && result ? (
-        <div>
+        <>
           <h2>グループ参加結果</h2>
           <p>グループID: {result} に参加しました。</p>
           <Link to={`/group/${result}`}>グループページへ移動</Link>
-        </div>
+        </>
       ) : isResultError ? (
-        <div>
+        <>
           <h2>グループ参加結果</h2>
           <p>グループの参加に失敗しました。再度お試しください。</p>
-        </div>
+        </>
       ) : null}
     </>
   );

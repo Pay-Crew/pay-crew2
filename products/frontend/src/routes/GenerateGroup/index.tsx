@@ -69,16 +69,16 @@ const GenerateGroup: FC = () => {
         </p>
       </form>
       {isSuccess && !isResultError && result ? (
-        <div>
+        <>
           <h2>グループ作成結果</h2>
           <p>グループID: {result.group_id}</p>
           <p>招待ID: {result.invite_id}</p>
-        </div>
+        </>
       ) : isResultError ? (
-        <div>
+        <>
           <h2>グループ作成結果</h2>
           <p>グループの作成に失敗しました。再度お試しください。</p>
-        </div>
+        </>
       ) : null}
     </>
   );

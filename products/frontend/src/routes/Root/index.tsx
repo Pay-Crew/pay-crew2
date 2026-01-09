@@ -48,7 +48,7 @@ const Root: FC = () => {
   };
 
   return (
-    <div>
+    <>
       <h1>Hello, World!</h1>
       <button onClick={handleDiscordSignin}>Sign in with Discord</button>
       <button onClick={googleSignIn}>Sign in with Google</button>
@@ -115,7 +115,7 @@ const Root: FC = () => {
           )}
         </>
       )}
-    </div>
+    </>
   );
 };
 
