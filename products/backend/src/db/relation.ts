@@ -1,17 +1,11 @@
 // drizzle
 import { relations } from 'drizzle-orm';
-import { account, session, user, userProfile } from './auth-schema';
-import { debt, group, groupMembership } from './pay-crew2-schema';
 // tables
-export { user, userProfile, session, account, verification } from './auth-schema';
-export { group, groupMembership, debt } from './pay-crew2-schema';
+import { account, session, user } from './auth-schema';
+import { debt, group, groupMembership } from './pay-crew2-schema';
 
 // auth-schema
-export const userRelations = relations(user, ({ one, many }) => ({
-  userProfile: one(userProfile, {
-    fields: [user.id],
-    references: [userProfile.userId],
-  }),
+export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session, {
     relationName: 'user__session_userId',
   }),
@@ -32,13 +26,6 @@ export const userRelations = relations(user, ({ one, many }) => ({
   }),
   debts_deletedByUser: many(debt, {
     relationName: 'user__debt_deletedByUser',
-  }),
-}));
-
-export const userProfileRelations = relations(userProfile, ({ one }) => ({
-  user: one(user, {
-    fields: [userProfile.userId],
-    references: [user.id],
   }),
 }));
 

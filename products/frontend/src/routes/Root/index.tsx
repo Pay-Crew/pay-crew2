@@ -7,7 +7,7 @@ import { $api } from '../../api/fetchClient';
 import { Link } from 'react-router';
 
 const Root: FC = () => {
-  // sign in handlers
+  // OAuth signin handlers
   const handleDiscordSignin = async () => {
     await authClient.signIn.social({
       provider: 'discord',
@@ -21,44 +21,46 @@ const Root: FC = () => {
     });
   };
 
-  // get group info of logged in user
+  // loginUserの所属グループ情報を取得
   const infoAboutGroupsTheUserBelongsToQuery = $api.useQuery('get', '/api/info/group', {
     credentials: 'include',
   });
 
-  // get transactions info of logged in user
+  // loginUserの貸し借り情報を取得
   const infoAboutUserTransactionsQuery = $api.useQuery('get', '/api/info/transaction', {
     credentials: 'include',
   });
 
+  // 貸し借り情報の振り分け
   const transactions = infoAboutUserTransactionsQuery.data?.transactions ?? [];
   const paybacks = transactions.filter((t) => t.amount > 0);
   const receivables = transactions.filter((t) => t.amount < 0);
 
+  // 貸し借り情報の削除処理
   const deleteGroupDebtMutation = $api.useMutation('delete', '/api/info/transaction', {
-    onSuccess: (data) => {
-      if (data?.counterparty_id) {
-        infoAboutUserTransactionsQuery.refetch();
-      }
+    onSuccess: () => {
+      infoAboutUserTransactionsQuery.refetch();
     },
   });
-
+  // 貸し借り情報の削除ハンドラ
   const handleDeleteDebtHandler = (counterpartyId: string) => {
     deleteGroupDebtMutation.mutate({ body: { counterparty_id: counterpartyId }, credentials: 'include' });
   };
 
   return (
     <>
-      <h1>Hello, World!</h1>
-      <button onClick={handleDiscordSignin}>Sign in with Discord</button>
-      <button onClick={googleSignIn}>Sign in with Google</button>
-      {infoAboutGroupsTheUserBelongsToQuery.isLoading || infoAboutUserTransactionsQuery.isLoading ? (
+      <h1>Pay Crew2</h1>
+      <button onClick={handleDiscordSignin}>Discordで サインイン / ログイン</button>
+      <button onClick={googleSignIn}>Googleで サインイン / ログイン</button>
+      {(infoAboutGroupsTheUserBelongsToQuery.isPending || infoAboutUserTransactionsQuery.isPending) && (
         <p>Loading...</p>
-      ) : infoAboutGroupsTheUserBelongsToQuery.isError || infoAboutUserTransactionsQuery.isError ? (
+      )}
+      {(infoAboutGroupsTheUserBelongsToQuery.isError || infoAboutUserTransactionsQuery.isError) && (
         <p>
           Error: {infoAboutGroupsTheUserBelongsToQuery.error?.message || infoAboutUserTransactionsQuery.error?.message}
         </p>
-      ) : (
+      )}
+      {infoAboutGroupsTheUserBelongsToQuery.data && infoAboutUserTransactionsQuery.data && (
         <>
           <Link to="/profile">プロフィール編集へ</Link>
           <br />
@@ -69,7 +71,7 @@ const Root: FC = () => {
             {infoAboutGroupsTheUserBelongsToQuery.data?.groups.map((group) => (
               <li key={group.group_id}>
                 <Link to={`/group/${group.group_id}`}>
-                  {group.group_name} (Created by: {group.created_by})
+                  {group.group_name} ({group.created_by_name})
                 </Link>
                 <ul>
                   {group.members.map((member) => (

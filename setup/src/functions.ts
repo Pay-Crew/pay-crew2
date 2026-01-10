@@ -9,6 +9,7 @@ export const dotenvLoader = (): EnvConfig => {
   const caster = new DotEnvCaster();
 
   const viteApiUrl = caster.castString(process.env.VITE_API_URL);
+  const viteClientUrl = caster.castString(process.env.VITE_CLIENT_URL);
   const viteRedirectUrl = caster.castString(process.env.VITE_REDIRECT_URL);
   const postgresUser = caster.castString(process.env.POSTGRES_USER);
   const postgresPassword = caster.castString(process.env.POSTGRES_PASSWORD);
@@ -30,6 +31,7 @@ export const dotenvLoader = (): EnvConfig => {
   console.info('Environment variables loaded from .env file');
   console.table({
     VITE_API_URL: viteApiUrl,
+    VITE_CLIENT_URL: viteClientUrl,
     VITE_REDIRECT_URL: viteRedirectUrl,
     POSTGRES_USER: postgresUser,
     POSTGRES_PASSWORD: postgresPassword ? '*****' : '',
@@ -46,6 +48,7 @@ export const dotenvLoader = (): EnvConfig => {
 
   const frontendConfig: FrontendConfig = {
     viteApiUrl,
+    viteClientUrl,
     viteRedirectUrl,
   };
   const backendConfig: BackendConfig = {

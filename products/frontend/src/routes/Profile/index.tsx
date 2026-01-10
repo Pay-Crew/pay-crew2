@@ -1,41 +1,22 @@
-import { useEffect, useState, type FC } from 'react';
+import { useEffect, type FC } from 'react';
 // @tanstack/react-query
-// import { useQueryClient } from '@tanstack/react-query';
 import { $api } from '../../api/fetchClient';
-import {
-  updateUserProfileRequestSchema,
-  type UpdateUserProfileRequestSchemaType,
-  type UpdateUserProfileResponseSchemaType,
-} from 'validator';
+import { updateUserProfileRequestSchema, type UpdateUserProfileRequestSchemaType } from 'validator';
 // react-hook-form
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 
 const Profile: FC = () => {
+  // ユーサープロフィール情報の取得
   const userProfileQuery = $api.useQuery('get', '/api/profile', {
     credentials: 'include',
   });
 
-  const [isUserProfileResultError, setIsUserProfileResultError] = useState<boolean>(false);
-  const [userProfileResult, setUserProfileResult] = useState<UpdateUserProfileResponseSchemaType | null>(null);
-  const userProfileMutation = $api.useMutation('put', `/api/profile`, {
-    onSuccess: (data) => {
-      if (!data) {
-        setIsUserProfileResultError(true);
-      } else {
-        // convert dat to UpdateUserProfileResponseSchemaType
-        const userProfile: UpdateUserProfileResponseSchemaType = {
-          display_name: data.display_name,
-          avatar_url: data.avatar_url,
-          bio: data.bio,
-        };
-        // set group info result
-        setUserProfileResult(userProfile);
-      }
-    },
-  });
+  // ユーザープロフィール情報の更新
+  const userProfileMutation = $api.useMutation('patch', `/api/profile`);
 
+  // react-hook-formの設定
   const {
     register,
     handleSubmit,
@@ -50,6 +31,7 @@ const Profile: FC = () => {
     } satisfies UpdateUserProfileRequestSchemaType,
   });
 
+  // ユーザープロフィール情報が取得できたらフォームに現在のユーザープロフィール情報をセット
   useEffect(() => {
     if (userProfileQuery.data) {
       reset({
@@ -60,6 +42,7 @@ const Profile: FC = () => {
     }
   }, [userProfileQuery.data, reset]);
 
+  // プロフィール更新ハンドラ
   const onSubmit: SubmitHandler<UpdateUserProfileRequestSchemaType> = (formData) => {
     userProfileMutation.mutate({ body: { ...formData }, credentials: 'include' });
   };
@@ -67,11 +50,9 @@ const Profile: FC = () => {
   return (
     <>
       <h1>プロフィールの編集</h1>
-      {userProfileQuery.isLoading ? (
-        <p>Loading...</p>
-      ) : userProfileQuery.isError ? (
-        <p>Error: {userProfileQuery.error.message}</p>
-      ) : (
+      {userProfileQuery.isLoading && <p>Loading...</p>}
+      {userProfileQuery.isError && <p>Error: {userProfileQuery.error.message}</p>}
+      {userProfileQuery.isSuccess && (
         <>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div>
@@ -85,6 +66,7 @@ const Profile: FC = () => {
               />
               <ErrorMessage errors={errors} name="display_name" />
             </div>
+
             <div>
               <label htmlFor="avatar_url">アバターURL:</label>
               <input
@@ -96,6 +78,7 @@ const Profile: FC = () => {
               />
               <ErrorMessage errors={errors} name="avatar_url" />
             </div>
+
             <div>
               <label htmlFor="bio">自己紹介:</label>
               <textarea
@@ -106,27 +89,21 @@ const Profile: FC = () => {
               />
               <ErrorMessage errors={errors} name="bio" />
             </div>
+
             <button type="submit" disabled={userProfileMutation.isPending}>
               プロフィールを更新
             </button>
+
             <p>
               {userProfileMutation.isPending
                 ? 'プロフィールを更新中...'
                 : userProfileMutation.isError
                   ? `プロフィールの更新に失敗しました: ${userProfileMutation.error.message}`
-                  : userProfileMutation.isSuccess && !isUserProfileResultError && userProfileResult
+                  : userProfileMutation.isSuccess
                     ? 'プロフィールの更新に成功しました！'
                     : null}
             </p>
           </form>
-          {userProfileMutation.isSuccess && !isUserProfileResultError && userProfileResult ? (
-            <div>
-              <h2>更新後のプロフィール情報</h2>
-              <p>表示名: {userProfileResult.display_name}</p>
-              <p>アバターURL: {userProfileResult.avatar_url}</p>
-              <p>自己紹介: {userProfileResult.bio}</p>
-            </div>
-          ) : null}
         </>
       )}
     </>

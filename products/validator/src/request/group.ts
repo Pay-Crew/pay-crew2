@@ -1,7 +1,7 @@
 import { z } from '@hono/zod-openapi';
 
 export const createGroupRequestSchema = z.object({
-  name: z.string().min(1),
+  group_name: z.string().min(1),
 });
 
 export type CreateGroupRequestSchemaType = z.infer<typeof createGroupRequestSchema>;
