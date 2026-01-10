@@ -11,8 +11,14 @@ import {
   type CreateGroupResponseSchemaType,
   createGroupRequestSchema,
 } from 'validator';
+// react-router
+import { Link } from 'react-router';
 
 const GenerateGroup: FC = () => {
+  // コピー状態管理
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copying' | 'success' | 'error'>('idle');
+  const [inviteUrl, setInviteUrl] = useState<string | null>(null);
+
   // グループ作成処理
   const [result, setResult] = useState<CreateGroupResponseSchemaType | null>(null);
   const { mutate, isSuccess, isPending, isError, error } = $api.useMutation('post', '/api/group/create', {
@@ -21,6 +27,8 @@ const GenerateGroup: FC = () => {
         group_id: data?.group_id,
         invite_id: data?.invite_id,
       });
+      setInviteUrl(`${import.meta.env.VITE_CLIENT_URL}/invite/${data?.invite_id}`);
+      setCopyStatus('idle');
     },
   });
 
@@ -39,6 +47,18 @@ const GenerateGroup: FC = () => {
   // グループ作成ハンドラ
   const onSubmit: SubmitHandler<CreateGroupRequestSchemaType> = async (formData) => {
     mutate({ body: formData, credentials: 'include' });
+  };
+
+  // 招待URLハンドラ
+  const inviteUrlHandler = async (url: string) => {
+    try {
+      setCopyStatus('copying');
+      await navigator.clipboard.writeText(url);
+      setCopyStatus('success');
+    } catch (e) {
+      console.error(e);
+      setCopyStatus('error');
+    }
   };
 
   return (
@@ -74,8 +94,18 @@ const GenerateGroup: FC = () => {
       {isSuccess && result && (
         <>
           <h2>グループ作成結果</h2>
-          <p>グループID: {result.group_id}</p>
-          <p>招待ID: {result.invite_id}</p>
+
+          {inviteUrl && (
+            <div>
+              <input value={inviteUrl} readOnly />
+              <button type="button" disabled={copyStatus === 'copying'} onClick={() => inviteUrlHandler(inviteUrl)}>
+                {copyStatus === 'copying' ? 'コピー中...' : copyStatus === 'success' ? 'コピー済み' : 'コピー'}
+              </button>
+              {copyStatus === 'success' && <p>コピーしました</p>}
+              {copyStatus === 'error' && <p>コピーに失敗しました</p>}
+            </div>
+          )}
+          <Link to={`/group/${result.group_id}`}>グループページへ移動</Link>
         </>
       )}
     </>

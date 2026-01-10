@@ -73,7 +73,18 @@ hono.openapi(infoAboutGroupsTheUserBelongsToSchema, async (c) => {
     );
 
   for (const groupData of groupsData) {
+    //* body.group_id のグループ作成者情報を取得 *//
     // NOTE: 共通化できそう
+    // ユーザ名を取得 (user table)
+    const createdByUserNameInfo = await db
+      .select({
+        name: user.name,
+        displayName: user.displayName,
+      })
+      .from(user)
+      .where(eq(user.id, groupData.createdBy))
+      .limit(1);
+
     // NOTE: --- 共通化開始 ---
     //* groupData.id のメンバー情報を取得 *//
     // グループメンバーのユーザーIDを取得 (group_membership table)
@@ -108,15 +119,19 @@ hono.openapi(infoAboutGroupsTheUserBelongsToSchema, async (c) => {
             : userNameInfo[0].name,
       });
     }
+    // NOTE: --- 共通化終了 ---
 
     // グループ情報を配列に追加
     groupInfo.push({
       group_id: groupData.id,
       group_name: groupData.name,
-      created_by: groupData.createdBy,
+      created_by_id: groupData.createdBy,
+      created_by_name:
+        createdByUserNameInfo[0].displayName !== null && createdByUserNameInfo[0].displayName.length > 0
+          ? createdByUserNameInfo[0].displayName
+          : createdByUserNameInfo[0].name,
       members: members,
     });
-    // NOTE: --- 共通化終了 ---
   }
 
   // レスポンス

@@ -1,4 +1,4 @@
-import { useEffect, useState, type FC } from 'react';
+import { useEffect, useMemo, useState, type FC } from 'react';
 import { useParams } from 'react-router';
 // @tanstack/react-query
 import { $api } from '../../api/fetchClient';
@@ -66,6 +66,8 @@ const GroupDetail: FC = () => {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<RegisterGroupDebtFormSchemaType>({
     resolver: zodResolver(RegisterGroupDebtFormSchema),
@@ -77,6 +79,25 @@ const GroupDetail: FC = () => {
       occurred_at: toDatetimeLocal(new Date()),
     },
   });
+
+  // 同じ人を借り手/貸し手に選べないようにするためにwatch
+  const debtorId = watch('debtor_id');
+  const creditorId = watch('creditor_id');
+
+  // メンバー一覧の取得
+  // membersのnullを除外して<select>の候補を作る
+  const members = useMemo(() => {
+    const raw = groupInfoResult?.members ?? [];
+    return raw.filter((m): m is NonNullable<(typeof raw)[number]> => Boolean(m));
+  }, [groupInfoResult]);
+
+  // debtorIdとcreditorIdが同じ場合、片方を空にする
+  useEffect(() => {
+    if (debtorId && creditorId && debtorId === creditorId) {
+      // debtorId === creditorId なので、 creditor を空にする
+      setValue('creditor_id', '');
+    }
+  }, [debtorId, creditorId, setValue]);
 
   // 貸し借り登録ハンドラ
   const onSubmit: SubmitHandler<RegisterGroupDebtFormSchemaType> = (formData) => {
@@ -133,14 +154,34 @@ const GroupDetail: FC = () => {
           <h2>貸し借りの登録</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div>
-              <label htmlFor="debtor_id">借りる人のID:</label>
-              <input id="debtor_id" type="text" {...register('debtor_id')} />
+              <label htmlFor="debtor_id">借りる人:</label>
+              <select id="debtor_id" {...register('debtor_id')} disabled={members.length === 0}>
+                <option value="">{members.length === 0 ? 'メンバー取得中…' : '選択してください'}</option>
+                {members
+                  // 貸す人に選んだメンバーは除外
+                  .filter((m) => (creditorId ? m.user_id !== creditorId : true))
+                  .map((member) => (
+                    <option key={member.user_id} value={member.user_id}>
+                      {member.user_name}
+                    </option>
+                  ))}
+              </select>
               <ErrorMessage errors={errors} name="debtor_id" />
             </div>
 
             <div>
-              <label htmlFor="creditor_id">貸す人のID:</label>
-              <input id="creditor_id" type="text" {...register('creditor_id')} />
+              <label htmlFor="creditor_id">貸す人:</label>
+              <select id="creditor_id" {...register('creditor_id')} disabled={members.length === 0}>
+                <option value="">{members.length === 0 ? 'メンバー取得中…' : '選択してください'}</option>
+                {members
+                  // 借りる人に選んだメンバーは除外
+                  .filter((m) => (debtorId ? m.user_id !== debtorId : true))
+                  .map((member) => (
+                    <option key={member.user_id} value={member.user_id}>
+                      {member.user_name}
+                    </option>
+                  ))}
+              </select>
               <ErrorMessage errors={errors} name="creditor_id" />
             </div>
 

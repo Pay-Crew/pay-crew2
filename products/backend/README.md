@@ -113,8 +113,10 @@ flowchart LR
   relation["src/db/relation.ts (リレーション定義用)"]
   schema["src/db/schema.ts (エクスポート用)"]
   auth-schema --> relation
-  pay-crew2 --> relation
+  auth-schema --> schema
   relation --> schema
+  pay-crew2 --> relation
+  pay-crew2 --> schema
 ```
 
 ## 構造

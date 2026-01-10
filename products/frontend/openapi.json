@@ -46,7 +46,11 @@
                             "type": "string",
                             "minLength": 1
                           },
-                          "created_by": {
+                          "created_by_id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "created_by_name": {
                             "type": "string",
                             "minLength": 1
                           },
@@ -74,7 +78,8 @@
                         "required": [
                           "group_id",
                           "group_name",
-                          "created_by",
+                          "created_by_id",
+                          "created_by_name",
                           "members"
                         ]
                       }

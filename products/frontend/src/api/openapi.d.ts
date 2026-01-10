@@ -32,7 +32,8 @@ export interface paths {
                                 /** Format: uuid */
                                 group_id: string;
                                 group_name: string;
-                                created_by: string;
+                                created_by_id: string;
+                                created_by_name: string;
                                 members: {
                                     user_id: string;
                                     user_name: string;

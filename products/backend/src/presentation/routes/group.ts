@@ -162,6 +162,25 @@ hono.openapi(joinGroupSchema, async (c) => {
     throw new HTTPException(400, { message: 'Bad Request' });
   }
 
+  // すでに参加している場合は即座に返スす
+  const existingMembership = await db
+    .select({
+      groupMembershipId: groupMembership.id,
+    })
+    .from(groupMembership)
+    .where(and(eq(groupMembership.groupId, groupData[0].id), eq(groupMembership.userId, user.id)))
+    .limit(1);
+
+  if (existingMembership.length > 0) {
+    // レスポンス
+    return c.json(
+      {
+        group_id: groupData[0].id,
+      } satisfies JoinGroupResponseSchemaType,
+      201
+    );
+  }
+
   // loginUser を invite_id の group に参加させる
   const result = await db
     .insert(groupMembership)

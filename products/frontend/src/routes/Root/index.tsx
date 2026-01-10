@@ -71,7 +71,7 @@ const Root: FC = () => {
             {infoAboutGroupsTheUserBelongsToQuery.data?.groups.map((group) => (
               <li key={group.group_id}>
                 <Link to={`/group/${group.group_id}`}>
-                  {group.group_name} (Created by: {group.created_by})
+                  {group.group_name} ({group.created_by_name})
                 </Link>
                 <ul>
                   {group.members.map((member) => (
