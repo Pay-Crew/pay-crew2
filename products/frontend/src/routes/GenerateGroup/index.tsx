@@ -1,6 +1,5 @@
 import { useState, type FC } from 'react';
 // @tanstack/react-query
-// import { useQueryClient } from '@tanstack/react-query';
 import { $api } from '../../api/fetchClient';
 // react-hook-form
 import { ErrorMessage } from '@hookform/error-message';
@@ -12,24 +11,28 @@ import {
   type CreateGroupResponseSchemaType,
   createGroupRequestSchema,
 } from 'validator';
+// react-router
+import { Link } from 'react-router';
 
 const GenerateGroup: FC = () => {
-  // const queryClient = useQueryClient();
-  const [isResultError, setIsResultError] = useState<boolean>(false);
+  // コピー状態管理
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copying' | 'success' | 'error'>('idle');
+  const [inviteUrl, setInviteUrl] = useState<string | null>(null);
+
+  // グループ作成処理
   const [result, setResult] = useState<CreateGroupResponseSchemaType | null>(null);
   const { mutate, isSuccess, isPending, isError, error } = $api.useMutation('post', '/api/group/create', {
     onSuccess: (data) => {
-      if (!data?.group_id || !data?.invite_id) {
-        setIsResultError(true);
-      } else {
-        setResult({
-          group_id: data?.group_id,
-          invite_id: data?.invite_id,
-        });
-      }
+      setResult({
+        group_id: data?.group_id,
+        invite_id: data?.invite_id,
+      });
+      setInviteUrl(`${import.meta.env.VITE_CLIENT_URL}/invite/${data?.invite_id}`);
+      setCopyStatus('idle');
     },
   });
 
+  // react-hook-formの設定
   const {
     register,
     handleSubmit,
@@ -37,12 +40,25 @@ const GenerateGroup: FC = () => {
   } = useForm<CreateGroupRequestSchemaType>({
     resolver: zodResolver(createGroupRequestSchema),
     defaultValues: {
-      name: '',
+      group_name: '',
     },
   });
 
+  // グループ作成ハンドラ
   const onSubmit: SubmitHandler<CreateGroupRequestSchemaType> = async (formData) => {
     mutate({ body: formData, credentials: 'include' });
+  };
+
+  // 招待URLハンドラ
+  const inviteUrlHandler = async (url: string) => {
+    try {
+      setCopyStatus('copying');
+      await navigator.clipboard.writeText(url);
+      setCopyStatus('success');
+    } catch (e) {
+      console.error(e);
+      setCopyStatus('error');
+    }
   };
 
   return (
@@ -50,9 +66,9 @@ const GenerateGroup: FC = () => {
       <h1>グループの作成</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label htmlFor="name">グループ名:</label>
-          <input id="name" type="text" {...register('name')} />
-          <ErrorMessage errors={errors} name="name" />
+          <label htmlFor="group_name">グループ名:</label>
+          <input id="group_name" type="text" {...register('group_name')} />
+          <ErrorMessage errors={errors} name="group_name" />
         </div>
 
         <button type="submit" disabled={isPending}>
@@ -65,21 +81,33 @@ const GenerateGroup: FC = () => {
               ? `グループの作成に失敗しました: ${error.message}`
               : isSuccess
                 ? 'グループの作成しました'
-                : ''}
+                : null}
         </p>
       </form>
-      {isSuccess && !isResultError && result ? (
-        <>
-          <h2>グループ作成結果</h2>
-          <p>グループID: {result.group_id}</p>
-          <p>招待ID: {result.invite_id}</p>
-        </>
-      ) : isResultError ? (
+      {isPending && <p>グループの作成中...</p>}
+      {isError && (
         <>
           <h2>グループ作成結果</h2>
           <p>グループの作成に失敗しました。再度お試しください。</p>
         </>
-      ) : null}
+      )}
+      {isSuccess && result && (
+        <>
+          <h2>グループ作成結果</h2>
+
+          {inviteUrl && (
+            <div>
+              <input value={inviteUrl} readOnly />
+              <button type="button" disabled={copyStatus === 'copying'} onClick={() => inviteUrlHandler(inviteUrl)}>
+                {copyStatus === 'copying' ? 'コピー中...' : copyStatus === 'success' ? 'コピー済み' : 'コピー'}
+              </button>
+              {copyStatus === 'success' && <p>コピーしました</p>}
+              {copyStatus === 'error' && <p>コピーに失敗しました</p>}
+            </div>
+          )}
+          <Link to={`/group/${result.group_id}`}>グループページへ移動</Link>
+        </>
+      )}
     </>
   );
 };

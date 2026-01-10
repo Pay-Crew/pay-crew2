@@ -14,7 +14,7 @@ const honoFactory = () => {
       if (!result.success) {
         console.error(result.error);
         throw new HTTPException(400, {
-          message: 'Zod Validation Error',
+          message: 'Bad Request',
         });
       }
     },

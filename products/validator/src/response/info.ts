@@ -8,7 +8,8 @@ export const infoAboutGroupsTheUserBelongsToResponseMemberElementSchema = z.obje
 export const infoAboutGroupsTheUserBelongsToResponseGroupElementSchema = z.object({
   group_id: z.uuid(),
   group_name: z.string().min(1),
-  created_by: z.string().min(1),
+  created_by_id: z.string().min(1),
+  created_by_name: z.string().min(1),
   members: z.array(infoAboutGroupsTheUserBelongsToResponseMemberElementSchema),
 });
 
@@ -43,9 +44,3 @@ export type InfoAboutUserTransactionsResponseTransactionElementSchemaType = z.in
 >;
 
 export type InfoAboutUserTransactionsResponseSchemaType = z.infer<typeof infoAboutUserTransactionsResponseSchema>;
-
-export const deleteInfoAboutUserRepaymentResponseSchema = z.object({
-  counterparty_id: z.string().min(1),
-});
-
-export type DeleteInfoAboutUserRepaymentResponseSchemaType = z.infer<typeof deleteInfoAboutUserRepaymentResponseSchema>;

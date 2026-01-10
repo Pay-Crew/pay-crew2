@@ -16,7 +16,7 @@ const databaseCredentialsSslRejectUnauthorized = caster.castBoolean(
 
 export default {
   dialect: 'postgresql',
-  schema: './src/db/schema.ts',
+  schema: ['./src/db/auth-schema.ts', './src/db/pay-crew2-schema.ts', './src/db/relation.ts'],
   out: './drizzle',
   dbCredentials: {
     url: databaseUrl,
