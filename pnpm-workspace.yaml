@@ -56,7 +56,7 @@ catalogs:
     turbo: ^2.5.8
   setup:
     dotenv: ^17.2.3
-    dotenv-caster: ^2.1.23
+    dotenv-caster: ^2.2.1
 
 ignoredBuiltDependencies:
   - '@swc/core'
