@@ -20,7 +20,9 @@ export const getGroupInfoResponseMemberElementSchema = z.object({
 
 export const getGroupInfoResponseSchema = z.object({
   group_name: z.uuid(),
-  created_by: z.string().min(1),
+  invite_id: z.string().min(1),
+  created_by_id: z.string().min(1),
+  created_by_name: z.string().min(1),
   members: z.array(getGroupInfoResponseMemberElementSchema),
 });
 
@@ -34,6 +36,8 @@ export const getGroupDebtHistoryResponseElementSchema = z.object({
   creditor_id: z.string().min(1),
   creditor_name: z.string().min(1),
   amount: z.number().min(0),
+  description: z.string().min(0),
+  occurred_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 });
 
 export const getGroupDebtHistoryResponseSchema = z.object({
@@ -42,12 +46,3 @@ export const getGroupDebtHistoryResponseSchema = z.object({
 
 export type GetGroupDebtHistoryResponseElementSchemaType = z.infer<typeof getGroupDebtHistoryResponseElementSchema>;
 export type GetGroupDebtHistoryResponseSchemaType = z.infer<typeof getGroupDebtHistoryResponseSchema>;
-
-export const registerGroupDebtResponseSchema = z.object({
-  creditorId: z.string().min(1),
-  debtorId: z.string().min(1),
-  amount: z.number().min(0),
-  occurredAt: z.date(),
-});
-
-export type RegisterGroupDebtResponseSchemaType = z.infer<typeof registerGroupDebtResponseSchema>;

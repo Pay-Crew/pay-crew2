@@ -18,8 +18,6 @@ import {
   type GetGroupDebtHistoryResponseSchemaType,
   GetGroupInfoResponseMemberElementSchemaType,
   registerGroupDebtRequestSchema,
-  registerGroupDebtResponseSchema,
-  type RegisterGroupDebtResponseSchemaType,
   deleteGroupDebtRequestSchema,
 } from 'validator';
 // error schema
@@ -67,9 +65,6 @@ hono.openapi(createGroupSchema, async (c) => {
   const loginUser = c.get('user');
   const body = c.req.valid('json');
 
-  // 現在時刻の取得
-  const now = new Date();
-
   // データベース接続
   const db = drizzle({ connection: c.env.HYPERDRIVE });
 
@@ -79,14 +74,12 @@ hono.openapi(createGroupSchema, async (c) => {
     .values({
       id: crypto.randomUUID(),
       name: body.group_name,
-      invite_id: `${crypto.randomUUID()}-${crypto.randomUUID()}`,
+      inviteId: `${crypto.randomUUID()}-${crypto.randomUUID()}`,
       createdBy: loginUser.id,
-      createdAt: now,
-      updatedAt: now,
     })
     .returning({
       id: group.id,
-      invite_id: group.invite_id,
+      inviteId: group.inviteId,
     });
 
   //* グループ作成者をgroupMembershipに挿入 *//
@@ -94,14 +87,13 @@ hono.openapi(createGroupSchema, async (c) => {
     id: crypto.randomUUID(),
     groupId: result[0].id,
     userId: loginUser.id,
-    joinedAt: now,
   });
 
   // レスポンス
   return c.json(
     {
       group_id: result[0].id,
-      invite_id: result[0].invite_id,
+      invite_id: result[0].inviteId,
     } satisfies CreateGroupResponseSchemaType,
     201
   );
@@ -142,9 +134,6 @@ hono.openapi(joinGroupSchema, async (c) => {
   const body = c.req.valid('json');
   const user = c.get('user');
 
-  // 現在時刻の取得
-  const now = new Date();
-
   // データベース接続
   const db = drizzle({ connection: c.env.HYPERDRIVE });
 
@@ -154,7 +143,7 @@ hono.openapi(joinGroupSchema, async (c) => {
       id: group.id,
     })
     .from(group)
-    .where(eq(group.invite_id, body.invite_id))
+    .where(eq(group.inviteId, body.invite_id))
     .limit(1);
 
   // invite_id が不正な場合はエラー
@@ -188,7 +177,6 @@ hono.openapi(joinGroupSchema, async (c) => {
       id: crypto.randomUUID(),
       groupId: groupData[0].id,
       userId: user.id,
-      joinedAt: now,
     })
     .returning({
       groupId: groupMembership.groupId,
@@ -261,6 +249,7 @@ hono.openapi(getGroupInfoSchema, async (c) => {
   const groupData = await db
     .select({
       name: group.name,
+      inviteId: group.inviteId,
       createdBy: group.createdBy,
     })
     .from(group)
@@ -320,7 +309,9 @@ hono.openapi(getGroupInfoSchema, async (c) => {
   return c.json(
     {
       group_name: groupData[0].name,
-      created_by:
+      invite_id: groupData[0].inviteId,
+      created_by_id: groupData[0].createdBy,
+      created_by_name:
         createdByUserNameInfo[0].displayName !== null && createdByUserNameInfo[0].displayName.length > 0
           ? createdByUserNameInfo[0].displayName
           : createdByUserNameInfo[0].name,
@@ -395,6 +386,8 @@ hono.openapi(getGroupDebtHistorySchema, async (c) => {
       debtorId: debt.debtorId,
       creditorId: debt.creditorId,
       amount: debt.amount,
+      description: debt.description,
+      occurredAt: debt.occurredAt,
     })
     .from(debt)
     .where(and(eq(debt.groupId, body.group_id), isNull(debt.deletedAt)));
@@ -438,6 +431,8 @@ hono.openapi(getGroupDebtHistorySchema, async (c) => {
           ? CreditorNameInfo[0].displayName
           : CreditorNameInfo[0].name,
       amount: debtEntry.amount,
+      description: debtEntry.description === null ? '' : debtEntry.description,
+      occurred_at: debtEntry.occurredAt,
     });
   }
 
@@ -468,13 +463,8 @@ const registerGroupDebtSchema = route.createSchema(
       },
     },
     responses: {
-      201: {
-        description: 'Created',
-        content: {
-          'application/json': {
-            schema: registerGroupDebtResponseSchema,
-          },
-        },
+      204: {
+        description: 'No Content',
       },
     },
   },
@@ -484,9 +474,6 @@ const registerGroupDebtSchema = route.createSchema(
 hono.openapi(registerGroupDebtSchema, async (c) => {
   const loginUser = c.get('user');
   const body = c.req.valid('json');
-
-  // 現在時刻の取得
-  const now = new Date();
 
   // データベース接続
   const db = drizzle({ connection: c.env.HYPERDRIVE });
@@ -508,35 +495,17 @@ hono.openapi(registerGroupDebtSchema, async (c) => {
   // NOTE: --- 共通化終了 ---
 
   // body.group_id に貸し借り履歴を追加 (debt table)
-  const result = await db
-    .insert(debt)
-    .values({
-      id: crypto.randomUUID(),
-      groupId: body.group_id,
-      creditorId: body.creditor_id,
-      debtorId: body.debtor_id,
-      amount: body.amount,
-      description: typeof body.description === 'undefined' ? null : body.description,
-      occurredAt: body.occurred_at ? new Date(body.occurred_at) : now,
-      createdAt: now,
-      updatedAt: now,
-    })
-    .returning({
-      creditorId: debt.creditorId,
-      debtorId: debt.debtorId,
-      amount: debt.amount,
-      occurredAt: debt.occurredAt,
-    });
+  await db.insert(debt).values({
+    id: crypto.randomUUID(),
+    groupId: body.group_id,
+    creditorId: body.creditor_id,
+    debtorId: body.debtor_id,
+    amount: body.amount,
+    description: typeof body.description === 'undefined' ? null : body.description,
+    occurredAt: body.occurred_at,
+  });
 
-  return c.json(
-    {
-      creditorId: result[0].creditorId,
-      debtorId: result[0].debtorId,
-      amount: result[0].amount,
-      occurredAt: result[0].occurredAt,
-    } satisfies RegisterGroupDebtResponseSchemaType,
-    201
-  );
+  return c.body(null, 204);
 });
 
 // TODO: 貸し借りの履歴の削除エンドポイントの登録
@@ -597,7 +566,6 @@ hono.openapi(deleteGroupDebtSchema, async (c) => {
     .set({
       deletedBy: loginUser.id,
       deletedAt: now,
-      updatedAt: now,
     })
     .where(and(eq(debt.id, body.debt_id), eq(debt.groupId, body.group_id), isNull(debt.deletedAt)));
 
