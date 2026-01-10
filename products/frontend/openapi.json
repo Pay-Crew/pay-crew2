@@ -4591,7 +4591,15 @@
                       "type": "string",
                       "format": "uuid"
                     },
-                    "created_by": {
+                    "invite_id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "created_by_id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "created_by_name": {
                       "type": "string",
                       "minLength": 1
                     },
@@ -4618,7 +4626,9 @@
                   },
                   "required": [
                     "group_name",
-                    "created_by",
+                    "invite_id",
+                    "created_by_id",
+                    "created_by_name",
                     "members"
                   ]
                 }
@@ -5855,6 +5865,14 @@
                           "amount": {
                             "type": "number",
                             "minimum": 0
+                          },
+                          "description": {
+                            "type": "string",
+                            "minLength": 0
+                          },
+                          "occurred_at": {
+                            "type": "string",
+                            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                           }
                         },
                         "required": [
@@ -5863,7 +5881,9 @@
                           "debtor_name",
                           "creditor_id",
                           "creditor_name",
-                          "amount"
+                          "amount",
+                          "description",
+                          "occurred_at"
                         ]
                       }
                     }
@@ -7077,53 +7097,24 @@
                     "type": "string"
                   },
                   "occurred_at": {
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
                   }
                 },
                 "required": [
                   "group_id",
                   "creditor_id",
                   "debtor_id",
-                  "amount"
+                  "amount",
+                  "occurred_at"
                 ]
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "creditorId": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "debtorId": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "amount": {
-                      "type": "number",
-                      "minimum": 0
-                    },
-                    "occurredAt": {
-                      "type": "string",
-                      "format": "date"
-                    }
-                  },
-                  "required": [
-                    "creditorId",
-                    "debtorId",
-                    "amount",
-                    "occurredAt"
-                  ]
-                }
-              }
-            }
+          "204": {
+            "description": "No Content"
           },
           "400": {
             "description": "Bad Request",

@@ -463,7 +463,9 @@ export interface paths {
                         "application/json": {
                             /** Format: uuid */
                             group_name: string;
-                            created_by: string;
+                            invite_id: string;
+                            created_by_id: string;
+                            created_by_name: string;
                             members: {
                                 user_id: string;
                                 user_name: string;
@@ -578,6 +580,8 @@ export interface paths {
                                 creditor_id: string;
                                 creditor_name: string;
                                 amount: number;
+                                description: string;
+                                occurred_at: string;
                             }[];
                         };
                     };
@@ -675,25 +679,17 @@ export interface paths {
                         debtor_id: string;
                         amount: number;
                         description?: string;
-                        occurred_at?: string;
+                        occurred_at: string;
                     };
                 };
             };
             responses: {
-                /** @description Created */
-                201: {
+                /** @description No Content */
+                204: {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content: {
-                        "application/json": {
-                            creditorId: string;
-                            debtorId: string;
-                            amount: number;
-                            /** Format: date */
-                            occurredAt: string;
-                        };
-                    };
+                    content?: never;
                 };
                 /** @description Bad Request */
                 400: {

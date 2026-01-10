@@ -80,7 +80,7 @@ const GenerateGroup: FC = () => {
             : isError
               ? `グループの作成に失敗しました: ${error.message}`
               : isSuccess
-                ? 'グループの作成しました'
+                ? 'グループの作成に成功しました'
                 : null}
         </p>
       </form>

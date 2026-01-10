@@ -75,9 +75,7 @@ const Root: FC = () => {
                 </Link>
                 <ul>
                   {group.members.map((member) => (
-                    <li key={member.user_id}>
-                      {member.user_name} (ID: {member.user_id})
-                    </li>
+                    <li key={member.user_id}>{member.user_name}</li>
                   ))}
                 </ul>
               </li>
