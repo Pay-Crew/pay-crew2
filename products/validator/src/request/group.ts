@@ -30,7 +30,7 @@ export const registerGroupDebtRequestSchema = z.object({
   debtor_id: z.string().min(1),
   amount: z.number().min(0),
   description: z.string().optional(),
-  occurred_at: z.string().optional(),
+  occurred_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 });
 
 export type RegisterGroupDebtRequestSchemaType = z.infer<typeof registerGroupDebtRequestSchema>;

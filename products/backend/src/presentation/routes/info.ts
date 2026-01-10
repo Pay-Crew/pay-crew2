@@ -298,7 +298,6 @@ hono.openapi(infoUserRepaymentSchema, async (c) => {
     .set({
       deletedBy: loginUser.id,
       deletedAt: now,
-      updatedAt: now,
     })
     .where(
       or(

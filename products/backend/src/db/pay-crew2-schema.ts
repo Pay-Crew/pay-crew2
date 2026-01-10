@@ -1,5 +1,5 @@
 // drizzle
-import { pgTable, text, timestamp, index, uuid, uniqueIndex, integer } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, index, uuid, uniqueIndex, integer, date } from 'drizzle-orm/pg-core';
 //auth-schema
 import { user } from './auth-schema';
 
@@ -8,7 +8,7 @@ export const group = pgTable(
   {
     id: uuid('id').primaryKey(),
     name: text('name').notNull(),
-    invite_id: text('invite_id').notNull().unique(),
+    inviteId: text('invite_id').notNull().unique(),
     createdBy: text('created_by')
       .references(() => user.id, { onDelete: 'set null' })
       .notNull(),
@@ -58,7 +58,7 @@ export const debt = pgTable(
       .references(() => user.id, { onDelete: 'cascade' }),
     amount: integer('amount').notNull(),
     description: text('description'),
-    occurredAt: timestamp('occurred_at').defaultNow().notNull(),
+    occurredAt: date('occurred_at').notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')
       .defaultNow()

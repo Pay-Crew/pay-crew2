@@ -52,7 +52,6 @@ export {
   type GetGroupDebtHistoryResponseElementSchemaType,
 } from './response/group';
 export { getGroupDebtHistoryResponseSchema, type GetGroupDebtHistoryResponseSchemaType } from './response/group';
-export { registerGroupDebtResponseSchema, type RegisterGroupDebtResponseSchemaType } from './response/group';
 
 // error response schema
 export { errorResponseSchema, type ErrorResponseSchemaType } from './response/error';
