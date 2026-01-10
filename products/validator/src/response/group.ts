@@ -51,9 +51,3 @@ export const registerGroupDebtResponseSchema = z.object({
 });
 
 export type RegisterGroupDebtResponseSchemaType = z.infer<typeof registerGroupDebtResponseSchema>;
-
-export const deleteGroupDebtResponseSchema = z.object({
-  debt_id: z.string().min(1),
-});
-
-export type DeleteGroupDebtResponseSchemaType = z.infer<typeof deleteGroupDebtResponseSchema>;

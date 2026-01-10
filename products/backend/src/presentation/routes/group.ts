@@ -21,8 +21,6 @@ import {
   registerGroupDebtResponseSchema,
   type RegisterGroupDebtResponseSchemaType,
   deleteGroupDebtRequestSchema,
-  deleteGroupDebtResponseSchema,
-  type DeleteGroupDebtResponseSchemaType,
 } from 'validator';
 // error schema
 import { route } from '../share/error';
@@ -30,7 +28,7 @@ import { route } from '../share/error';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { and, eq, isNull } from 'drizzle-orm';
 import { group, debt, groupMembership } from '../../db/pay-crew2-schema';
-import { user, userProfile } from '../../db/auth-schema';
+import { user } from '../../db/auth-schema';
 
 const hono = honoFactory();
 
@@ -39,7 +37,7 @@ const createGroupSchema = route.createSchema(
   {
     path: '/api/group/create',
     method: 'post',
-    description: 'create a new group',
+    description: 'グループを新規作成するエンドポイント',
     security: [{ SessionCookie: [] }],
     request: {
       body: {
@@ -62,55 +60,44 @@ const createGroupSchema = route.createSchema(
       },
     },
   },
-  [400, 401, 500] as const
+  [401, 500] as const
 );
 
 hono.openapi(createGroupSchema, async (c) => {
-  c.status(201);
+  const loginUser = c.get('user');
   const body = c.req.valid('json');
-  const user = c.get('user');
 
-  //validation
-  if (!body || !body.name) {
-    throw new HTTPException(400, { message: 'Bad Request' });
-  }
-  // set group name
-  const groupName = body.name;
+  // 現在時刻の取得
+  const now = new Date();
 
-  // create invited_id
-  let uuid1 = crypto.randomUUID();
-  let uuid2 = crypto.randomUUID();
-  // invite_id format: <uuid1>-<uuid2>
-  const invite_id = `${uuid1}-${uuid2}`;
-
-  // connect to db
+  // データベース接続
   const db = drizzle({ connection: c.env.HYPERDRIVE });
 
-  //* insert group data *//
+  //* グループ情報を挿入 *//
   const result = await db
     .insert(group)
     .values({
       id: crypto.randomUUID(),
-      name: groupName,
-      invite_id: invite_id,
-      createdBy: user.id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      name: body.group_name,
+      invite_id: `${crypto.randomUUID()}-${crypto.randomUUID()}`,
+      createdBy: loginUser.id,
+      createdAt: now,
+      updatedAt: now,
     })
-    .returning();
+    .returning({
+      id: group.id,
+      invite_id: group.invite_id,
+    });
 
-  //* insert created_by user to groupMembership *//
-  await db
-    .insert(groupMembership)
-    .values({
-      id: crypto.randomUUID(),
-      groupId: result[0].id,
-      userId: user.id,
-      joinedAt: new Date(),
-    })
-    .returning();
+  //* グループ作成者をgroupMembershipに挿入 *//
+  await db.insert(groupMembership).values({
+    id: crypto.randomUUID(),
+    groupId: result[0].id,
+    userId: loginUser.id,
+    joinedAt: now,
+  });
 
-  // return response
+  // レスポンス
   return c.json(
     {
       group_id: result[0].id,
@@ -125,7 +112,7 @@ const joinGroupSchema = route.createSchema(
   {
     path: '/api/group/join',
     method: 'post',
-    description: 'join an existing group',
+    description: '招待IDを使ってグループに参加するエンドポイント',
     security: [{ SessionCookie: [] }],
     request: {
       body: {
@@ -152,39 +139,43 @@ const joinGroupSchema = route.createSchema(
 );
 
 hono.openapi(joinGroupSchema, async (c) => {
-  c.status(201);
   const body = c.req.valid('json');
   const user = c.get('user');
 
-  //validation
-  if (!body || !body.invite_id) {
-    throw new HTTPException(400, { message: 'Bad Request' });
-  }
-  const inviteId = body.invite_id;
+  // 現在時刻の取得
+  const now = new Date();
 
-  // connect to db
+  // データベース接続
   const db = drizzle({ connection: c.env.HYPERDRIVE });
 
-  // find group by invite_id
-  const groupData = await db.select().from(group).where(eq(group.invite_id, inviteId)).limit(1);
+  // invite_id から group を取得
+  const groupData = await db
+    .select({
+      id: group.id,
+    })
+    .from(group)
+    .where(eq(group.invite_id, body.invite_id))
+    .limit(1);
+
+  // invite_id が不正な場合はエラー
   if (groupData.length === 0) {
-    // validate invite_id
-    throw new HTTPException(401, { message: 'Invalid invite_id' });
+    throw new HTTPException(400, { message: 'Bad Request' });
   }
 
-  // add user to the group
-  const groupId = groupData[0].id;
+  // loginUser を invite_id の group に参加させる
   const result = await db
     .insert(groupMembership)
     .values({
       id: crypto.randomUUID(),
-      groupId: groupId,
+      groupId: groupData[0].id,
       userId: user.id,
-      joinedAt: new Date(),
+      joinedAt: now,
     })
-    .returning();
+    .returning({
+      groupId: groupMembership.groupId,
+    });
 
-  // return response
+  // レスポンス
   return c.json(
     {
       group_id: result[0].groupId,
@@ -211,8 +202,8 @@ const getGroupInfoSchema = route.createSchema(
       },
     },
     responses: {
-      200: {
-        description: 'OK',
+      201: {
+        description: 'Created',
         content: {
           'application/json': {
             schema: getGroupInfoResponseSchema,
@@ -225,106 +216,98 @@ const getGroupInfoSchema = route.createSchema(
 );
 
 hono.openapi(getGroupInfoSchema, async (c) => {
-  c.status(201);
   const body = c.req.valid('json');
   const loginUser = c.get('user');
 
-  // NOTE: このvalidationは、groupのhistoryの取得のエンドポイントでも全く同じものを使うので、共通化を検討すること
-  // NOTE: --- 共通化開始 ---
-  // validation
-  if (!body || !body.group_id) {
-    throw new HTTPException(400, { message: 'Bad Request' });
-  }
-  const groupId = body.group_id;
-
-  // connect to db
+  // データベース接続
   const db = drizzle({ connection: c.env.HYPERDRIVE });
 
-  // find me from the group (validation)
+  // NOTE: --- 共通化開始 ---
+  // loginUser が body.group_id のグループのメンバーであることを確認
   const me = await db
-    .select()
+    .select({
+      groupMembershipId: groupMembership.id,
+    })
     .from(groupMembership)
-    .where(and(eq(groupMembership.groupId, groupId), eq(groupMembership.userId, loginUser.id)))
+    .where(and(eq(groupMembership.groupId, body.group_id), eq(groupMembership.userId, loginUser.id)))
     .limit(1);
+
+  // body.group_id のグループのメンバーでない場合はエラー
   if (me.length === 0) {
-    // validate membership
-    throw new HTTPException(401, { message: 'User is not a member of the group' });
+    throw new HTTPException(400, { message: 'Bad Request' });
   }
   // NOTE: --- 共通化終了 ---
 
-  //* get group info *//
-  const groupData = await db.select().from(group).where(eq(group.id, groupId)).limit(1);
-  if (groupData.length === 0) {
-    // validate group_id
-    throw new HTTPException(401, { message: 'Invalid group_id' });
-  }
-
-  //* get created_by member's name *//
-  const createdByUserId = groupData[0].createdBy;
-  let createdByUserName = '';
-  // get user name from user table
-  const createdByUserInfo = await db.select().from(user).where(eq(user.id, createdByUserId)).limit(1);
-  if (createdByUserInfo.length === 0) {
-    throw new HTTPException(500, { message: 'The creator of the group was not found' });
-  }
-  createdByUserName = createdByUserInfo[0].name;
-  // get display name from user_profile table
-  const createdByDisplayNameInfo = await db
-    .select()
-    .from(userProfile)
-    .where(eq(userProfile.userId, createdByUserId))
+  //* body.group_id のグループ情報を取得 *//
+  const groupData = await db
+    .select({
+      name: group.name,
+      createdBy: group.createdBy,
+    })
+    .from(group)
+    .where(eq(group.id, body.group_id))
     .limit(1);
-  if (
-    createdByDisplayNameInfo.length > 0 &&
-    typeof createdByDisplayNameInfo[0].displayName === 'string' &&
-    createdByDisplayNameInfo[0].displayName.length > 0
-  ) {
-    createdByUserName = createdByDisplayNameInfo[0].displayName;
-  }
 
-  //* get members *//
-  // get all member userIds from groupMembership table
-  const membersData = await db.select().from(groupMembership).where(eq(groupMembership.groupId, groupId));
-  const memberUserIds = membersData.map((member) => member.userId);
-  // get user name or display name for each member
+  //* body.group_id のグループ作成者情報を取得 *//
+  // NOTE: 共通化できそう
+  // ユーザ名を取得 (user table)
+  const createdByUserNameInfo = await db
+    .select({
+      name: user.name,
+      displayName: user.displayName,
+    })
+    .from(user)
+    .where(eq(user.id, groupData[0].createdBy))
+    .limit(1);
+
+  // NOTE: 共通化できそう (info.ts と group.ts で共通化)
+  // NOTE: --- 共通化開始 ---
+  //* body.group_id のメンバー情報を取得 *//
+  // グループメンバーのユーザーIDを取得 (group_membership table)
+  const memberUserIds = await db
+    .select({
+      userId: groupMembership.userId,
+    })
+    .from(groupMembership)
+    .where(eq(groupMembership.groupId, body.group_id));
+
+  // メンバー情報を格納する配列
   const members: GetGroupInfoResponseMemberElementSchemaType[] = [];
+
   for (const memberUserId of memberUserIds) {
-    // initialize user name
-    let userName = '';
+    // NOTE: 共通化できそう
+    // ユーザ名を取得 (user table)
+    const memberUserNameInfo = await db
+      .select({
+        name: user.name,
+        displayName: user.displayName,
+      })
+      .from(user)
+      .where(eq(user.id, memberUserId.userId))
+      .limit(1);
 
-    // get user name from user table
-    const userNameInfo = await db.select().from(user).where(eq(user.id, memberUserId)).limit(1);
-    if (userNameInfo.length === 0) {
-      throw new HTTPException(500, { message: 'A group member was not found' });
-    }
-    //set user name
-    userName = userNameInfo[0].name;
-
-    // get display name from user_profile table
-    const displayNameInfo = await db.select().from(userProfile).where(eq(userProfile.userId, memberUserId)).limit(1);
-    if (
-      displayNameInfo.length > 0 &&
-      typeof displayNameInfo[0].displayName === 'string' &&
-      displayNameInfo[0].displayName.length > 0
-    ) {
-      userName = displayNameInfo[0].displayName;
-    }
-
-    // push to members array
+    // メンバー情報を配列に追加
     members.push({
-      user_id: memberUserId,
-      user_name: userName,
+      user_id: memberUserId.userId,
+      user_name:
+        memberUserNameInfo[0].displayName !== null && memberUserNameInfo[0].displayName.length > 0
+          ? memberUserNameInfo[0].displayName
+          : memberUserNameInfo[0].name,
     });
   }
+  // NOTE: --- 共通化終了 ---
 
   // return response
   return c.json(
     {
       group_name: groupData[0].name,
-      created_by: createdByUserName,
+      created_by:
+        createdByUserNameInfo[0].displayName !== null && createdByUserNameInfo[0].displayName.length > 0
+          ? createdByUserNameInfo[0].displayName
+          : createdByUserNameInfo[0].name,
       members: members,
     } satisfies GetGroupInfoResponseSchemaType,
-    200
+    201
   );
 });
 
@@ -346,8 +329,8 @@ const getGroupDebtHistorySchema = route.createSchema(
       },
     },
     responses: {
-      200: {
-        description: 'OK',
+      201: {
+        description: 'Created',
         content: {
           'application/json': {
             schema: getGroupDebtHistoryResponseSchema,
@@ -360,97 +343,91 @@ const getGroupDebtHistorySchema = route.createSchema(
 );
 
 hono.openapi(getGroupDebtHistorySchema, async (c) => {
-  c.status(201);
-  const body = c.req.valid('json');
   const loginUser = c.get('user');
+  const body = c.req.valid('json');
 
-  // NOTE: このvalidationは、各グループの情報を取得するエンドポイントでも全く同じものを使うので、共通化を検討すること
-  // NOTE: --- 共通化開始 ---
-  // validation
-  if (!body || !body.group_id) {
-    throw new HTTPException(400, { message: 'Bad Request' });
-  }
-  const groupId = body.group_id;
-
-  // connect to db
+  // データベース接続
   const db = drizzle({ connection: c.env.HYPERDRIVE });
 
-  // find me from the group (validation)
+  // NOTE: --- 共通化開始 ---
+  // loginUser が body.group_id のグループのメンバーであることを確認
   const me = await db
-    .select()
+    .select({
+      groupMembershipId: groupMembership.id,
+    })
     .from(groupMembership)
-    .where(and(eq(groupMembership.groupId, groupId), eq(groupMembership.userId, loginUser.id)))
+    .where(and(eq(groupMembership.groupId, body.group_id), eq(groupMembership.userId, loginUser.id)))
     .limit(1);
+
+  // body.group_id のグループのメンバーでない場合はエラー
   if (me.length === 0) {
-    // validate membership
-    throw new HTTPException(401, { message: 'User is not a member of the group' });
+    throw new HTTPException(400, { message: 'Bad Request' });
   }
   // NOTE: --- 共通化終了 ---
 
-  //* get each group debt info *//
+  //* グループの貸し借り履歴を取得 *//
+  // 貸し借り履歴を格納する配列
   let debtData: GetGroupDebtHistoryResponseElementSchemaType[] = [];
+
+  // body.group_id の貸し借り履歴を取得 (debt table)
   const rawDebtData = await db
-    .select()
+    .select({
+      id: debt.id,
+      debtorId: debt.debtorId,
+      creditorId: debt.creditorId,
+      amount: debt.amount,
+    })
     .from(debt)
-    .where(and(eq(debt.groupId, groupId), isNull(debt.deletedAt)));
+    .where(and(eq(debt.groupId, body.group_id), isNull(debt.deletedAt)));
+
   for (const debtEntry of rawDebtData) {
-    // get debtor name from user table
-    const debtorInfo = await db.select().from(user).where(eq(user.id, debtEntry.debtorId)).limit(1);
-    if (debtorInfo.length === 0) {
-      throw new HTTPException(500, { message: 'A debtor user was not found' });
-    }
-    let debtorName = debtorInfo[0].name;
-    // get display name from user_profile table
-    const debtorDisplayNameInfo = await db
-      .select()
-      .from(userProfile)
-      .where(eq(userProfile.userId, debtEntry.debtorId))
+    // debt_name を取得
+    // NOTE: 共通化できそう
+    // ユーザ名を取得 (user table)
+    const DebtorNameInfo = await db
+      .select({
+        name: user.name,
+        displayName: user.displayName,
+      })
+      .from(user)
+      .where(eq(user.id, debtEntry.debtorId))
       .limit(1);
-    if (
-      debtorDisplayNameInfo.length > 0 &&
-      typeof debtorDisplayNameInfo[0].displayName === 'string' &&
-      debtorDisplayNameInfo[0].displayName.length > 0
-    ) {
-      debtorName = debtorDisplayNameInfo[0].displayName;
-    }
 
-    // get creditor name from user table
-    const creditorInfo = await db.select().from(user).where(eq(user.id, debtEntry.creditorId)).limit(1);
-    if (creditorInfo.length === 0) {
-      throw new HTTPException(500, { message: 'A creditor user was not found' });
-    }
-    let creditorName = creditorInfo[0].name;
-    // get display name from user_profile table
-    const creditorDisplayNameInfo = await db
-      .select()
-      .from(userProfile)
-      .where(eq(userProfile.userId, debtEntry.creditorId))
+    // creditor_name を取得
+    // NOTE: 共通化できそう
+    // ユーザ名を取得 (user table)
+    const CreditorNameInfo = await db
+      .select({
+        name: user.name,
+        displayName: user.displayName,
+      })
+      .from(user)
+      .where(eq(user.id, debtEntry.creditorId))
       .limit(1);
-    if (
-      creditorDisplayNameInfo.length > 0 &&
-      typeof creditorDisplayNameInfo[0].displayName === 'string' &&
-      creditorDisplayNameInfo[0].displayName.length > 0
-    ) {
-      creditorName = creditorDisplayNameInfo[0].displayName;
-    }
 
-    // push to debtData array
+    // 貸し借り履歴データを配列に追加
     debtData.push({
       debt_id: debtEntry.id,
       debtor_id: debtEntry.debtorId,
-      debtor_name: debtorName,
+      debtor_name:
+        DebtorNameInfo[0].displayName !== null && DebtorNameInfo[0].displayName.length > 0
+          ? DebtorNameInfo[0].displayName
+          : DebtorNameInfo[0].name,
       creditor_id: debtEntry.creditorId,
-      creditor_name: creditorName,
+      creditor_name:
+        CreditorNameInfo[0].displayName !== null && CreditorNameInfo[0].displayName.length > 0
+          ? CreditorNameInfo[0].displayName
+          : CreditorNameInfo[0].name,
       amount: debtEntry.amount,
     });
   }
 
-  // return response
+  // レスポンス
   return c.json(
     {
       debts: debtData,
     } satisfies GetGroupDebtHistoryResponseSchemaType,
-    200
+    201
   );
 });
 
@@ -486,49 +463,51 @@ const registerGroupDebtSchema = route.createSchema(
 );
 
 hono.openapi(registerGroupDebtSchema, async (c) => {
-  c.status(201);
-  const body = c.req.valid('json');
   const loginUser = c.get('user');
+  const body = c.req.valid('json');
 
-  // NOTE: このvalidationは、各グループの情報を取得するエンドポイントでも全く同じものを使うので、共通化を検討すること
-  // NOTE: --- 共通化開始 ---
-  // validation
-  if (!body || !body.group_id) {
-    throw new HTTPException(400, { message: 'Bad Request' });
-  }
-  const groupId = body.group_id;
+  // 現在時刻の取得
+  const now = new Date();
 
-  // connect to db
+  // データベース接続
   const db = drizzle({ connection: c.env.HYPERDRIVE });
 
-  // find me from the group (validation)
+  // NOTE: --- 共通化開始 ---
+  // loginUser が body.group_id のグループのメンバーであることを確認
   const me = await db
-    .select()
+    .select({
+      groupMembershipId: groupMembership.id,
+    })
     .from(groupMembership)
-    .where(and(eq(groupMembership.groupId, groupId), eq(groupMembership.userId, loginUser.id)))
+    .where(and(eq(groupMembership.groupId, body.group_id), eq(groupMembership.userId, loginUser.id)))
     .limit(1);
+
+  // body.group_id のグループのメンバーでない場合はエラー
   if (me.length === 0) {
-    // validate membership
-    throw new HTTPException(401, { message: 'User is not a member of the group' });
+    throw new HTTPException(400, { message: 'Bad Request' });
   }
   // NOTE: --- 共通化終了 ---
 
-  // register group debt entry
+  // body.group_id に貸し借り履歴を追加 (debt table)
   const result = await db
     .insert(debt)
     .values({
       id: crypto.randomUUID(),
-      groupId: groupId,
+      groupId: body.group_id,
       creditorId: body.creditor_id,
       debtorId: body.debtor_id,
       amount: body.amount,
-      description: body.description ? body.description : null,
-      occurredAt: body.occurred_at ? new Date(body.occurred_at) : new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedBy: null,
+      description: typeof body.description === 'undefined' ? null : body.description,
+      occurredAt: body.occurred_at ? new Date(body.occurred_at) : now,
+      createdAt: now,
+      updatedAt: now,
     })
-    .returning();
+    .returning({
+      creditorId: debt.creditorId,
+      debtorId: debt.debtorId,
+      amount: debt.amount,
+      occurredAt: debt.occurredAt,
+    });
 
   return c.json(
     {
@@ -559,13 +538,8 @@ const deleteGroupDebtSchema = route.createSchema(
       },
     },
     responses: {
-      200: {
-        description: 'Deleted',
-        content: {
-          'application/json': {
-            schema: deleteGroupDebtResponseSchema,
-          },
-        },
+      204: {
+        description: 'No Content',
       },
     },
   },
@@ -573,51 +547,43 @@ const deleteGroupDebtSchema = route.createSchema(
 );
 
 hono.openapi(deleteGroupDebtSchema, async (c) => {
-  c.status(200);
-  const body = c.req.valid('json');
   const loginUser = c.get('user');
+  const body = c.req.valid('json');
 
-  // NOTE: このvalidationは、各グループの情報を取得するエンドポイントでも全く同じものを使うので、共通化を検討すること
-  // NOTE: --- 共通化開始 ---
-  // validation
-  if (!body || !body.group_id) {
-    throw new HTTPException(400, { message: 'Bad Request' });
-  }
-  const groupId = body.group_id;
+  // 現在時刻の取得
+  const now = new Date();
 
-  // connect to db
+  // データベース接続
   const db = drizzle({ connection: c.env.HYPERDRIVE });
 
-  // find me from the group (validation)
+  // NOTE: --- 共通化開始 ---
+  // loginUser が body.group_id のグループのメンバーであることを確認
   const me = await db
-    .select()
+    .select({
+      groupMembershipId: groupMembership.id,
+    })
     .from(groupMembership)
-    .where(and(eq(groupMembership.groupId, groupId), eq(groupMembership.userId, loginUser.id)))
+    .where(and(eq(groupMembership.groupId, body.group_id), eq(groupMembership.userId, loginUser.id)))
     .limit(1);
+
+  // body.group_id のグループのメンバーでない場合はエラー
   if (me.length === 0) {
-    // validate membership
-    throw new HTTPException(401, { message: 'User is not a member of the group' });
+    throw new HTTPException(400, { message: 'Bad Request' });
   }
   // NOTE: --- 共通化終了 ---
 
-  const now = new Date();
-  // delete group debt entry (soft delete)
-  const result = await db
+  //* body.debt_id の貸し借りの履歴の削除 (論理削除) *//
+  await db
     .update(debt)
     .set({
       deletedBy: loginUser.id,
       deletedAt: now,
       updatedAt: now,
     })
-    .where(and(eq(debt.id, body.debt_id), eq(debt.groupId, groupId)))
-    .returning();
+    .where(and(eq(debt.id, body.debt_id), eq(debt.groupId, body.group_id), isNull(debt.deletedAt)));
 
-  return c.json(
-    {
-      debt_id: result[0].id,
-    } satisfies DeleteGroupDebtResponseSchemaType,
-    200
-  );
+  // レスポンス
+  return c.body(null, 204);
 });
 
 export default hono;

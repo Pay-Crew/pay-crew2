@@ -4,85 +4,6 @@
  */
 
 export interface paths {
-    "/api/session": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description sample endpoint to get session info */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            id: string;
-                            email: string;
-                        };
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /**
-                             * @description HTTPステータスコード
-                             * @example 400
-                             */
-                            status: 100 | 102 | 103 | 200 | 201 | 202 | 203 | 206 | 207 | 208 | 226 | 300 | 301 | 302 | 303 | 305 | 306 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 418 | 421 | 422 | 423 | 424 | 425 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511 | -1;
-                            /**
-                             * @description エラーメッセージ
-                             * @example Bad Request
-                             */
-                            message: string;
-                        };
-                    };
-                };
-                /** @description Internal Server Error */
-                500: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /**
-                             * @description HTTPステータスコード
-                             * @example 400
-                             */
-                            status: 100 | 102 | 103 | 200 | 201 | 202 | 203 | 206 | 207 | 208 | 226 | 300 | 301 | 302 | 303 | 305 | 306 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 418 | 421 | 422 | 423 | 424 | 425 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511 | -1;
-                            /**
-                             * @description エラーメッセージ
-                             * @example Bad Request
-                             */
-                            message: string;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/info/group": {
         parameters: {
             query?: never;
@@ -90,7 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description get info about groups the user belongs to */
+        /** @description ログインユーザーが参加しているグループ一覧を取得するエンドポイント */
         get: {
             parameters: {
                 query?: never;
@@ -177,7 +98,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description get info about user transactions */
+        /** @description ログインユーザーの貸し借りの履歴を取得するエンドポイント */
         get: {
             parameters: {
                 query?: never;
@@ -246,7 +167,7 @@ export interface paths {
         };
         put?: never;
         post?: never;
-        /** @description do user repayment */
+        /** @description ログインユーザーと指定された取引相手間の取引履歴を削除する (完済する) エンドポイント */
         delete: {
             parameters: {
                 query?: never;
@@ -262,36 +183,12 @@ export interface paths {
                 };
             };
             responses: {
-                /** @description Created */
-                200: {
+                /** @description No Content */
+                204: {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content: {
-                        "application/json": {
-                            counterparty_id: string;
-                        };
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /**
-                             * @description HTTPステータスコード
-                             * @example 400
-                             */
-                            status: 100 | 102 | 103 | 200 | 201 | 202 | 203 | 206 | 207 | 208 | 226 | 300 | 301 | 302 | 303 | 305 | 306 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 418 | 421 | 422 | 423 | 424 | 425 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511 | -1;
-                            /**
-                             * @description エラーメッセージ
-                             * @example Bad Request
-                             */
-                            message: string;
-                        };
-                    };
+                    content?: never;
                 };
                 /** @description Unauthorized */
                 401: {
@@ -349,7 +246,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description create a new group */
+        /** @description グループを新規作成するエンドポイント */
         post: {
             parameters: {
                 query?: never;
@@ -360,7 +257,7 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/json": {
-                        name: string;
+                        group_name: string;
                     };
                 };
             };
@@ -375,26 +272,6 @@ export interface paths {
                             /** Format: uuid */
                             group_id: string;
                             invite_id: string;
-                        };
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /**
-                             * @description HTTPステータスコード
-                             * @example 400
-                             */
-                            status: 100 | 102 | 103 | 200 | 201 | 202 | 203 | 206 | 207 | 208 | 226 | 300 | 301 | 302 | 303 | 305 | 306 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 418 | 421 | 422 | 423 | 424 | 425 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511 | -1;
-                            /**
-                             * @description エラーメッセージ
-                             * @example Bad Request
-                             */
-                            message: string;
                         };
                     };
                 };
@@ -455,7 +332,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description join an existing group */
+        /** @description 招待IDを使ってグループに参加するエンドポイント */
         post: {
             parameters: {
                 query?: never;
@@ -576,8 +453,8 @@ export interface paths {
                 };
             };
             responses: {
-                /** @description OK */
-                200: {
+                /** @description Created */
+                201: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -686,8 +563,8 @@ export interface paths {
                 };
             };
             responses: {
-                /** @description OK */
-                200: {
+                /** @description Created */
+                201: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -912,16 +789,12 @@ export interface paths {
                 };
             };
             responses: {
-                /** @description Created */
-                200: {
+                /** @description No Content */
+                204: {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content: {
-                        "application/json": {
-                            debt_id: string;
-                        };
-                    };
+                    content?: never;
                 };
                 /** @description Bad Request */
                 400: {
@@ -997,7 +870,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description get user profile */
+        /** @description ログインユーザーのプロフィール情報を取得するエンドポイント */
         get: {
             parameters: {
                 query?: never;
@@ -1021,26 +894,6 @@ export interface paths {
                         };
                     };
                 };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /**
-                             * @description HTTPステータスコード
-                             * @example 400
-                             */
-                            status: 100 | 102 | 103 | 200 | 201 | 202 | 203 | 206 | 207 | 208 | 226 | 300 | 301 | 302 | 303 | 305 | 306 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 418 | 421 | 422 | 423 | 424 | 425 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511 | -1;
-                            /**
-                             * @description エラーメッセージ
-                             * @example Bad Request
-                             */
-                            message: string;
-                        };
-                    };
-                };
                 /** @description Unauthorized */
                 401: {
                     headers: {
@@ -1083,8 +936,13 @@ export interface paths {
                 };
             };
         };
-        /** @description update user profile */
-        put: {
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** @description ログインユーザーのプロフィール情報を更新するエンドポイント */
+        patch: {
             parameters: {
                 query?: never;
                 header?: never;
@@ -1102,39 +960,12 @@ export interface paths {
                 };
             };
             responses: {
-                /** @description OK */
-                200: {
+                /** @description No Content */
+                204: {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content: {
-                        "application/json": {
-                            display_name: string;
-                            /** Format: uri */
-                            avatar_url: string;
-                            bio: string;
-                        };
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /**
-                             * @description HTTPステータスコード
-                             * @example 400
-                             */
-                            status: 100 | 102 | 103 | 200 | 201 | 202 | 203 | 206 | 207 | 208 | 226 | 300 | 301 | 302 | 303 | 305 | 306 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 418 | 421 | 422 | 423 | 424 | 425 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511 | -1;
-                            /**
-                             * @description エラーメッセージ
-                             * @example Bad Request
-                             */
-                            message: string;
-                        };
-                    };
+                    content?: never;
                 };
                 /** @description Unauthorized */
                 401: {
@@ -1178,11 +1009,6 @@ export interface paths {
                 };
             };
         };
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
         trace?: never;
     };
 }

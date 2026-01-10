@@ -36,6 +36,10 @@ better-authが実行時に参照する設定ファイル。
 pnpm run backend:better-auth:generate
 ```
 
+`auto-auth-schema.ts`が更新される。
+
+このファイルを読み、適宜`src/db/auth-schema.ts`を手動で更新する。
+
 3. `pnpm run backend:drizzle:generate`を実行する。
 
 ```sh
@@ -100,6 +104,19 @@ pnpm run backend:deploy
 
 ※ HyperdriveのIDが漏洩すると、他者にデータベースを操作される可能性があるため、デプロイ完了後は必ず元に戻してからステージング (`git add`) をすること。
 
+## drizzleのスキーマファイルの構造
+
+```mermaid
+flowchart LR
+  auth-schema["src/db/auth-schema.ts (better-auth関係のテーブル定義用)"]
+  pay-crew2["src/db/pay-crew2-schema.ts (pay-crew2関係のテーブル定義用)"]
+  relation["src/db/relation.ts (リレーション定義用)"]
+  schema["src/db/schema.ts (エクスポート用)"]
+  auth-schema --> relation
+  pay-crew2 --> relation
+  relation --> schema
+```
+
 ## 構造
 
 この構造は、レイヤードアーキテクチャから着想を得て定義している。
@@ -116,6 +133,7 @@ pnpm run backend:deploy
   - hono
   - @hono/zod-openapi
   - zod-openapi-share
+  - better-auth
 
 
 #### presentation/share
@@ -128,6 +146,7 @@ presentation層で共通して使用するエンティティを定義する。
 
 - 外部依存
   - drizzle
+  - better-auth
 
 ### db
 
@@ -146,6 +165,7 @@ openapi.jsonの生成を行う処理を定義している。
   - hono
   - @hono/zod-openapi
   - zod-openapi-share
+  - better-auth
 
 ## 依存関係
 

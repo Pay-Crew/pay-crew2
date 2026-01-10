@@ -1,5 +1,4 @@
 // hono instance
-import { HTTPException } from 'hono/http-exception';
 import honoFactory from '../factory/hono';
 // validator
 import {
@@ -11,8 +10,6 @@ import {
   type InfoAboutGroupsTheUserBelongsToResponseGroupElementSchemaType,
   type InfoAboutGroupsTheUserBelongsToResponseSchemaType,
   deleteInfoAboutUserRepaymentRequestSchema,
-  deleteInfoAboutUserRepaymentResponseSchema,
-  DeleteInfoAboutUserRepaymentResponseSchemaType,
 } from 'validator';
 // error schema
 import { route } from '../share/error';
@@ -20,7 +17,9 @@ import { route } from '../share/error';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { and, or, eq, inArray, isNull } from 'drizzle-orm';
 import { group, debt, groupMembership } from '../../db/pay-crew2-schema';
-import { user, userProfile } from '../../db/auth-schema';
+import { user } from '../../db/auth-schema';
+// types
+import { TransactionType } from '../utils/types';
 
 const hono = honoFactory();
 
@@ -29,7 +28,7 @@ const infoAboutGroupsTheUserBelongsToSchema = route.createSchema(
   {
     path: '/api/info/group',
     method: 'get',
-    description: 'get info about groups the user belongs to',
+    description: 'ログインユーザーが参加しているグループ一覧を取得するエンドポイント',
     security: [{ SessionCookie: [] }],
     request: {},
     responses: {
@@ -49,11 +48,13 @@ const infoAboutGroupsTheUserBelongsToSchema = route.createSchema(
 hono.openapi(infoAboutGroupsTheUserBelongsToSchema, async (c) => {
   const loginUser = c.get('user');
 
-  // connect to db
+  // データベース接続
   const db = drizzle({ connection: c.env.HYPERDRIVE });
 
-  //* get group info that belongs to the user *//
+  // グループ情報格納用配列
   let groupInfo: InfoAboutGroupsTheUserBelongsToResponseGroupElementSchemaType[] = [];
+
+  //* ユーザが参加しているグループ情報を取得 (group table) *//
   const groupsData = await db
     .select({
       id: group.id,
@@ -72,50 +73,53 @@ hono.openapi(infoAboutGroupsTheUserBelongsToSchema, async (c) => {
     );
 
   for (const groupData of groupsData) {
-    //* get members *//
-    // get all member userIds from groupMembership table
-    const membersData = await db.select().from(groupMembership).where(eq(groupMembership.groupId, groupData.id));
-    const memberUserIds = membersData.map((member) => member.userId);
-    // get user name or display name for each member
+    // NOTE: 共通化できそう
+    // NOTE: --- 共通化開始 ---
+    //* groupData.id のメンバー情報を取得 *//
+    // グループメンバーのユーザーIDを取得 (group_membership table)
+    const memberUserIds = await db
+      .select({
+        userId: groupMembership.userId,
+      })
+      .from(groupMembership)
+      .where(eq(groupMembership.groupId, groupData.id));
+
+    // メンバー情報を格納する配列
     const members: InfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType[] = [];
+
     for (const memberUserId of memberUserIds) {
-      // initialize user name
-      let userName = '';
+      // NOTE: 共通化できそう
+      // ユーザ名を取得 (user table)
+      const userNameInfo = await db
+        .select({
+          name: user.name,
+          displayName: user.displayName,
+        })
+        .from(user)
+        .where(eq(user.id, memberUserId.userId))
+        .limit(1);
 
-      // get user name from user table
-      const userNameInfo = await db.select().from(user).where(eq(user.id, memberUserId)).limit(1);
-      if (userNameInfo.length === 0) {
-        throw new HTTPException(500, { message: 'A group member was not found' });
-      }
-      //set user name
-      userName = userNameInfo[0].name;
-
-      // get display name from user_profile table
-      const displayNameInfo = await db.select().from(userProfile).where(eq(userProfile.userId, memberUserId)).limit(1);
-      if (
-        displayNameInfo.length > 0 &&
-        typeof displayNameInfo[0].displayName === 'string' &&
-        displayNameInfo[0].displayName.length > 0
-      ) {
-        userName = displayNameInfo[0].displayName;
-      }
-
-      // push to members array
+      // メンバー情報を配列に追加
       members.push({
-        user_id: memberUserId,
-        user_name: userName,
+        user_id: memberUserId.userId,
+        user_name:
+          userNameInfo[0].displayName !== null && userNameInfo[0].displayName.length > 0
+            ? userNameInfo[0].displayName
+            : userNameInfo[0].name,
       });
     }
-    // push to groupInfo array
+
+    // グループ情報を配列に追加
     groupInfo.push({
       group_id: groupData.id,
       group_name: groupData.name,
       created_by: groupData.createdBy,
       members: members,
     });
+    // NOTE: --- 共通化終了 ---
   }
 
-  // return response
+  // レスポンス
   return c.json(
     {
       groups: groupInfo,
@@ -129,7 +133,7 @@ const infoAboutUserTransactionsSchema = route.createSchema(
   {
     path: '/api/info/transaction',
     method: 'get',
-    description: 'get info about user transactions',
+    description: 'ログインユーザーの貸し借りの履歴を取得するエンドポイント',
     security: [{ SessionCookie: [] }],
     request: {},
     responses: {
@@ -146,39 +150,40 @@ const infoAboutUserTransactionsSchema = route.createSchema(
   [401, 500] as const
 );
 
-type TransactionType = {
-  user_id: string; // 取引相手のユーザID
-  lent_amount: number; // 貸した金額
-  borrowed_amount: number; // 借りた金額
-};
-
 hono.openapi(infoAboutUserTransactionsSchema, async (c) => {
   const loginUser = c.get('user');
 
-  // connect to db
+  // データベース接続
   const db = drizzle({ connection: c.env.HYPERDRIVE });
 
-  // loginUserが貸している取引履歴を取得
+  //* loginUserが貸している取引履歴を取得 *//
   // マイナス n 円
   const creditorTransactions = await db
-    .select()
+    .select({
+      debtorId: debt.debtorId,
+      amount: debt.amount,
+    })
     .from(debt)
     .where(and(eq(debt.creditorId, loginUser.id), isNull(debt.deletedAt)));
 
-  // loginUserが借りている取引履歴を取得
+  //* loginUserが借りている取引履歴を取得 *//
   // プラス n 円
   const debtorTransactions = await db
-    .select()
+    .select({
+      creditorId: debt.creditorId,
+      amount: debt.amount,
+    })
     .from(debt)
     .where(and(eq(debt.debtorId, loginUser.id), isNull(debt.deletedAt)));
 
-  // 取引相手ごとに集計
+  //* 取引相手ごとに集計 *//
+  // 集計結果を格納するMap
   const transactions: Map<string, TransactionType> = new Map();
 
   // 貸している取引を集計
-  for (const transaction of creditorTransactions) {
-    const userId = transaction.debtorId;
-    const amount = transaction.amount;
+  for (const creditorTransaction of creditorTransactions) {
+    const userId = creditorTransaction.debtorId;
+    const amount = creditorTransaction.amount;
     if (!transactions.has(userId)) {
       transactions.set(userId, { user_id: userId, lent_amount: 0, borrowed_amount: 0 });
     }
@@ -187,9 +192,9 @@ hono.openapi(infoAboutUserTransactionsSchema, async (c) => {
   }
 
   // 借りている取引を集計
-  for (const transaction of debtorTransactions) {
-    const userId = transaction.creditorId;
-    const amount = transaction.amount;
+  for (const debtorTransaction of debtorTransactions) {
+    const userId = debtorTransaction.creditorId;
+    const amount = debtorTransaction.amount;
     if (!transactions.has(userId)) {
       transactions.set(userId, { user_id: userId, lent_amount: 0, borrowed_amount: 0 });
     }
@@ -197,38 +202,33 @@ hono.openapi(infoAboutUserTransactionsSchema, async (c) => {
     existing.borrowed_amount += amount;
   }
 
-  // netAmount の計算
+  // 集計結果を格納する配列
   const aggregatedTransactions: InfoAboutUserTransactionsResponseTransactionElementSchemaType[] = [];
+
+  // 貸し借りの合算
   for (const transaction of transactions.values()) {
-    // calculate net amount: netAmount = borrowed_amount - lent_amount
+    // 合算結果: netAmount = borrowed_amount - lent_amount
     const netAmount = transaction.borrowed_amount - transaction.lent_amount;
 
-    let userName = '';
-    // get user name from user table
-    const userInfo = await db.select().from(user).where(eq(user.id, transaction.user_id)).limit(1);
-    if (userInfo.length === 0) {
-      throw new HTTPException(500, { message: 'A transaction counterparty was not found' });
-    }
-    userName = userInfo[0].name;
-    // get display name from user_profile table
-    const displayNameInfo = await db
-      .select()
-      .from(userProfile)
-      .where(eq(userProfile.userId, transaction.user_id))
+    // NOTE: 共通化できそう
+    // ユーザ名を取得 (user table)
+    const userNameInfo = await db
+      .select({
+        name: user.name,
+        displayName: user.displayName,
+      })
+      .from(user)
+      .where(eq(user.id, transaction.user_id))
       .limit(1);
-    if (
-      displayNameInfo.length > 0 &&
-      typeof displayNameInfo[0].displayName === 'string' &&
-      displayNameInfo[0].displayName.length > 0
-    ) {
-      userName = displayNameInfo[0].displayName;
-    }
 
-    // push to aggregatedTransactions array if netAmount is not zero
+    // netAmount が 0 でない場合のみ配列に追加
     if (netAmount !== 0) {
       aggregatedTransactions.push({
         counterparty_id: transaction.user_id,
-        counterparty_name: userName,
+        counterparty_name:
+          userNameInfo[0].displayName !== null && userNameInfo[0].displayName.length > 0
+            ? userNameInfo[0].displayName
+            : userNameInfo[0].name,
         amount: netAmount,
       });
     }
@@ -248,7 +248,7 @@ const infoUserRepaymentSchema = route.createSchema(
   {
     path: '/api/info/transaction',
     method: 'delete',
-    description: 'do user repayment',
+    description: 'ログインユーザーと指定された取引相手間の取引履歴を削除する (完済する) エンドポイント',
     security: [{ SessionCookie: [] }],
     request: {
       body: {
@@ -261,34 +261,24 @@ const infoUserRepaymentSchema = route.createSchema(
       },
     },
     responses: {
-      200: {
-        description: 'Deleted',
-        content: {
-          'application/json': {
-            schema: deleteInfoAboutUserRepaymentResponseSchema,
-          },
-        },
+      204: {
+        description: 'No Content',
       },
     },
   },
-  [400, 401, 500] as const
+  [401, 500] as const
 );
 
 hono.openapi(infoUserRepaymentSchema, async (c) => {
-  const body = c.req.valid('json');
   const loginUser = c.get('user');
+  const body = c.req.valid('json');
 
-  // validation
-  if (!body || !body.counterparty_id) {
-    throw new HTTPException(400, { message: 'Bad Request' });
-  }
-
-  // connect to db
+  // データベース接続
   const db = drizzle({ connection: c.env.HYPERDRIVE });
 
   const now = new Date();
   // loginUser <-> counterparty_id 間の取引履歴を削除（deletedAt, deletedBy をセット）
-  const creditorTransactions = await db
+  await db
     .update(debt)
     .set({
       deletedBy: loginUser.id,
@@ -300,16 +290,10 @@ hono.openapi(infoUserRepaymentSchema, async (c) => {
         and(eq(debt.creditorId, loginUser.id), eq(debt.debtorId, body.counterparty_id), isNull(debt.deletedAt)),
         and(eq(debt.debtorId, loginUser.id), eq(debt.creditorId, body.counterparty_id), isNull(debt.deletedAt))
       )
-    )
-    .returning();
+    );
 
-  // return response
-  return c.json(
-    {
-      counterparty_id: body.counterparty_id,
-    } satisfies DeleteInfoAboutUserRepaymentResponseSchemaType,
-    200
-  );
+  // レスポンス
+  return c.body(null, 204);
 });
 
 export default hono;

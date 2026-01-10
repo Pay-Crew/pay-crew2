@@ -43,9 +43,3 @@ export type InfoAboutUserTransactionsResponseTransactionElementSchemaType = z.in
 >;
 
 export type InfoAboutUserTransactionsResponseSchemaType = z.infer<typeof infoAboutUserTransactionsResponseSchema>;
-
-export const deleteInfoAboutUserRepaymentResponseSchema = z.object({
-  counterparty_id: z.string().min(1),
-});
-
-export type DeleteInfoAboutUserRepaymentResponseSchemaType = z.infer<typeof deleteInfoAboutUserRepaymentResponseSchema>;

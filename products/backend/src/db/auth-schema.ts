@@ -1,36 +1,26 @@
 import { pgTable, text, timestamp, boolean, index } from 'drizzle-orm/pg-core';
 
-export const user = pgTable('user', {
-  id: text('id').primaryKey(),
-  name: text('name').notNull(),
-  email: text('email').notNull().unique(),
-  emailVerified: boolean('email_verified').default(false).notNull(),
-  image: text('image'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at')
-    .defaultNow()
-    .$onUpdate(() => /* @__PURE__ */ new Date())
-    .notNull(),
-});
-
-export const userProfile = pgTable(
-  'user_profile',
+export const user = pgTable(
+  'user',
   {
-    userId: text('user_id')
-      .primaryKey()
-      .references(() => user.id, { onDelete: 'cascade' }),
-    displayName: text('display_name'),
-    avatarUrl: text('avatar_url'),
-    bio: text('bio'),
+    id: text('id').primaryKey(),
+    name: text('name').notNull(),
+    email: text('email').notNull().unique(),
+    emailVerified: boolean('email_verified').default(false).notNull(),
+    image: text('image'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')
       .defaultNow()
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
+    // 追加のプロフィール情報
+    displayName: text('display_name'),
+    avatarUrl: text('avatar_url'),
+    bio: text('bio'),
   },
   (table) => [
-    // displayName に対する二次索引を作成
-    index('user_profile_display_name_idx').on(table.displayName),
+    // display_name に対する二次索引を作成
+    index('user_display_name_idx').on(table.displayName),
   ]
 );
 

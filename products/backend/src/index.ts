@@ -20,7 +20,7 @@ app.use(
   cors({
     origin: ['https://pay-crew2.yukiosada.work', 'http://localhost:5173'],
     allowHeaders: ['Content-Type', 'Authorization', 'baggage', 'sentry-trace'],
-    allowMethods: ['POST', 'PUT', 'GET', 'DELETE', 'OPTIONS'],
+    allowMethods: ['POST', 'PUT', 'PATCH', 'GET', 'DELETE', 'OPTIONS'],
     exposeHeaders: ['Content-Length'],
     maxAge: 600,
     credentials: true,
