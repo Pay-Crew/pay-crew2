@@ -5,7 +5,7 @@ import { account, session, user } from './auth-schema';
 import { debt, group, groupMembership } from './pay-crew2-schema';
 
 // auth-schema
-export const userRelations = relations(user, ({ one, many }) => ({
+export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session, {
     relationName: 'user__session_userId',
   }),
