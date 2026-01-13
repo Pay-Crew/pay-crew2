@@ -1,0 +1,23 @@
+.markdown {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  & * {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: var(--text-base);
+  }
+  & h1 {
+    font-size: var(--text-2xl);
+  }
+  & h2 {
+    font-size: var(--text-xl);
+  }
+  & h3 {
+    font-size: var(--text-lg);
+  }
+  & ul,
+  ol {
+    padding-left: 20px;
+  }
+}

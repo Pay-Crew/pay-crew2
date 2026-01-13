@@ -6,6 +6,7 @@ import { updateUserProfileRequestSchema, type UpdateUserProfileRequestSchemaType
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+import { Title } from '../../share';
 
 const Profile: FC = () => {
   // ユーサープロフィール情報の取得
@@ -49,7 +50,7 @@ const Profile: FC = () => {
 
   return (
     <>
-      <h1>プロフィールの編集</h1>
+      <Title title="プロフィールの編集" />
       {userProfileQuery.isLoading && <p>Loading...</p>}
       {userProfileQuery.isError && <p>Error: {userProfileQuery.error.message}</p>}
       {userProfileQuery.isSuccess && (

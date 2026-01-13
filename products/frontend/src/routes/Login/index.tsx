@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 // better-auth
 import { authClient } from '../../lib/auth';
+import { Title } from '../../share';
 
 const Login: FC = () => {
   // OAuth signin handlers
@@ -19,7 +20,7 @@ const Login: FC = () => {
 
   return (
     <div>
-      <h1>Login Page</h1>
+      <Title title="ログイン / サインイン" />
       <button onClick={handleDiscordSignin}>Discordで サインイン / ログイン</button>
       <button onClick={googleSignIn}>Googleで サインイン / ログイン</button>
     </div>

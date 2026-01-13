@@ -1,0 +1,18 @@
+.title {
+  font-size: var(--text-4xl);
+  font-family: 'Limelight', sans-serif;
+  text-align: center;
+  margin: 100px 0;
+}
+
+.description {
+  text-align: center;
+  margin: 0 0 50px 0;
+}
+
+.welcomeBox {
+  display: flex;
+  gap: var(--space-lg);
+  width: 100%;
+  justify-content: center;
+}

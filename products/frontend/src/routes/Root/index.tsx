@@ -3,6 +3,9 @@ import { useEffect, type FC } from 'react';
 import { $api } from '../../api/fetchClient';
 // react-router
 import { useNavigate, Link } from 'react-router';
+// css
+import styles from './index.module.css';
+import { SubTitle } from '../../share';
 
 const Root: FC = () => {
   // sessionのチェック
@@ -44,7 +47,10 @@ const Root: FC = () => {
 
   return (
     <>
-      <h1>Pay Crew2</h1>
+      <h1 className={styles.title}>Pay Crew2</h1>
+      <p className={styles.description}>
+        Pay Crew2は、友人や家族と簡単に割り勘やお金の貸し借りを管理できるアプリケーションです。
+      </p>
       {sessionCheckMutation.isPending && <p>セッションの確認中...</p>}
       {sessionCheckMutation.isError && <p>セッションが無効です。ログインページへリダイレクトします...。</p>}
       {sessionCheckMutation.isSuccess && (
@@ -61,11 +67,11 @@ const Root: FC = () => {
           )}
           {infoAboutGroupsTheUserBelongsToQuery.data && infoAboutUserTransactionsQuery.data && (
             <>
-              <Link to="/profile">プロフィール編集へ</Link>
-              <br />
-              <Link to="/gen-group">グループ作成へ</Link>
-              <br />
-              <h3>Group Info:</h3>
+              <div className={styles.welcomeBox}>
+                <Link to="/profile">プロフィール編集へ</Link>
+                <Link to="/gen-group">グループ作成へ</Link>
+              </div>
+              <SubTitle subTitle="参加しているグループ情報" />
               <ul>
                 {infoAboutGroupsTheUserBelongsToQuery.data?.groups.map((group) => (
                   <li key={group.group_id}>
@@ -81,26 +87,26 @@ const Root: FC = () => {
                 ))}
               </ul>
 
-              <h3>💸 返す金額の一覧</h3>
+              <SubTitle subTitle="返す金額の一覧 💸" />
               {paybacks.length === 0 ? (
                 <p>返すお金はありません</p>
               ) : (
                 <ul>
-                  {paybacks.map((t, i) => (
-                    <li key={i}>
+                  {paybacks.map((t) => (
+                    <li key={t.counterparty_id}>
                       {t.counterparty_name} に <b>{t.amount}</b> 円
                     </li>
                   ))}
                 </ul>
               )}
 
-              <h3>💰 貸す金額の一覧</h3>
+              <SubTitle subTitle="受け取る金額の一覧 💰" />
               {receivables.length === 0 ? (
                 <p>貸しているお金はありません</p>
               ) : (
                 <ul>
-                  {receivables.map((t, i) => (
-                    <li key={i}>
+                  {receivables.map((t) => (
+                    <li key={t.counterparty_id}>
                       {t.counterparty_name} から <b>{Math.abs(t.amount)}</b> 円
                       <button
                         onClick={() => handleDeleteDebtHandler(t.counterparty_id)}

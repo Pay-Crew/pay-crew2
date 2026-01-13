@@ -18,10 +18,9 @@ const SessionCheck: FC = () => {
 
   return (
     <>
-      <h1>Pay Crew2</h1>
       {sessionCheckMutation.isPending && <p>セッションの確認中...</p>}
       {sessionCheckMutation.isError && <p>セッションが無効です。ログインページへリダイレクトします...。</p>}
-      {sessionCheckMutation.isSuccess && <Outlet />};
+      {sessionCheckMutation.isSuccess && <Outlet />}
     </>
   );
 };

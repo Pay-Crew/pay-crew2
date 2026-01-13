@@ -20,7 +20,9 @@
     "better-auth": "catalog:",
     "react": "catalog:frontend",
     "react-dom": "catalog:frontend",
+    "remark-gfm": "catalog:frontend",
     "react-hook-form": "catalog:frontend",
+    "react-markdown": "catalog:frontend",
     "react-router": "catalog:frontend",
     "zod": "catalog:"
   },
