@@ -1,3 +1,6 @@
+// check response schema
+export { sessionCheckResponseSchema, type SessionCheckResponseSchemaType } from './response/check';
+
 // info request schema
 export {
   deleteInfoAboutUserRepaymentRequestSchema,
