@@ -1,0 +1,4 @@
+.container {
+  width: calc(100% - 60px);
+  padding: 0 30px 200px 30px;
+}

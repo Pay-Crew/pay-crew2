@@ -1,4 +1,40 @@
+:root {
+  --text-xs: calc(1rem * 8 / 10);
+  --text-sm: calc(1rem * 8 / 9);
+  --text-base: calc(1rem * 8 / 8);
+  --text-lg: calc(1rem * 8 / 7);
+  --text-xl: calc(1rem * 8 / 6);
+  --text-2xl: calc(1rem * 8 / 5);
+  --text-3xl: calc(1rem * 8 / 4);
+  --text-4xl: calc(1rem * 8 / 3);
+  --text-5xl: calc(1rem * 8 / 2);
+  --text-6xl: calc(1rem * 8 / 1);
+
+  --color-base: #b09757;
+
+  --background-color-base: #001c32;
+
+  --space-xs: calc(0.5rem * 1);
+  --space-sm: calc(0.5rem * 2);
+  --space-base: calc(0.5rem * 3);
+  --space-lg: calc(0.5rem * 5);
+  --space-xl: calc(0.5rem * 8);
+  --space-2xl: calc(0.5rem * 13);
+  --space-3xl: calc(0.5rem * 21);
+  --space-4xl: calc(0.5rem * 34);
+  --space-5xl: calc(0.5rem * 55);
+  --space-6xl: calc(0.5rem * 89);
+}
+
 * {
   margin: 0;
   padding: 0;
+  color: var(--color-base);
+  font-size: var(--text-lg);
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+}
+
+body,
+html {
+  background-color: var(--background-color-base);
 }

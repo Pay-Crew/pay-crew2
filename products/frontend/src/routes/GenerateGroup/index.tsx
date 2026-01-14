@@ -13,6 +13,8 @@ import {
 } from 'validator';
 // react-router
 import { Link } from 'react-router';
+// components
+import { Title } from '../../share';
 
 const GenerateGroup: FC = () => {
   // コピー状態管理
@@ -63,7 +65,7 @@ const GenerateGroup: FC = () => {
 
   return (
     <>
-      <h1>グループの作成</h1>
+      <Title title="グループ作成" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="group_name">グループ名:</label>
@@ -85,16 +87,9 @@ const GenerateGroup: FC = () => {
         </p>
       </form>
       {isPending && <p>グループの作成中...</p>}
-      {isError && (
-        <>
-          <h2>グループ作成結果</h2>
-          <p>グループの作成に失敗しました。再度お試しください。</p>
-        </>
-      )}
+      {isError && <p>グループの作成に失敗しました。再度お試しください。</p>}
       {isSuccess && result && (
         <>
-          <h2>グループ作成結果</h2>
-
           {inviteUrl && (
             <div>
               <input value={inviteUrl} readOnly />

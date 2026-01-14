@@ -12,6 +12,8 @@ import {
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+// components
+import { SubTitle, Title } from '../../share';
 
 const GroupDetail: FC = () => {
   // URLパラメータからgroupIdを取得
@@ -137,12 +139,11 @@ const GroupDetail: FC = () => {
 
   return (
     <>
-      <h1>グループ情報</h1>
       {groupInfoMutation.isPending && <p>グループ情報を取得中...</p>}
       {groupInfoMutation.isError && <p>グループ情報の取得に失敗しました。再度お試しください。</p>}
       {groupInfoMutation.isSuccess && groupInfoResult && (
         <>
-          <p>グループ名: {groupInfoResult.group_name}</p>
+          <Title title={groupInfoResult.group_name} />
           <p>作成者: {groupInfoResult.created_by_name}</p>
           {inviteUrl && (
             <div>
@@ -154,13 +155,13 @@ const GroupDetail: FC = () => {
               {copyStatus === 'error' && <p>コピーに失敗しました</p>}
             </div>
           )}
-          <h3>メンバー一覧</h3>
+          <h3>メンバー 一覧</h3>
           <ul>
             {groupInfoResult.members.map((member) =>
               member ? <li key={member.user_id}>{member.user_name}</li> : null
             )}
           </ul>
-          <h2>貸し借りの登録</h2>
+          <SubTitle subTitle="貸し借りの登録" />
           <form onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label htmlFor="debtor_id">借りる人:</label>
@@ -227,7 +228,7 @@ const GroupDetail: FC = () => {
           </form>
         </>
       )}
-      <h2>グループの貸し借りの履歴</h2>
+      <SubTitle subTitle="貸し借りの履歴" />
       {debtHistoryMutation.isPending && <p>貸し借りの履歴を取得中...</p>}
       {debtHistoryMutation.isError && <p>貸し借りの履歴の取得に失敗しました。再度お試しください。</p>}
       {debtHistoryMutation.isSuccess && debtHistoryResult && (

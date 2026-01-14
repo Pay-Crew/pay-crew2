@@ -1,0 +1,21 @@
+.footer {
+  width: 100%;
+  padding: var(--space-xl) 0;
+  border-top: 4px double var(--color-base);
+}
+
+.copyright {
+  text-align: center;
+  font-size: var(--text-sm);
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin: var(--space-base) 0 0 0;
+}
+.link {
+  display: block;
+  font-size: var(--text-sm);
+}
