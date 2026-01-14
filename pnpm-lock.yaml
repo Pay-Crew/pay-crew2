@@ -105,6 +105,9 @@ catalogs:
     happy-dom:
       specifier: ^20.0.10
       version: 20.0.10
+    lucide-react:
+      specifier: ^0.562.0
+      version: 0.562.0
     openapi-fetch:
       specifier: ^0.15.0
       version: 0.15.0
@@ -123,6 +126,9 @@ catalogs:
     react-hook-form:
       specifier: ^7.65.0
       version: 7.65.0
+    react-icons:
+      specifier: ^5.5.0
+      version: 5.5.0
     react-markdown:
       specifier: ^10.1.0
       version: 10.1.0
@@ -236,6 +242,9 @@ importers:
       hono:
         specifier: catalog:backend
         version: 4.10.4
+      lucide-react:
+        specifier: catalog:frontend
+        version: 0.562.0(react@19.2.0)
       openapi-fetch:
         specifier: catalog:frontend
         version: 0.15.0
@@ -263,6 +272,9 @@ importers:
       react-hook-form:
         specifier: catalog:frontend
         version: 7.65.0(react@19.2.0)
+      react-icons:
+        specifier: catalog:frontend
+        version: 5.5.0(react@19.2.0)
       react-markdown:
         specifier: catalog:frontend
         version: 10.1.0(@types/react@19.2.2)(react@19.2.0)
@@ -382,6 +394,9 @@ importers:
       better-auth:
         specifier: 'catalog:'
         version: 1.4.10(drizzle-kit@0.31.6)(drizzle-orm@0.44.7(@cloudflare/workers-types@4.20251014.0)(@types/pg@8.15.6)(kysely@0.28.9)(pg@8.16.3))(pg@8.16.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(vitest@4.0.5)
+      lucide-react:
+        specifier: catalog:frontend
+        version: 0.562.0(react@19.2.0)
       react:
         specifier: catalog:frontend
         version: 19.2.0
@@ -391,6 +406,9 @@ importers:
       react-hook-form:
         specifier: catalog:frontend
         version: 7.65.0(react@19.2.0)
+      react-icons:
+        specifier: catalog:frontend
+        version: 5.5.0(react@19.2.0)
       react-markdown:
         specifier: catalog:frontend
         version: 10.1.0(@types/react@19.2.2)(react@19.2.0)
@@ -2973,6 +2991,11 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
+  lucide-react@0.562.0:
+    resolution: {integrity: sha512-82hOAu7y0dbVuFfmO4bYF1XEwYk/mEbM5E+b1jgci/udUBEE/R7LF5Ip0CCEmXe8AybRM8L+04eP+LGZeDvkiw==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
@@ -3410,6 +3433,11 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
+
+  react-icons@5.5.0:
+    resolution: {integrity: sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==}
+    peerDependencies:
+      react: '*'
 
   react-markdown@10.1.0:
     resolution: {integrity: sha512-qKxVopLT/TyA6BX3Ue5NwabOsAzm0Q7kAPwq6L+wWDwisYs7R8vZ0nRXqq6rkueboxpkjvLGU9fWifiX/ZZFxQ==}
@@ -6618,6 +6646,10 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
+  lucide-react@0.562.0(react@19.2.0):
+    dependencies:
+      react: 19.2.0
+
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -7262,6 +7294,10 @@ snapshots:
       scheduler: 0.27.0
 
   react-hook-form@7.65.0(react@19.2.0):
+    dependencies:
+      react: 19.2.0
+
+  react-icons@5.5.0(react@19.2.0):
     dependencies:
       react: 19.2.0
 

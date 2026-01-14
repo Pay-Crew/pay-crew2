@@ -28,11 +28,15 @@
   max-width: 900px;
 }
 .groupLi {
-  width: calc(100% - var(--space-sm) * 2);
+  width: 100%;
   border-radius: var(--space-xs);
   border: solid 1px var(--color-base);
   margin: var(--space-base) 0;
-  padding: var(--space-xs) var(--space-sm);
+}
+.groupLink {
+  display: block;
+  text-decoration: none;
+  padding: var(--space-sm);
 }
 
 .memberUl {
@@ -50,8 +54,11 @@
   align-items: center;
   gap: var(--space-sm);
 }
-.groupLink {
+.groupName {
   font-size: var(--text-xl);
+  color: var(--background-color-base);
+  background-color: var(--color-base);
+  padding: 0 var(--space-sm);
 }
 .label {
   font-size: var(--text-sm);

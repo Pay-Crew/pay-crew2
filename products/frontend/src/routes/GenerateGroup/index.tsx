@@ -14,7 +14,9 @@ import {
 // react-router
 import { Link } from 'react-router';
 // components
-import { Title } from '../../share';
+import { Button, Title } from '../../share';
+// css
+import styles from './index.module.css';
 
 const GenerateGroup: FC = () => {
   // コピー状態管理
@@ -72,10 +74,7 @@ const GenerateGroup: FC = () => {
           <input id="group_name" type="text" {...register('group_name')} />
           <ErrorMessage errors={errors} name="group_name" />
         </div>
-
-        <button type="submit" disabled={isPending}>
-          グループを作成
-        </button>
+        <Button type="submit" content="グループを作成" onClick={handleSubmit(onSubmit)} disabled={isPending} />
         <p>
           {isPending
             ? 'グループの作成中...'
@@ -93,14 +92,19 @@ const GenerateGroup: FC = () => {
           {inviteUrl && (
             <div>
               <input value={inviteUrl} readOnly />
-              <button type="button" disabled={copyStatus === 'copying'} onClick={() => inviteUrlHandler(inviteUrl)}>
-                {copyStatus === 'copying' ? 'コピー中...' : copyStatus === 'success' ? 'コピー済み' : 'コピー'}
-              </button>
+              <Button
+                type="button"
+                content={copyStatus === 'copying' ? 'コピー中...' : copyStatus === 'success' ? 'コピー済み' : 'コピー'}
+                onClick={() => inviteUrlHandler(inviteUrl)}
+                disabled={copyStatus === 'copying'}
+              />
               {copyStatus === 'success' && <p>コピーしました</p>}
               {copyStatus === 'error' && <p>コピーに失敗しました</p>}
             </div>
           )}
-          <Link to={`/group/${result.group_id}`}>グループページへ移動</Link>
+          <Link className={styles.groupLink} to={`/group/${result.group_id}`}>
+            グループページへ移動
+          </Link>
         </>
       )}
     </>

@@ -1,5 +1,5 @@
 .title {
   font-size: var(--text-3xl);
   text-align: center;
-  margin: 100px 0;
+  margin: var(--text-6xl) 0;
 }

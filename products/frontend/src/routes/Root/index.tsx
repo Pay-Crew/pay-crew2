@@ -3,6 +3,8 @@ import { useEffect, type FC } from 'react';
 import { $api } from '../../api/fetchClient';
 // react-router
 import { useNavigate, Link } from 'react-router';
+// icons
+import { SquareArrowOutUpRight } from 'lucide-react';
 // css
 import styles from './index.module.css';
 import { SubTitle } from '../../share';
@@ -71,28 +73,29 @@ const Root: FC = () => {
                 <Link to="/profile">プロフィール編集へ</Link>
                 <Link to="/gen-group">グループ作成へ</Link>
               </div>
-              <SubTitle subTitle="参加しているグループ情報" />
+              <SubTitle subTitle="参加しているグループ" />
               <ul className={styles.groupUl}>
                 {infoAboutGroupsTheUserBelongsToQuery.data?.groups.map((group) => (
                   <li className={styles.groupLi} key={group.group_id}>
-                    <div className={styles.groupHeader}>
-                      <Link className={styles.groupLink} to={`/group/${group.group_id}`}>
-                        {group.group_name}
-                      </Link>
-                      <small className={styles.label}>created by&thinsp;:&nbsp;{group.created_by_name}</small>
-                    </div>
-                    <div className={styles.memberBox}>
-                      <small className={styles.label}>[メンバー]</small>
-                      <ul className={styles.memberUl}>
-                        {group.members.map((member, index) =>
-                          index === group.members.length - 1 ? (
-                            <li key={member.user_id}>{member.user_name}</li>
-                          ) : (
-                            <li key={member.user_id}>{member.user_name}、</li>
-                          )
-                        )}
-                      </ul>
-                    </div>
+                    <Link className={styles.groupLink} to={`/group/${group.group_id}`}>
+                      <div className={styles.groupHeader}>
+                        <h3 className={styles.groupName}>{group.group_name}</h3>
+                        <small className={styles.label}>created by&thinsp;:&nbsp;{group.created_by_name}</small>
+                        <SquareArrowOutUpRight />
+                      </div>
+                      <div className={styles.memberBox}>
+                        <small className={styles.label}>[メンバー]</small>
+                        <ul className={styles.memberUl}>
+                          {group.members.map((member, index) =>
+                            index === group.members.length - 1 ? (
+                              <li key={member.user_id}>{member.user_name}</li>
+                            ) : (
+                              <li key={member.user_id}>{member.user_name}、</li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    </Link>
                   </li>
                 ))}
               </ul>

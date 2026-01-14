@@ -13,7 +13,9 @@ import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 // components
-import { SubTitle, Title } from '../../share';
+import { Button, SubTitle } from '../../share';
+// css
+import styles from './index.module.css';
 
 const GroupDetail: FC = () => {
   // URLパラメータからgroupIdを取得
@@ -143,24 +145,32 @@ const GroupDetail: FC = () => {
       {groupInfoMutation.isError && <p>グループ情報の取得に失敗しました。再度お試しください。</p>}
       {groupInfoMutation.isSuccess && groupInfoResult && (
         <>
-          <Title title={groupInfoResult.group_name} />
-          <p>作成者: {groupInfoResult.created_by_name}</p>
+          <h1 className={styles.title}>{groupInfoResult.group_name}</h1>
+          <small className={styles.createdBy}>created by&thinsp;:&nbsp;{groupInfoResult.created_by_name}</small>
+          <h3 className={styles.memberTitle}>参加メンバー</h3>
+          <ul className={styles.memberUl}>
+            {groupInfoResult.members.map((member, index) =>
+              index === groupInfoResult.members.length - 1 ? (
+                <li key={member.user_id}>{member.user_name}</li>
+              ) : (
+                <li key={member.user_id}>{member.user_name}、</li>
+              )
+            )}
+          </ul>
           {inviteUrl && (
             <div>
-              <input value={inviteUrl} readOnly />
-              <button type="button" disabled={copyStatus === 'copying'} onClick={() => inviteUrlHandler(inviteUrl)}>
-                {copyStatus === 'copying' ? 'コピー中...' : copyStatus === 'success' ? 'コピー済み' : 'コピー'}
-              </button>
+              <label htmlFor="invite_url">招待URL:</label>
+              <input id="invite_url" type="text" value={inviteUrl} readOnly />
+              <Button
+                type="button"
+                content={copyStatus === 'copying' ? 'コピー中...' : copyStatus === 'success' ? 'コピー済み' : 'コピー'}
+                onClick={() => inviteUrlHandler(inviteUrl)}
+                disabled={copyStatus === 'copying'}
+              />
               {copyStatus === 'success' && <p>コピーしました</p>}
               {copyStatus === 'error' && <p>コピーに失敗しました</p>}
             </div>
           )}
-          <h3>メンバー 一覧</h3>
-          <ul>
-            {groupInfoResult.members.map((member) =>
-              member ? <li key={member.user_id}>{member.user_name}</li> : null
-            )}
-          </ul>
           <SubTitle subTitle="貸し借りの登録" />
           <form onSubmit={handleSubmit(onSubmit)}>
             <div>
@@ -203,7 +213,7 @@ const GroupDetail: FC = () => {
 
             <div>
               <label htmlFor="description">詳細:</label>
-              <input id="description" type="text" {...register('description')} />
+              <textarea id="description" {...register('description')} />
               <ErrorMessage errors={errors} name="description" />
             </div>
 
@@ -213,9 +223,12 @@ const GroupDetail: FC = () => {
               <ErrorMessage errors={errors} name="occurred_at" />
             </div>
 
-            <button type="submit" disabled={debtRegisterMutation.isPending}>
-              貸し借りを登録
-            </button>
+            <Button
+              type="submit"
+              content="貸し借りを登録"
+              onClick={handleSubmit(onSubmit)}
+              disabled={debtRegisterMutation.isPending}
+            />
             <p>
               {debtRegisterMutation.isPending
                 ? '貸し借りの登録中...'
@@ -235,11 +248,18 @@ const GroupDetail: FC = () => {
         <ul>
           {debtHistoryResult.debts.map((debt, index) => (
             <li key={index}>
-              {debt.debtor_name} さんが {debt.creditor_name} さんに {debt.amount} 円を借りています。 （詳細:{' '}
-              {debt.description}、発生日時: {debt.occurred_at}
-              <button onClick={() => deleteGroupDebtHandler(debt.debt_id)} disabled={deleteGroupDebtMutation.isPending}>
-                {deleteGroupDebtMutation.isPending ? '処理中...' : '完済した'}
-              </button>
+              <p>
+                {debt.debtor_name} さんが {debt.creditor_name} さんに {debt.amount} 円を借りています。
+              </p>
+              <p>
+                （詳細: {debt.description}、発生日時: {debt.occurred_at}）
+              </p>
+              <Button
+                type="button"
+                content={deleteGroupDebtMutation.isPending ? '処理中...' : '完済した'}
+                onClick={() => deleteGroupDebtHandler(debt.debt_id)}
+                disabled={deleteGroupDebtMutation.isPending}
+              />
             </li>
           ))}
         </ul>

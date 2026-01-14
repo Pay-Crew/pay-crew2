@@ -1,0 +1,22 @@
+.title {
+  font-size: var(--text-3xl);
+  text-align: center;
+  margin: var(--text-6xl) 0 0 0;
+}
+.createdBy {
+  display: block;
+  font-size: var(--text-sm);
+  text-align: center;
+}
+.memberTitle {
+  text-align: center;
+  font-size: var(--text-xl);
+  margin: var(--space-base) 0 var(--space-sm) 0;
+}
+.memberUl {
+  list-style: none;
+  display: flex;
+  width: fit-content;
+  max-width: 900px;
+  margin: 0 auto;
+}
