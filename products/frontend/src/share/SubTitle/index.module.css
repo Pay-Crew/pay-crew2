@@ -1,5 +1,5 @@
 .subTitle {
   font-size: var(--text-2xl);
   text-align: center;
-  margin: 80px 0 20px 0;
+  margin: var(--space-2xl) 0 var(--space-lg) 0;
 }

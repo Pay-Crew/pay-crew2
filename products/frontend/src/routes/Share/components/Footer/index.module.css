@@ -1,6 +1,6 @@
 .footer {
   width: 100%;
-  padding: 30px 0;
+  padding: var(--space-xl) 0;
   border-top: 4px double var(--color-base);
 }
 
@@ -13,7 +13,7 @@
   display: flex;
   justify-content: center;
   gap: var(--space-lg);
-  margin: 10px 0 0 0;
+  margin: var(--space-base) 0 0 0;
 }
 .link {
   display: block;

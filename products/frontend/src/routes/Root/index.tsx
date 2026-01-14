@@ -89,9 +89,9 @@ const Root: FC = () => {
 
               <SubTitle subTitle="返す金額の一覧 💸" />
               {paybacks.length === 0 ? (
-                <p>返すお金はありません</p>
+                <p className={styles.message}>返すお金はありません</p>
               ) : (
-                <ul>
+                <ul className={styles.moneyUl}>
                   {paybacks.map((t) => (
                     <li key={t.counterparty_id}>
                       {t.counterparty_name} に <b>{t.amount}</b> 円
@@ -102,12 +102,14 @@ const Root: FC = () => {
 
               <SubTitle subTitle="受け取る金額の一覧 💰" />
               {receivables.length === 0 ? (
-                <p>貸しているお金はありません</p>
+                <p className={styles.message}>貸しているお金はありません</p>
               ) : (
-                <ul>
+                <ul className={styles.moneyUl}>
                   {receivables.map((t) => (
                     <li key={t.counterparty_id}>
-                      {t.counterparty_name} から <b>{Math.abs(t.amount)}</b> 円
+                      <p className={styles.moneyDescription}>
+                        {t.counterparty_name} から {Math.abs(t.amount)}円
+                      </p>
                       <button
                         onClick={() => handleDeleteDebtHandler(t.counterparty_id)}
                         disabled={deleteGroupDebtMutation.isPending}
