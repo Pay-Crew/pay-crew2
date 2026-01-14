@@ -129,6 +129,9 @@ catalogs:
     react-router:
       specifier: ^7.9.5
       version: 7.9.5
+    remark-gfm:
+      specifier: ^4.0.1
+      version: 4.0.1
     typescript-eslint:
       specifier: ^8.46.2
       version: 8.46.2
@@ -267,7 +270,7 @@ importers:
         specifier: catalog:frontend
         version: 7.9.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       remark-gfm:
-        specifier: ^4.0.1
+        specifier: catalog:frontend
         version: 4.0.1
       tsx:
         specifier: catalog:node
@@ -394,6 +397,9 @@ importers:
       react-router:
         specifier: catalog:frontend
         version: 7.9.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      remark-gfm:
+        specifier: catalog:frontend
+        version: 4.0.1
       zod:
         specifier: 'catalog:'
         version: 4.1.12
