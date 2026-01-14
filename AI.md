@@ -93,3 +93,39 @@ groupのメンバー
 貸し借りの登録ボタン
 {groupId}の履歴一覧
 ※各履歴には、削除ボタンを付ける (削除すると、削除したメンバーがその項目に表示されると共に、その項目の文字列に訂正線が引かれる。「削除されました」の文字も追加する)
+
+
+
+- メモ
+
+```ts
+import { useEffect, type FC } from 'react';
+// @tanstack/react-query
+import { $api } from '../../api/fetchClient';
+// react-router
+import { useNavigate } from 'react-router';
+
+const SessionCheck: FC = () => {
+  // sessionのチェック
+  const navigate = useNavigate();
+  const sessionCheckMutation = $api.useMutation('get', '/api/session', {
+    onError: () => {
+      navigate('/login', { replace: true });
+    },
+  });
+  useEffect(() => {
+    sessionCheckMutation.mutate({ credentials: 'include' });
+  }, []);
+
+  return (
+    <>
+      <h1>Pay Crew2</h1>
+      {sessionCheckMutation.isPending && <p>セッションの確認中...</p>}
+      {sessionCheckMutation.isError && <p>セッションが無効です。ログインページへリダイレクトします...。</p>}
+      {sessionCheckMutation.isSuccess && <p>各コンテンツ</p>;};
+    </>
+    );
+}
+
+export default SessionCheck;
+```

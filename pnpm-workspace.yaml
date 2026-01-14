@@ -46,7 +46,9 @@ catalogs:
     openapi-typescript: ^7.10.1
     react: ^19.2.0
     react-dom: ^19.2.0
+    remark-gfm: ^4.0.1
     react-hook-form: ^7.65.0
+    react-markdown: ^10.1.0
     react-router: ^7.9.5
     typescript-eslint: ^8.46.2
     vite: ^7.1.12

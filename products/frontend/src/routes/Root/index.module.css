@@ -1,0 +1,33 @@
+.title {
+  font-size: var(--text-4xl);
+  font-family: 'Limelight', sans-serif;
+  text-align: center;
+  margin: var(--space-2xl) 0;
+}
+
+.description {
+  text-align: center;
+  margin: 0 0 var(--space-lg) 0;
+}
+
+.welcomeBox {
+  display: flex;
+  gap: var(--space-lg);
+  width: 100%;
+  justify-content: center;
+}
+
+.message {
+  text-align: center;
+}
+
+.moneyUl {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  list-style: none;
+}
+
+.moneyDescription {
+  margin: 0 0 0;
+}
