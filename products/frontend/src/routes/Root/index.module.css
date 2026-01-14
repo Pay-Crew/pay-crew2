@@ -21,13 +21,45 @@
   text-align: center;
 }
 
+.groupUl {
+  list-style: none;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 900px;
+}
+.groupLi {
+  width: calc(100% - var(--space-sm) * 2);
+  border-radius: var(--space-xs);
+  border: solid 1px var(--color-base);
+  margin: var(--space-base) 0;
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.memberUl {
+  list-style: none;
+  display: flex;
+}
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-sm) 0;
+}
+.memberBox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.groupLink {
+  font-size: var(--text-xl);
+}
+.label {
+  font-size: var(--text-sm);
+}
+
 .moneyUl {
   width: fit-content;
   max-width: 100%;
   margin: 0 auto;
   list-style: none;
-}
-
-.moneyDescription {
-  margin: 0 0 0;
 }
