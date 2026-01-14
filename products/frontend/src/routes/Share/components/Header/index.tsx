@@ -31,7 +31,7 @@ const Header: FC = () => {
           {sessionCheckMutation.isSuccess && <p>{sessionCheckMutation.data.user_name}</p>}
         </>
         <nav className={styles.nav}>
-          <NavLink to="/">マイページ</NavLink>
+          <NavLink to="/">トップ</NavLink>
           <NavLink to="/gen-group">グループ作成</NavLink>
         </nav>
       </div>
