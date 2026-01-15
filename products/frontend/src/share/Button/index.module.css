@@ -1,0 +1,8 @@
+.button {
+  font-size: var(--text-lg);
+  color: var(--background-color-base);
+  background-color: var(--color-base);
+  padding: 0 var(--space-sm);
+  border: 6px double var(--background-color-base);
+  cursor: pointer;
+}

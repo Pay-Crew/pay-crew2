@@ -1,4 +1,5 @@
 .container {
-  width: calc(100% - 60px);
-  padding: 0 30px 200px 30px;
+  --width-margin: var(--space-base);
+  width: calc(100% - 2 * var(--width-margin));
+  padding: 0 var(--width-margin) var(--space-4xl) var(--width-margin);
 }
