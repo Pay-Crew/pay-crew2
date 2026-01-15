@@ -5,4 +5,7 @@
   padding: 0 var(--space-sm);
   border: 6px double var(--background-color-base);
   cursor: pointer;
+  display: block;
+  width: 150px;
+  margin: 0 auto;
 }

@@ -20,3 +20,44 @@
   max-width: 900px;
   margin: 0 auto;
 }
+
+.moneyUl {
+  width: fit-content;
+  max-width: 900px;
+  margin: 0 auto;
+  list-style: none;
+}
+.moneyLi {
+  display: flex;
+  border-radius: var(--space-xs);
+  border: solid 1px var(--color-base);
+  margin: var(--space-base) 0;
+  padding: var(--space-sm);
+}
+.moneyInfo {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.moneyMetaInfo {
+  font-size: var(--text-base);
+}
+.detailButton {
+  font-size: var(--text-base);
+  background-color: var(--background-color-base);
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.moneyDetail {
+  font-size: var(--text-base);
+  margin: var(--space-sm) 0;
+}
+.moneyButton {
+  flex: 0 0 80px;
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  color: var(--background-color-base);
+  background-color: var(--color-base);
+  border: 6px double var(--background-color-base);
+}

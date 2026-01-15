@@ -25,6 +25,7 @@ const Login: FC = () => {
   return (
     <div>
       <Title title="登録 / ログイン" />
+      <p className={styles.description}>Discord または Google アカウントを使用して登録 / ログインしてください。</p>
       <div className={styles.container}>
         <div>
           <button type="button" className={styles.button} onClick={handleDiscordSignin}>

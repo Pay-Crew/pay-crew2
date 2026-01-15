@@ -5,6 +5,11 @@
   margin: 0 auto;
 }
 
+.description {
+  text-align: center;
+  margin: 0 0 var(--space-2xl) 0;
+}
+
 .button {
   background-color: var(--background-color-base);
   border: 6px double var(--color-base);

@@ -14,7 +14,7 @@ import {
 // react-router
 import { Link } from 'react-router';
 // components
-import { Button, Title } from '../../share';
+import { Button, FormButton, Title } from '../../share';
 // css
 import styles from './index.module.css';
 
@@ -74,7 +74,7 @@ const GenerateGroup: FC = () => {
           <input id="group_name" type="text" {...register('group_name')} />
           <ErrorMessage errors={errors} name="group_name" />
         </div>
-        <Button type="submit" content="グループを作成" onClick={handleSubmit(onSubmit)} disabled={isPending} />
+        <FormButton content="作成" onClick={handleSubmit(onSubmit)} disabled={isPending} />
         <p>
           {isPending
             ? 'グループの作成中...'

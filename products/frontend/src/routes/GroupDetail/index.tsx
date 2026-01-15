@@ -13,7 +13,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 // components
-import { Button, SubTitle } from '../../share';
+import { Button, SubTitle, FormButton } from '../../share';
 // css
 import styles from './index.module.css';
 
@@ -139,6 +139,19 @@ const GroupDetail: FC = () => {
     deleteGroupDebtMutation.mutate({ body: { group_id: groupId, debt_id: debtId }, credentials: 'include' });
   };
 
+  // 詳細展開ハンドラ
+  const [detail, setDetail] = useState<Set<string>>(new Set());
+  const detailExpandHandler = (debtId: string) => {
+    setDetail((prev) => new Set(prev).add(debtId));
+  };
+  const detailShrinkHandler = (debtId: string) => {
+    setDetail((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(debtId);
+      return newSet;
+    });
+  };
+
   return (
     <>
       {groupInfoMutation.isPending && <p>グループ情報を取得中...</p>}
@@ -223,12 +236,7 @@ const GroupDetail: FC = () => {
               <ErrorMessage errors={errors} name="occurred_at" />
             </div>
 
-            <Button
-              type="submit"
-              content="貸し借りを登録"
-              onClick={handleSubmit(onSubmit)}
-              disabled={debtRegisterMutation.isPending}
-            />
+            <FormButton content="登録" onClick={handleSubmit(onSubmit)} disabled={debtRegisterMutation.isPending} />
             <p>
               {debtRegisterMutation.isPending
                 ? '貸し借りの登録中...'
@@ -245,21 +253,44 @@ const GroupDetail: FC = () => {
       {debtHistoryMutation.isPending && <p>貸し借りの履歴を取得中...</p>}
       {debtHistoryMutation.isError && <p>貸し借りの履歴の取得に失敗しました。再度お試しください。</p>}
       {debtHistoryMutation.isSuccess && debtHistoryResult && (
-        <ul>
+        <ul className={styles.moneyUl}>
           {debtHistoryResult.debts.map((debt, index) => (
-            <li key={index}>
-              <p>
-                {debt.debtor_name} さんが {debt.creditor_name} さんに {debt.amount} 円を借りています。
-              </p>
-              <p>
-                （詳細: {debt.description}、発生日時: {debt.occurred_at}）
-              </p>
-              <Button
+            <li className={styles.moneyLi} key={index}>
+              <div className={styles.moneyInfo}>
+                <p>
+                  {debt.debtor_name} さんが {debt.creditor_name} さんに {debt.amount} 円を借りています。
+                </p>
+                <p className={styles.moneyMetaInfo}>[発生日]&nbsp;{debt.occurred_at}</p>
+                {!detail.has(debt.debt_id) && (
+                  <button
+                    className={styles.detailButton}
+                    type="button"
+                    onClick={() => detailExpandHandler(debt.debt_id)}
+                  >
+                    さらに表示
+                  </button>
+                )}
+                {detail.has(debt.debt_id) && (
+                  <>
+                    <p className={styles.moneyDetail}>{debt.description || '未記入...'}</p>
+                    <button
+                      className={styles.detailButton}
+                      type="button"
+                      onClick={() => detailShrinkHandler(debt.debt_id)}
+                    >
+                      閉じる
+                    </button>
+                  </>
+                )}
+              </div>
+              <button
+                className={styles.moneyButton}
                 type="button"
-                content={deleteGroupDebtMutation.isPending ? '処理中...' : '完済した'}
                 onClick={() => deleteGroupDebtHandler(debt.debt_id)}
                 disabled={deleteGroupDebtMutation.isPending}
-              />
+              >
+                {deleteGroupDebtMutation.isPending ? '処理中...' : '完済'}
+              </button>
             </li>
           ))}
         </ul>

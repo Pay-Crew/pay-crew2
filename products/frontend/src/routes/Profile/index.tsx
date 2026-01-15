@@ -6,7 +6,7 @@ import { updateUserProfileRequestSchema, type UpdateUserProfileRequestSchemaType
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { Button, Title } from '../../share';
+import { FormButton, Title } from '../../share';
 
 const Profile: FC = () => {
   // ユーサープロフィール情報の取得
@@ -91,12 +91,7 @@ const Profile: FC = () => {
               <ErrorMessage errors={errors} name="bio" />
             </div>
 
-            <Button
-              type="submit"
-              content="プロフィールを更新"
-              onClick={handleSubmit(onSubmit)}
-              disabled={userProfileMutation.isPending}
-            />
+            <FormButton content="更新" onClick={handleSubmit(onSubmit)} disabled={userProfileMutation.isPending} />
 
             <p>
               {userProfileMutation.isPending
