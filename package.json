@@ -112,6 +112,7 @@
     "react": "catalog:frontend",
     "react-dom": "catalog:frontend",
     "react-hook-form": "catalog:frontend",
+    "react-hot-toast": "catalog:frontend",
     "react-icons": "catalog:frontend",
     "react-markdown": "catalog:frontend",
     "react-router": "catalog:frontend",

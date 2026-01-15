@@ -24,6 +24,7 @@
     "remark-gfm": "catalog:frontend",
     "react-icons": "catalog:frontend",
     "react-hook-form": "catalog:frontend",
+    "react-hot-toast": "catalog:frontend",
     "react-markdown": "catalog:frontend",
     "react-router": "catalog:frontend",
     "zod": "catalog:"

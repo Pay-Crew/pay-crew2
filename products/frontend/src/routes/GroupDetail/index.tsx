@@ -13,9 +13,11 @@ import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 // components
-import { Button, SubTitle, FormButton } from '../../share';
+import { Button, SubTitle, FormButton, Loading } from '../../share';
 // css
 import styles from './index.module.css';
+// toast
+import toast from 'react-hot-toast';
 
 const GroupDetail: FC = () => {
   // URLパラメータからgroupIdを取得
@@ -24,7 +26,7 @@ const GroupDetail: FC = () => {
   if (!groupId) return <p>Group ID is not provided.</p>;
 
   // コピー状態管理
-  const [copyStatus, setCopyStatus] = useState<'idle' | 'copying' | 'success' | 'error'>('idle');
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copying' | 'success'>('idle');
   const [inviteUrl, setInviteUrl] = useState<string | null>(null);
   // 招待URLハンドラ
   const inviteUrlHandler = async (url: string) => {
@@ -32,9 +34,9 @@ const GroupDetail: FC = () => {
       setCopyStatus('copying');
       await navigator.clipboard.writeText(url);
       setCopyStatus('success');
-    } catch (e) {
-      console.error(e);
-      setCopyStatus('error');
+      toast.success('招待URLをコピーしました');
+    } catch {
+      toast.error('コピーに失敗しました');
     }
   };
 
@@ -57,6 +59,19 @@ const GroupDetail: FC = () => {
       setDebtHistoryResult(data);
     },
   });
+
+  // トースト表示
+  useEffect(() => {
+    if (groupInfoMutation.isError) {
+      toast.error('グループ情報の取得に失敗しました', { id: 'group-detail-info-error' });
+    }
+  }, [groupInfoMutation.isError]);
+
+  useEffect(() => {
+    if (debtHistoryMutation.isError) {
+      toast.error('貸し借り情報の取得に失敗しました', { id: 'debt-history-error' });
+    }
+  }, [debtHistoryMutation.isError]);
 
   // コンポーネントマウント時にグループ情報と貸し借り履歴を取得
   useEffect(() => {
@@ -154,7 +169,7 @@ const GroupDetail: FC = () => {
 
   return (
     <>
-      {groupInfoMutation.isPending && <p>グループ情報を取得中...</p>}
+      {groupInfoMutation.isPending && <Loading content="グループ情報を取得中..." />}
       {groupInfoMutation.isError && <p>グループ情報の取得に失敗しました。再度お試しください。</p>}
       {groupInfoMutation.isSuccess && groupInfoResult && (
         <>
@@ -180,10 +195,9 @@ const GroupDetail: FC = () => {
                 onClick={() => inviteUrlHandler(inviteUrl)}
                 disabled={copyStatus === 'copying'}
               />
-              {copyStatus === 'success' && <p>コピーしました</p>}
-              {copyStatus === 'error' && <p>コピーに失敗しました</p>}
             </div>
           )}
+
           <SubTitle subTitle="貸し借りの登録" />
           <form onSubmit={handleSubmit(onSubmit)}>
             <div>
@@ -250,7 +264,7 @@ const GroupDetail: FC = () => {
         </>
       )}
       <SubTitle subTitle="貸し借りの履歴" />
-      {debtHistoryMutation.isPending && <p>貸し借りの履歴を取得中...</p>}
+      {debtHistoryMutation.isPending && <Loading content="貸し借りの履歴を取得中..." />}
       {debtHistoryMutation.isError && <p>貸し借りの履歴の取得に失敗しました。再度お試しください。</p>}
       {debtHistoryMutation.isSuccess && debtHistoryResult && (
         <ul className={styles.moneyUl}>
@@ -272,7 +286,7 @@ const GroupDetail: FC = () => {
                 )}
                 {detail.has(debt.debt_id) && (
                   <>
-                    <p className={styles.moneyDetail}>{debt.description || '未記入...'}</p>
+                    <p className={styles.moneyDetail}>{debt.description || '未記入'}</p>
                     <button
                       className={styles.detailButton}
                       type="button"
