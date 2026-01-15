@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  gap: var(--space-lg);
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.description {
+  text-align: center;
+  margin: 0 0 var(--space-2xl) 0;
+}
+
+.button {
+  background-color: var(--background-color-base);
+  border: 6px double var(--color-base);
+  padding: var(--space-base);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.icon {
+  width: 100px;
+  height: 100px;
+  fill: var(--color-base);
+}
+
+.label {
+  text-align: center;
+}

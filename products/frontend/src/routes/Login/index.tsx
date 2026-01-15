@@ -2,6 +2,10 @@ import type { FC } from 'react';
 // better-auth
 import { authClient } from '../../lib/auth';
 import { Title } from '../../share';
+// icons
+import { FaDiscord, FaGoogle } from 'react-icons/fa6';
+// css
+import styles from './index.module.css';
 
 const Login: FC = () => {
   // OAuth signin handlers
@@ -20,9 +24,22 @@ const Login: FC = () => {
 
   return (
     <div>
-      <Title title="ログイン / サインイン" />
-      <button onClick={handleDiscordSignin}>Discordで サインイン / ログイン</button>
-      <button onClick={googleSignIn}>Googleで サインイン / ログイン</button>
+      <Title title="登録 / ログイン" />
+      <p className={styles.description}>Discord または Google アカウントを使用して登録 / ログインしてください。</p>
+      <div className={styles.container}>
+        <div>
+          <button type="button" className={styles.button} onClick={handleDiscordSignin}>
+            <FaDiscord className={styles.icon} />
+          </button>
+          <p className={styles.label}>Discord</p>
+        </div>
+        <div>
+          <button type="button" className={styles.button} onClick={googleSignIn}>
+            <FaGoogle className={styles.icon} />
+          </button>
+          <p className={styles.label}>Google</p>
+        </div>
+      </div>
     </div>
   );
 };

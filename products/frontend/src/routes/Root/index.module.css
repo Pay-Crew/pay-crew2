@@ -21,13 +21,52 @@
   text-align: center;
 }
 
-.moneyUl {
-  width: fit-content;
-  max-width: 100%;
-  margin: 0 auto;
+.groupUl {
   list-style: none;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 900px;
+}
+.groupLi {
+  width: 100%;
+  border-radius: var(--space-xs);
+  border: solid 1px var(--color-base);
+  margin: var(--space-base) 0;
+}
+.groupLink {
+  display: block;
+  text-decoration: none;
+  padding: var(--space-sm);
 }
 
-.moneyDescription {
-  margin: 0 0 0;
+.memberUl {
+  list-style: none;
+  display: flex;
+}
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-sm) 0;
+}
+.memberBox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.groupName {
+  font-size: var(--text-xl);
+  color: var(--background-color-base);
+  background-color: var(--color-base);
+  padding: 0 var(--space-sm);
+}
+.label {
+  font-size: var(--text-sm);
+}
+
+.moneyUl {
+  width: fit-content;
+  max-width: 900px;
+  margin: 0 auto;
+  list-style: none;
 }

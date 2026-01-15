@@ -1,6 +1,6 @@
 .footer {
   width: 100%;
-  padding: var(--space-xl) 0;
+  padding: var(--space-lg) 0;
   border-top: 4px double var(--color-base);
 }
 

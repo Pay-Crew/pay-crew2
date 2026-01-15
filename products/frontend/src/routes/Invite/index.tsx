@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router';
 // @tanstack/react-query
 import { $api } from '../../api/fetchClient';
 // components
-import { Title } from '../../share';
+import { FormButton, Title } from '../../share';
 
 const Invite: FC = () => {
   // URLパラメータからinviteIdを取得
@@ -29,7 +29,7 @@ const Invite: FC = () => {
   return (
     <>
       <Title title="グループの招待" />
-      <button onClick={() => inviteHandler(inviteId)}>参加する</button>
+      <FormButton content="参加" onClick={() => inviteHandler(inviteId)} />
       {isPending && <p>参加処理中...</p>}
       {isError && <p>エラーが発生しました: {error.message}</p>}
       {isSuccess && (
