@@ -19,12 +19,13 @@ import {
   GetGroupInfoResponseMemberElementSchemaType,
   registerGroupDebtRequestSchema,
   deleteGroupDebtRequestSchema,
+  cancelGroupDebtRequestSchema,
 } from 'validator';
 // error schema
 import { route } from '../share/error';
 // drizzle
 import { drizzle } from 'drizzle-orm/node-postgres';
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, eq, isNotNull, isNull } from 'drizzle-orm';
 import { group, debt, groupMembership } from '../../db/pay-crew2-schema';
 import { user } from '../../db/auth-schema';
 
@@ -388,15 +389,17 @@ hono.openapi(getGroupDebtHistorySchema, async (c) => {
       amount: debt.amount,
       description: debt.description,
       occurredAt: debt.occurredAt,
+      deletedAt: debt.deletedAt,
+      deletedBy: debt.deletedBy,
     })
     .from(debt)
-    .where(and(eq(debt.groupId, body.group_id), isNull(debt.deletedAt)));
+    .where(eq(debt.groupId, body.group_id));
 
   for (const debtEntry of rawDebtData) {
     // debt_name を取得
     // NOTE: 共通化できそう
     // ユーザ名を取得 (user table)
-    const DebtorNameInfo = await db
+    const debtorNameInfo = await db
       .select({
         name: user.name,
         displayName: user.displayName,
@@ -408,7 +411,7 @@ hono.openapi(getGroupDebtHistorySchema, async (c) => {
     // creditor_name を取得
     // NOTE: 共通化できそう
     // ユーザ名を取得 (user table)
-    const CreditorNameInfo = await db
+    const creditorNameInfo = await db
       .select({
         name: user.name,
         displayName: user.displayName,
@@ -417,22 +420,45 @@ hono.openapi(getGroupDebtHistorySchema, async (c) => {
       .where(eq(user.id, debtEntry.creditorId))
       .limit(1);
 
+    // deleted_by_name を取得
+    // NOTE: 共通化できそう
+    // ユーザ名を取得 (user table)
+    let deletedByNameInfo = null;
+    if (debtEntry.deletedBy !== null) {
+      deletedByNameInfo = await db
+        .select({
+          name: user.name,
+          displayName: user.displayName,
+        })
+        .from(user)
+        .where(eq(user.id, debtEntry.deletedBy))
+        .limit(1);
+    }
+
     // 貸し借り履歴データを配列に追加
     debtData.push({
       debt_id: debtEntry.id,
       debtor_id: debtEntry.debtorId,
       debtor_name:
-        DebtorNameInfo[0].displayName !== null && DebtorNameInfo[0].displayName.length > 0
-          ? DebtorNameInfo[0].displayName
-          : DebtorNameInfo[0].name,
+        debtorNameInfo[0].displayName !== null && debtorNameInfo[0].displayName.length > 0
+          ? debtorNameInfo[0].displayName
+          : debtorNameInfo[0].name,
       creditor_id: debtEntry.creditorId,
       creditor_name:
-        CreditorNameInfo[0].displayName !== null && CreditorNameInfo[0].displayName.length > 0
-          ? CreditorNameInfo[0].displayName
-          : CreditorNameInfo[0].name,
+        creditorNameInfo[0].displayName !== null && creditorNameInfo[0].displayName.length > 0
+          ? creditorNameInfo[0].displayName
+          : creditorNameInfo[0].name,
       amount: debtEntry.amount,
       description: debtEntry.description === null ? '' : debtEntry.description,
       occurred_at: debtEntry.occurredAt,
+      deleted_at: debtEntry.deletedAt?.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo' }) || null,
+      deleted_by_id: debtEntry.deletedBy,
+      deleted_by_name:
+        debtEntry.deletedBy && deletedByNameInfo
+          ? deletedByNameInfo[0].displayName !== null && deletedByNameInfo[0].displayName.length > 0
+            ? deletedByNameInfo[0].displayName
+            : deletedByNameInfo[0].name
+          : null,
     });
   }
 
@@ -568,6 +594,68 @@ hono.openapi(deleteGroupDebtSchema, async (c) => {
       deletedAt: now,
     })
     .where(and(eq(debt.id, body.debt_id), eq(debt.groupId, body.group_id), isNull(debt.deletedAt)));
+
+  // レスポンス
+  return c.body(null, 204);
+});
+
+// TODO: 貸し借り履歴の削除の取り消しエンドポイントの登録
+const cancelGroupDebtSchema = route.createSchema(
+  {
+    path: '/api/group/debt/cancel',
+    method: 'post',
+    description: 'cancel deleted group debt entry',
+    security: [{ SessionCookie: [] }],
+    request: {
+      body: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: cancelGroupDebtRequestSchema,
+          },
+        },
+      },
+    },
+    responses: {
+      204: {
+        description: 'No Content',
+      },
+    },
+  },
+  [400, 401, 500] as const
+);
+
+hono.openapi(cancelGroupDebtSchema, async (c) => {
+  const loginUser = c.get('user');
+  const body = c.req.valid('json');
+
+  // データベース接続
+  const db = drizzle({ connection: c.env.HYPERDRIVE });
+
+  // NOTE: --- 共通化開始 ---
+  // loginUser が body.group_id のグループのメンバーであることを確認
+  const me = await db
+    .select({
+      groupMembershipId: groupMembership.id,
+    })
+    .from(groupMembership)
+    .where(and(eq(groupMembership.groupId, body.group_id), eq(groupMembership.userId, loginUser.id)))
+    .limit(1);
+
+  // body.group_id のグループのメンバーでない場合はエラー
+  if (me.length === 0) {
+    throw new HTTPException(400, { message: 'Bad Request' });
+  }
+  // NOTE: --- 共通化終了 ---
+
+  //* body.debt_id の貸し借りの履歴の削除の取り消し (論理削除の取り消し) *//
+  await db
+    .update(debt)
+    .set({
+      deletedBy: null,
+      deletedAt: null,
+    })
+    .where(and(eq(debt.id, body.debt_id), eq(debt.groupId, body.group_id), isNotNull(debt.deletedAt)));
 
   // レスポンス
   return c.body(null, 204);

@@ -38,6 +38,12 @@ export const getGroupDebtHistoryResponseElementSchema = z.object({
   amount: z.number().min(0),
   description: z.string().min(0),
   occurred_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  deleted_at: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .nullable(),
+  deleted_by_id: z.string().min(1).nullable(),
+  deleted_by_name: z.string().min(1).nullable(),
 });
 
 export const getGroupDebtHistoryResponseSchema = z.object({
