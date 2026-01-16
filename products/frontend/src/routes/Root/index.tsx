@@ -43,7 +43,7 @@ const Root: FC = () => {
   return (
     <>
       <Logo content="Pay Crew2" />
-      <Error content="Pay Crew2は、まだ開発中です。" />
+      <Error content="Pay Crew2は、まだ開発中です。そのため、予告なくデータが消失する可能性があります。また、サービスの仕様が変更されることがあります。これらを含む「Pay Crew2」について、一切の責任を負いかねますのでご了承ください。" />
       <Description content="Pay Crew2は、友人や家族と簡単に割り勘やお金の貸し借りを管理できるアプリケーションです。" />
       {(infoAboutGroupsTheUserBelongsToQuery.isPending || infoAboutUserTransactionsQuery.isPending) && (
         <Loading content="データを取得中..." />
