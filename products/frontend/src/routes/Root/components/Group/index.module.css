@@ -1,60 +1,66 @@
-.groupUl {
+.ul {
   list-style: none;
   margin: 0 auto;
-  width: 100%;
   max-width: 900px;
 }
-.groupLi {
-  width: 100%;
+.li {
   border-radius: var(--space-xs);
   border: solid 1px var(--color-base);
   margin: var(--space-base) 0;
 }
-.groupLink {
+.link {
   display: block;
   text-decoration: none;
   padding: var(--space-sm);
 }
 
-.groupHeader {
+/* section 1 */
+.groupNameWrapper {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  margin: 0 0 var(--space-sm) 0;
 }
-.memberBox {
+.groupName {
+  width: fit-content;
+  max-width: calc(100% - var(--space-sm) * 2);
+  font-size: var(--text-xl);
+  color: var(--background-color-base);
+  background-color: var(--color-base);
+  padding: 0 var(--space-sm);
+  word-wrap: break-word;
+  min-width: 0;
+}
+.icon {
+  flex-shrink: 0;
+  width: var(--text-xl);
+  height: var(--text-xl);
+}
+
+/* section2 ~ 3 shared */
+.label {
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+/* section 2 */
+.createdByWrapper {
+  display: flex;
+  min-width: 0;
+}
+.createdBy {
+  font-size: var(--text-sm);
+  word-wrap: break-word;
+  min-width: 0;
+}
+
+/* section 3 */
+.memberWrapper {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
   width: 100%;
 }
-.groupName {
-  font-size: var(--text-xl);
-  color: var(--background-color-base);
-  background-color: var(--color-base);
-  padding: 0 var(--space-sm);
-}
-
-.memberLabel {
-  font-size: var(--text-sm);
-  white-space: nowrap;
-}
 .memberNames {
-  word-wrap: break-word;
-  min-width: 0;
-}
-
-.createdByWrapper {
-  width: fit-content;
-  display: flex;
-  min-width: 0;
-}
-.createdByLabel {
-  font-size: var(--text-sm);
-  white-space: nowrap;
-}
-.createdBy {
-  font-size: var(--text-sm);
   word-wrap: break-word;
   min-width: 0;
 }
