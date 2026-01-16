@@ -1,0 +1,6 @@
+.groupName {
+  font-size: var(--text-3xl);
+  text-align: center;
+  margin: var(--text-6xl) 0 0 0;
+  word-wrap: break-word;
+}

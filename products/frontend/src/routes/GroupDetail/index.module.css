@@ -1,63 +1,23 @@
-.title {
-  font-size: var(--text-3xl);
-  text-align: center;
-  margin: var(--text-6xl) 0 0 0;
+.inputWrapper {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
 }
-.createdBy {
+.label {
   display: block;
-  font-size: var(--text-sm);
-  text-align: center;
 }
-.memberTitle {
-  text-align: center;
-  font-size: var(--text-xl);
-  margin: var(--space-base) 0 var(--space-sm) 0;
+.input {
+  display: block;
+  width: 100%;
+  color: #000000;
 }
-.memberUl {
-  list-style: none;
-  display: flex;
-  width: fit-content;
-  max-width: 900px;
-  margin: 0 auto;
+.textarea {
+  display: block;
+  width: 100%;
+  height: 100px;
+  color: #000000;
 }
-
-.moneyUl {
-  width: fit-content;
-  max-width: 900px;
-  margin: 0 auto;
-  list-style: none;
-}
-.moneyLi {
-  display: flex;
-  border-radius: var(--space-xs);
-  border: solid 1px var(--color-base);
-  margin: var(--space-base) 0;
-  padding: var(--space-sm);
-}
-.moneyInfo {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-.moneyMetaInfo {
+.error {
+  color: var(--color-error);
   font-size: var(--text-base);
-}
-.detailButton {
-  font-size: var(--text-base);
-  background-color: var(--background-color-base);
-  border: none;
-  text-decoration: underline;
-  cursor: pointer;
-}
-.moneyDetail {
-  font-size: var(--text-base);
-  margin: var(--space-sm) 0;
-}
-.moneyButton {
-  flex: 0 0 80px;
-  height: 80px;
-  width: 80px;
-  border-radius: 50%;
-  color: var(--background-color-base);
-  background-color: var(--color-base);
-  border: 6px double var(--background-color-base);
 }

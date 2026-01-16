@@ -1,0 +1,9 @@
+.successMessage {
+  text-align: center;
+}
+
+.groupLink {
+  display: block;
+  text-align: center;
+  margin: var(--space-lg) 0 0 0;
+}

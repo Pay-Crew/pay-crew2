@@ -1,16 +1,11 @@
 .header {
   width: calc(100% - 60px);
-  padding: 0 var(--space-base);
-  height: 80px;
+  padding: var(--space-base);
   display: flex;
   justify-content: space-between;
   border-bottom: 4px double var(--color-base);
 }
 
-.titleContainer {
-  display: flex;
-  align-items: center;
-}
 .title {
   display: block;
   font-size: var(--text-2xl);
@@ -18,12 +13,13 @@
   text-decoration: none;
 }
 
-.navContainer {
-  display: flex;
-  align-items: center;
-  gap: var(--space-lg);
-}
 .nav {
   display: flex;
   gap: var(--space-base);
+}
+
+@media screen and (max-width: 499px) {
+  .nav {
+    display: none;
+  }
 }

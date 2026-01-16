@@ -1,0 +1,19 @@
+.message {
+  text-align: center;
+}
+
+.ul {
+  list-style: none;
+  margin: 0 auto;
+  max-width: 900px;
+}
+
+.li {
+  border-radius: var(--space-xs);
+  border: solid 1px var(--color-base);
+  margin: var(--space-base) 0;
+  padding: var(--space-sm);
+  word-wrap: break-word;
+  white-space: normal;
+  min-width: 0;
+}

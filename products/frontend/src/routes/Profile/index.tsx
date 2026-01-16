@@ -6,16 +6,34 @@ import { updateUserProfileRequestSchema, type UpdateUserProfileRequestSchemaType
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { FormButton, Title } from '../../share';
+import { FormButton, Loading, Error, Title } from '../../share';
+// toast
+import { toast } from 'react-hot-toast';
+// css
+import styles from './index.module.css';
 
 const Profile: FC = () => {
   // ユーサープロフィール情報の取得
   const userProfileQuery = $api.useQuery('get', '/api/profile', {
     credentials: 'include',
+    onError: () => {
+      toast.error('情報の取得に失敗しました', { id: 'profile-user-info' });
+    },
   });
 
   // ユーザープロフィール情報の更新
-  const userProfileMutation = $api.useMutation('patch', `/api/profile`);
+  const userProfileMutation = $api.useMutation('patch', `/api/profile`, {
+    onSuccess: () => {
+      userProfileQuery.refetch();
+      toast.success('更新に成功しました', { id: 'profile-update-user-info' });
+    },
+    onError: () => {
+      toast.error('更新に失敗しました', { id: 'profile-update-user-info' });
+    },
+    onMutate: () => {
+      toast.loading('更新中...', { id: 'profile-update-user-info' });
+    },
+  });
 
   // react-hook-formの設定
   const {
@@ -51,57 +69,68 @@ const Profile: FC = () => {
   return (
     <>
       <Title title="プロフィールの編集" />
-      {userProfileQuery.isLoading && <p>Loading...</p>}
-      {userProfileQuery.isError && <p>Error: {userProfileQuery.error.message}</p>}
+      {userProfileQuery.isLoading && <Loading content="データの取得中..." />}
+      {userProfileQuery.isError && <Error content="データの取得に失敗しました。" />}
       {userProfileQuery.isSuccess && (
         <>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <label htmlFor="display_name">表示名:</label>
+            <div className={styles.inputWrapper}>
+              <label className={styles.label} htmlFor="display_name">
+                表示名
+              </label>
               <input
+                className={styles.input}
                 id="display_name"
                 type="text"
                 {...register('display_name', {
                   setValueAs: (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
                 })}
               />
-              <ErrorMessage errors={errors} name="display_name" />
+              <ErrorMessage
+                errors={errors}
+                name="display_name"
+                render={({ message }) => <div className={styles.error}>{message}</div>}
+              />
             </div>
 
-            <div>
-              <label htmlFor="avatar_url">アバターURL:</label>
+            <div className={styles.inputWrapper}>
+              <label className={styles.label} htmlFor="avatar_url">
+                アバターURL
+              </label>
               <input
+                className={styles.input}
                 id="avatar_url"
                 type="text"
                 {...register('avatar_url', {
                   setValueAs: (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
                 })}
               />
-              <ErrorMessage errors={errors} name="avatar_url" />
+              <ErrorMessage
+                errors={errors}
+                name="avatar_url"
+                render={({ message }) => <div className={styles.error}>{message}</div>}
+              />
             </div>
 
-            <div>
-              <label htmlFor="bio">自己紹介:</label>
+            <div className={styles.inputWrapper}>
+              <label className={styles.label} htmlFor="bio">
+                自己紹介
+              </label>
               <textarea
+                className={styles.textarea}
                 id="bio"
                 {...register('bio', {
                   setValueAs: (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
                 })}
               />
-              <ErrorMessage errors={errors} name="bio" />
+              <ErrorMessage
+                errors={errors}
+                name="bio"
+                render={({ message }) => <div className={styles.error}>{message}</div>}
+              />
             </div>
 
             <FormButton content="更新" onClick={handleSubmit(onSubmit)} disabled={userProfileMutation.isPending} />
-
-            <p>
-              {userProfileMutation.isPending
-                ? 'プロフィールを更新中...'
-                : userProfileMutation.isError
-                  ? `プロフィールの更新に失敗しました: ${userProfileMutation.error.message}`
-                  : userProfileMutation.isSuccess
-                    ? 'プロフィールの更新に成功しました！'
-                    : null}
-            </p>
           </form>
         </>
       )}

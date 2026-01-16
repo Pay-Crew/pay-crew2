@@ -3,6 +3,8 @@ import { useEffect, type FC } from 'react';
 import { $api } from '../../api/fetchClient';
 // react-router
 import { Outlet, useNavigate } from 'react-router';
+// components
+import { Loading, Error } from '../../share';
 
 const SessionCheck: FC = () => {
   // sessionのチェック
@@ -18,8 +20,10 @@ const SessionCheck: FC = () => {
 
   return (
     <>
-      {sessionCheckMutation.isPending && <p>セッションの確認中...</p>}
-      {sessionCheckMutation.isError && <p>セッションが無効です。ログインページへリダイレクトします...。</p>}
+      {sessionCheckMutation.isPending && <Loading content="セッションを確認中..." />}
+      {sessionCheckMutation.isError && (
+        <Error content="セッションの確認に失敗しました。ログインページへリダイレクトします。" />
+      )}
       {sessionCheckMutation.isSuccess && <Outlet />}
     </>
   );

@@ -11,21 +11,22 @@ import {
   type CreateGroupResponseSchemaType,
   createGroupRequestSchema,
 } from 'validator';
-// react-router
-import { Link } from 'react-router';
+// toast
+import toast from 'react-hot-toast';
 // components
-import { Button, FormButton, Title } from '../../share';
+import { FormButton, InviteButton, Title } from '../../share';
 // css
 import styles from './index.module.css';
+import { Link } from 'react-router';
 
 const GenerateGroup: FC = () => {
   // コピー状態管理
-  const [copyStatus, setCopyStatus] = useState<'idle' | 'copying' | 'success' | 'error'>('idle');
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copying' | 'success'>('idle');
   const [inviteUrl, setInviteUrl] = useState<string | null>(null);
 
-  // グループ作成処理
+  // グループ作成処理 + トースト通知
   const [result, setResult] = useState<CreateGroupResponseSchemaType | null>(null);
-  const { mutate, isSuccess, isPending, isError, error } = $api.useMutation('post', '/api/group/create', {
+  const { mutate, isSuccess, isPending } = $api.useMutation('post', '/api/group/create', {
     onSuccess: (data) => {
       setResult({
         group_id: data?.group_id,
@@ -33,6 +34,19 @@ const GenerateGroup: FC = () => {
       });
       setInviteUrl(`${import.meta.env.VITE_CLIENT_URL}/invite/${data?.invite_id}`);
       setCopyStatus('idle');
+      toast.success('グループの作成に成功しました', { id: 'generate-group-create-group' });
+    },
+    onError: () => {
+      setResult(null);
+      setInviteUrl(null);
+      setCopyStatus('idle');
+      toast.error('グループの作成に失敗しました', { id: 'generate-group-create-group' });
+    },
+    onMutate: () => {
+      setResult(null);
+      setInviteUrl(null);
+      setCopyStatus('idle');
+      toast.loading('グループの作成中...', { id: 'generate-group-create-group' });
     },
   });
 
@@ -53,55 +67,33 @@ const GenerateGroup: FC = () => {
     mutate({ body: formData, credentials: 'include' });
   };
 
-  // 招待URLハンドラ
-  const inviteUrlHandler = async (url: string) => {
-    try {
-      setCopyStatus('copying');
-      await navigator.clipboard.writeText(url);
-      setCopyStatus('success');
-    } catch (e) {
-      console.error(e);
-      setCopyStatus('error');
-    }
-  };
-
   return (
     <>
       <Title title="グループ作成" />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="group_name">グループ名:</label>
-          <input id="group_name" type="text" {...register('group_name')} />
-          <ErrorMessage errors={errors} name="group_name" />
-        </div>
-        <FormButton content="作成" onClick={handleSubmit(onSubmit)} disabled={isPending} />
-        <p>
-          {isPending
-            ? 'グループの作成中...'
-            : isError
-              ? `グループの作成に失敗しました: ${error.message}`
-              : isSuccess
-                ? 'グループの作成に成功しました'
-                : null}
-        </p>
-      </form>
-      {isPending && <p>グループの作成中...</p>}
-      {isError && <p>グループの作成に失敗しました。再度お試しください。</p>}
+      {!isSuccess && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className={styles.inputWrapper}>
+            <label className={styles.label} htmlFor="group_name">
+              グループ名
+            </label>
+            <input className={styles.input} id="group_name" type="text" {...register('group_name')} />
+            <ErrorMessage
+              errors={errors}
+              name="group_name"
+              render={({ message }) => <div className={styles.error}>{message}</div>}
+            />
+          </div>
+          <FormButton content="作成" onClick={handleSubmit(onSubmit)} disabled={isPending} />
+        </form>
+      )}
       {isSuccess && result && (
         <>
-          {inviteUrl && (
-            <div>
-              <input value={inviteUrl} readOnly />
-              <Button
-                type="button"
-                content={copyStatus === 'copying' ? 'コピー中...' : copyStatus === 'success' ? 'コピー済み' : 'コピー'}
-                onClick={() => inviteUrlHandler(inviteUrl)}
-                disabled={copyStatus === 'copying'}
-              />
-              {copyStatus === 'success' && <p>コピーしました</p>}
-              {copyStatus === 'error' && <p>コピーに失敗しました</p>}
-            </div>
-          )}
+          <InviteButton
+            copyStatus={copyStatus}
+            setCopyStatus={setCopyStatus}
+            inviteUrl={inviteUrl}
+            setInviteUrl={setInviteUrl}
+          />
           <Link className={styles.groupLink} to={`/group/${result.group_id}`}>
             グループページへ移動
           </Link>

@@ -1,0 +1,43 @@
+.container {
+  width: fit-content;
+  margin: 0 auto;
+  padding: var(--space-lg) 0;
+}
+
+.content {
+  text-align: center;
+  margin: var(--space-base) 0 0 0;
+  color: var(--color-error);
+}
+
+.loader {
+  display: grid;
+  grid-template-columns: repeat(5, 20px);
+  gap: 20px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.box {
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-error);
+  animation: fade 1s infinite ease-in-out;
+}
+
+@keyframes fade {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.box:nth-child(2n) {
+  animation-delay: 0s;
+}
+.box:nth-child(2n + 1) {
+  animation-delay: 0.6s;
+}
