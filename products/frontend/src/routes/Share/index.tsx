@@ -15,10 +15,10 @@ const Share: FC = () => {
         position="bottom-center"
         toastOptions={{
           style: {
-            fontSize: 'calc(1rem * 8 / 8)',
+            fontSize: 'var(--text-base)',
             fontWeight: 'bold',
-            color: '#001c32',
-            background: '#b09757',
+            color: 'var(--background-color-base)',
+            background: 'var(--color-base)',
             border: 'none',
           },
         }}

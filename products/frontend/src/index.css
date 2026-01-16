@@ -11,6 +11,8 @@
   --text-6xl: calc(1rem * 8 / 1);
 
   --color-base: #b09757;
+  --color-error: #de474a;
+  --color-disabled: #353535;
 
   --background-color-base: #001c32;
 

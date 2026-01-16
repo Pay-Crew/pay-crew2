@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+}
+
+.statusCode {
+  text-align: center;
+  font-family: 'Limelight', sans-serif;
+  font-size: var(--text-6xl);
+}
+
+.statusMessage {
+  text-align: center;
+  font-family: 'Limelight', sans-serif;
+  font-size: var(--text-3xl);
+}

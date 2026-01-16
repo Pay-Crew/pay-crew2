@@ -8,7 +8,7 @@ type Props = {
   content: string;
 };
 
-const Button: FC<Props> = (props: Props) => {
+const FormButton: FC<Props> = (props: Props) => {
   return (
     <button type="submit" className={styles.button} onClick={props.onClick} disabled={props.disabled}>
       {props.content}
@@ -16,4 +16,4 @@ const Button: FC<Props> = (props: Props) => {
   );
 };
 
-export default Button;
+export default FormButton;

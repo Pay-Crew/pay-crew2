@@ -1,0 +1,20 @@
+.welcomeBox {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+@media screen and (min-width: 500px) {
+  .welcomeBox {
+    flex-direction: row;
+    gap: var(--space-lg);
+  }
+}
+
+@media screen and (max-width: 499px) {
+  .welcomeBox {
+    flex-direction: column;
+    gap: var(--space-base);
+    text-align: center;
+  }
+}

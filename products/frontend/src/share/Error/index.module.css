@@ -7,6 +7,7 @@
 .content {
   text-align: center;
   margin: var(--space-base) 0 0 0;
+  color: var(--color-error);
 }
 
 .loader {
@@ -20,7 +21,7 @@
 .box {
   width: 20px;
   height: 20px;
-  background-color: var(--color-base);
+  background-color: var(--color-error);
   animation: fade 1s infinite ease-in-out;
 }
 
@@ -34,18 +35,9 @@
   }
 }
 
-.box:nth-child(1) {
+.box:nth-child(2n) {
   animation-delay: 0s;
 }
-.box:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.box:nth-child(3) {
-  animation-delay: 0.4s;
-}
-.box:nth-child(4) {
+.box:nth-child(2n + 1) {
   animation-delay: 0.6s;
-}
-.box:nth-child(5) {
-  animation-delay: 0.8s;
 }

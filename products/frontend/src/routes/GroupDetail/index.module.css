@@ -2,21 +2,34 @@
   font-size: var(--text-3xl);
   text-align: center;
   margin: var(--text-6xl) 0 0 0;
+  word-wrap: break-word;
+}
+
+.createdByWrapper {
+  width: fit-content;
+  display: flex;
+  min-width: 0;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.createdByLabel {
+  font-size: var(--text-sm);
+  white-space: nowrap;
 }
 .createdBy {
-  display: block;
   font-size: var(--text-sm);
-  text-align: center;
+  word-wrap: break-word;
+  min-width: 0;
 }
+
 .memberTitle {
   text-align: center;
   font-size: var(--text-xl);
   margin: var(--space-base) 0 var(--space-sm) 0;
 }
-.memberUl {
-  list-style: none;
-  display: flex;
-  width: fit-content;
+.memberNames {
+  word-wrap: break-word;
+  min-width: 0;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -41,6 +54,9 @@
 .moneyMetaInfo {
   font-size: var(--text-base);
 }
+.moneySummary {
+  word-wrap: break-word;
+}
 .detailButton {
   font-size: var(--text-base);
   background-color: var(--background-color-base);
@@ -51,13 +67,5 @@
 .moneyDetail {
   font-size: var(--text-base);
   margin: var(--space-sm) 0;
-}
-.moneyButton {
-  flex: 0 0 80px;
-  height: 80px;
-  width: 80px;
-  border-radius: 50%;
-  color: var(--background-color-base);
-  background-color: var(--color-base);
-  border: 6px double var(--background-color-base);
+  word-wrap: break-word;
 }
