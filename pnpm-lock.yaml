@@ -126,6 +126,9 @@ catalogs:
     react-hook-form:
       specifier: ^7.65.0
       version: 7.65.0
+    react-hot-toast:
+      specifier: ^2.6.0
+      version: 2.6.0
     react-icons:
       specifier: ^5.5.0
       version: 5.5.0
@@ -273,7 +276,7 @@ importers:
         specifier: catalog:frontend
         version: 7.65.0(react@19.2.0)
       react-hot-toast:
-        specifier: ^2.6.0
+        specifier: catalog:frontend
         version: 2.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react-icons:
         specifier: catalog:frontend
@@ -409,6 +412,9 @@ importers:
       react-hook-form:
         specifier: catalog:frontend
         version: 7.65.0(react@19.2.0)
+      react-hot-toast:
+        specifier: catalog:frontend
+        version: 2.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react-icons:
         specifier: catalog:frontend
         version: 5.5.0(react@19.2.0)
