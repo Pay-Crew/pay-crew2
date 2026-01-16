@@ -20,9 +20,7 @@ const Member: FC<Props> = (props: Props) => {
     <>
       <h3 className={styles.memberTitle}>参加メンバー</h3>
       <p className={styles.memberNames}>
-        {props.groupInfoResult?.members.map((member, index) =>
-          index === props.groupInfoResult.members.length - 1 ? `${member.user_name}` : `${member.user_name}、`
-        )}
+        {(props.groupInfoResult?.members ?? []).map((member) => member.user_name).join('、')}
       </p>
     </>
   );

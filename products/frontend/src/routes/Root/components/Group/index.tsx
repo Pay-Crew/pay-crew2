@@ -43,9 +43,7 @@ const Group: FC<Props> = (props: Props) => {
               <div className={styles.memberWrapper}>
                 <small className={styles.label}>[メンバー]</small>
                 <p className={styles.memberNames}>
-                  {group.members.map((member, index) =>
-                    index === group.members.length - 1 ? `${member.user_name}` : `${member.user_name}、`
-                  )}
+                  {(group.members ?? []).map((member) => member.user_name).join('、')}
                 </p>
               </div>
             </Link>

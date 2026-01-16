@@ -11,7 +11,7 @@ type Props = {
   setInviteUrl: Dispatch<SetStateAction<string | null>>;
 };
 
-const InviteURL: FC<Props> = (props: Props) => {
+const InviteButton: FC<Props> = (props: Props) => {
   // 招待URLハンドラ
   const inviteUrlHandler = async (url: string) => {
     try {
@@ -21,6 +21,7 @@ const InviteURL: FC<Props> = (props: Props) => {
       toast.success('招待URLをコピーしました', { id: 'group-detail-invite-url-copy' });
     } catch {
       toast.error('コピーに失敗しました', { id: 'group-detail-invite-url-copy' });
+      props.setCopyStatus('idle');
     }
   };
 
@@ -35,11 +36,9 @@ const InviteURL: FC<Props> = (props: Props) => {
         >
           招待URLをコピーする
         </button>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </>
   );
 };
 
-export default InviteURL;
+export default InviteButton;
