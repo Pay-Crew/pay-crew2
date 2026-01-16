@@ -1,17 +1,11 @@
 import { type FC } from 'react';
 // @tanstack/react-query
 import { $api } from '../../api/fetchClient';
-// react-router
-import { Link } from 'react-router';
 // toast
 import toast from 'react-hot-toast';
-// icons
-import { SquareArrowOutUpRight } from 'lucide-react';
 // components
-import { SubTitle, Loading, Error, FullPaymentButton } from '../../share';
-import { Description, Logo, Menu } from './components';
-// css
-import styles from './index.module.css';
+import { Loading, Error } from '../../share';
+import { Borrowed, Description, Group, Lent, Logo, Menu } from './components';
 
 const Root: FC = () => {
   // loginUserの所属グループ情報を取得
@@ -60,63 +54,14 @@ const Root: FC = () => {
       {infoAboutGroupsTheUserBelongsToQuery.data && infoAboutUserTransactionsQuery.data && (
         <>
           <Menu />
-          <SubTitle subTitle="所属グループ" />
-          <ul className={styles.groupUl}>
-            {infoAboutGroupsTheUserBelongsToQuery.data?.groups.map((group) => (
-              <li className={styles.groupLi} key={group.group_id}>
-                <Link className={styles.groupLink} to={`/group/${group.group_id}`}>
-                  <h3 className={styles.groupName}>{group.group_name}</h3>
-                  <SquareArrowOutUpRight />
-                  <div className={styles.groupHeader}>
-                    <div className={styles.createdByWrapper}>
-                      <small className={styles.createdByLabel}>created by&thinsp;:&nbsp;</small>
-                      <small className={styles.createdBy}>{group.created_by_name}</small>
-                    </div>
-                  </div>
-                  <div className={styles.memberBox}>
-                    <small className={styles.memberLabel}>[メンバー]</small>
-                    <p className={styles.memberNames}>
-                      {group.members.map((member, index) =>
-                        index === group.members.length - 1 ? `${member.user_name}` : `${member.user_name}、`
-                      )}
-                    </p>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
 
-          <SubTitle subTitle="返す金額の一覧" />
-          {paybacks.length === 0 ? (
-            <p className={styles.message}>返すお金はありません</p>
-          ) : (
-            <ul className={styles.moneyUl}>
-              {paybacks.map((t) => (
-                <li key={t.counterparty_id}>
-                  {t.counterparty_name} に {t.amount}円
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <SubTitle subTitle="受け取る金額の一覧" />
-          {receivables.length === 0 ? (
-            <p className={styles.message}>貸しているお金はありません</p>
-          ) : (
-            <ul className={styles.moneyUl}>
-              {receivables.map((t) => (
-                <li key={t.counterparty_id}>
-                  <p>
-                    {t.counterparty_name} から {Math.abs(t.amount)}円
-                  </p>
-                  <FullPaymentButton
-                    onClick={() => handleDeleteDebtHandler(t.counterparty_id)}
-                    disabled={deleteGroupDebtMutation.isPending}
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
+          <Group groups={infoAboutGroupsTheUserBelongsToQuery.data.groups} />
+          <Lent paybacks={paybacks} />
+          <Borrowed
+            receivables={receivables}
+            onClick={() => handleDeleteDebtHandler}
+            disabled={deleteGroupDebtMutation.isPending}
+          />
         </>
       )}
     </>

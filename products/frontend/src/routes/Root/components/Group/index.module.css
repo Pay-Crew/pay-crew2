@@ -1,7 +1,3 @@
-.message {
-  text-align: center;
-}
-
 .groupUl {
   list-style: none;
   margin: 0 auto;
@@ -61,11 +57,4 @@
   font-size: var(--text-sm);
   word-wrap: break-word;
   min-width: 0;
-}
-
-.moneyUl {
-  width: fit-content;
-  max-width: 900px;
-  margin: 0 auto;
-  list-style: none;
 }

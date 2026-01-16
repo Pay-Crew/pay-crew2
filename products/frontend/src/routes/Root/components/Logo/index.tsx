@@ -7,7 +7,7 @@ type Props = {
 };
 
 const Logo: FC<Props> = (props: Props) => {
-  return <h1 className={styles.title}>{props.content}</h1>;
+  return <h1 className={styles.logo}>{props.content}</h1>;
 };
 
 export default Logo;

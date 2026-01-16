@@ -1,0 +1,16 @@
+.createdByWrapper {
+  width: fit-content;
+  display: flex;
+  min-width: 0;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.createdByLabel {
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+.createdBy {
+  font-size: var(--text-sm);
+  word-wrap: break-word;
+  min-width: 0;
+}
