@@ -1,4 +1,23 @@
+.inputWrapper {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.label {
+  display: block;
+}
+.input {
+  display: block;
+  width: 100%;
+  color: #000000;
+}
+.error {
+  color: var(--color-error);
+  font-size: var(--text-base);
+}
+
 .groupLink {
   display: block;
   text-align: center;
+  margin: var(--space-lg) 0 0 0;
 }

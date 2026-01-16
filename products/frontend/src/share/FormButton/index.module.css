@@ -7,5 +7,5 @@
   cursor: pointer;
   display: block;
   width: 150px;
-  margin: 0 auto;
+  margin: var(--space-lg) auto 0 auto;
 }

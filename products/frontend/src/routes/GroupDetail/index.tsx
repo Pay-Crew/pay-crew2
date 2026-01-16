@@ -12,8 +12,13 @@ import {
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+// toast
+import toast from 'react-hot-toast';
+// utils
+import { toDateInputValue } from '../../lib/date';
 // components
-import { Button, SubTitle, FormButton } from '../../share';
+import { SubTitle, FormButton, InviteButton, Loading, Error } from '../../share';
+import { CreatedBy, GroupName, Member, History } from './components';
 // css
 import styles from './index.module.css';
 
@@ -21,31 +26,30 @@ const GroupDetail: FC = () => {
   // URLパラメータからgroupIdを取得
   const { groupId } = useParams<{ groupId: string }>();
   // groupIdが存在しない場合の処理
-  if (!groupId) return <p>Group ID is not provided.</p>;
+  if (!groupId) return <Error content="グループIDが指定されていません。" />;
 
   // コピー状態管理
-  const [copyStatus, setCopyStatus] = useState<'idle' | 'copying' | 'success' | 'error'>('idle');
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copying' | 'success'>('idle');
   const [inviteUrl, setInviteUrl] = useState<string | null>(null);
-  // 招待URLハンドラ
-  const inviteUrlHandler = async (url: string) => {
-    try {
-      setCopyStatus('copying');
-      await navigator.clipboard.writeText(url);
-      setCopyStatus('success');
-    } catch (e) {
-      console.error(e);
-      setCopyStatus('error');
-    }
-  };
 
   // グループ情報の取得
   const [groupInfoResult, setGroupInfoResult] = useState<GetGroupInfoResponseSchemaType | null>(null);
   const groupInfoMutation = $api.useMutation('post', `/api/group/info`, {
     onSuccess: (data) => {
-      // グループ情報をセット
       setGroupInfoResult(data);
-      // 招待URLをセット
       setInviteUrl(`${import.meta.env.VITE_CLIENT_URL}/invite/${data.invite_id}`);
+      setCopyStatus('idle');
+    },
+    onError: () => {
+      setGroupInfoResult(null);
+      setInviteUrl(null);
+      setCopyStatus('idle');
+      toast.error('グループ情報の取得に失敗しました', { id: 'group-detail-group-info' });
+    },
+    onMutate: () => {
+      setGroupInfoResult(null);
+      setInviteUrl(null);
+      setCopyStatus('idle');
     },
   });
 
@@ -53,8 +57,14 @@ const GroupDetail: FC = () => {
   const [debtHistoryResult, setDebtHistoryResult] = useState<GetGroupDebtHistoryResponseSchemaType | null>(null);
   const debtHistoryMutation = $api.useMutation('post', `/api/group/debt/history`, {
     onSuccess: (data) => {
-      // グループの貸し借り履歴をセット
       setDebtHistoryResult(data);
+    },
+    onError: () => {
+      setDebtHistoryResult(null);
+      toast.error('貸し借り情報の取得に失敗しました', { id: 'group-detail-debt-history' });
+    },
+    onMutate: () => {
+      setDebtHistoryResult(null);
     },
   });
 
@@ -68,15 +78,17 @@ const GroupDetail: FC = () => {
   const debtRegisterMutation = $api.useMutation('post', `/api/group/debt/register`, {
     onSuccess: () => {
       debtHistoryMutation.mutate({ body: { group_id: groupId }, credentials: 'include' });
+      toast.success('貸し借りの登録に成功しました', { id: 'group-detail-debt-register' });
+    },
+    onError: () => {
+      toast.error('貸し借りの登録に失敗しました', { id: 'group-detail-debt-register' });
+    },
+    onMutate: () => {
+      toast.loading('貸し借りの登録中...', { id: 'group-detail-debt-register' });
     },
   });
 
   // react-hook-formの設定
-  const toDateInputValue = (d: Date) => {
-    const pad = (n: number) => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-  };
-
   const {
     register,
     handleSubmit,
@@ -98,7 +110,7 @@ const GroupDetail: FC = () => {
   const debtorId = watch('debtor_id');
   const creditorId = watch('creditor_id');
 
-  // メンバー一覧の取得
+  // メンバー 一覧の取得
   // membersのnullを除外して<select>の候補を作る
   const members = useMemo(() => {
     const raw = groupInfoResult?.members ?? [];
@@ -130,65 +142,54 @@ const GroupDetail: FC = () => {
 
   // 貸し借り削除処理
   const deleteGroupDebtMutation = $api.useMutation('delete', '/api/group/debt/delete', {
-    onSuccess: () => {
+    onSuccess: (_data, result) => {
+      const debtId = result.body.debt_id;
       debtHistoryMutation.mutate({ body: { group_id: groupId }, credentials: 'include' });
+      toast.success('貸し借りの削除に成功しました', { id: `group-detail-delete-debt-${debtId}` });
+    },
+    onError: (_error, result) => {
+      const debtId = result.body.debt_id;
+      toast.error('貸し借りの削除に失敗しました', { id: `group-detail-delete-debt-${debtId}` });
+    },
+    onMutate: (result) => {
+      const debtId = result.body.debt_id;
+      toast.loading('貸し借りの削除中...', { id: `group-detail-delete-debt-${debtId}` });
     },
   });
+
   // 貸し借り削除ハンドラ
   const deleteGroupDebtHandler = (debtId: string) => {
     deleteGroupDebtMutation.mutate({ body: { group_id: groupId, debt_id: debtId }, credentials: 'include' });
   };
 
-  // 詳細展開ハンドラ
-  const [detail, setDetail] = useState<Set<string>>(new Set());
-  const detailExpandHandler = (debtId: string) => {
-    setDetail((prev) => new Set(prev).add(debtId));
-  };
-  const detailShrinkHandler = (debtId: string) => {
-    setDetail((prev) => {
-      const newSet = new Set(prev);
-      newSet.delete(debtId);
-      return newSet;
-    });
-  };
-
   return (
     <>
-      {groupInfoMutation.isPending && <p>グループ情報を取得中...</p>}
-      {groupInfoMutation.isError && <p>グループ情報の取得に失敗しました。再度お試しください。</p>}
+      {groupInfoMutation.isPending && <Loading content="グループ情報を取得中..." />}
+      {groupInfoMutation.isError && <Error content="グループ情報の取得に失敗しました。" />}
       {groupInfoMutation.isSuccess && groupInfoResult && (
         <>
-          <h1 className={styles.title}>{groupInfoResult.group_name}</h1>
-          <small className={styles.createdBy}>created by&thinsp;:&nbsp;{groupInfoResult.created_by_name}</small>
-          <h3 className={styles.memberTitle}>参加メンバー</h3>
-          <ul className={styles.memberUl}>
-            {groupInfoResult.members.map((member, index) =>
-              index === groupInfoResult.members.length - 1 ? (
-                <li key={member.user_id}>{member.user_name}</li>
-              ) : (
-                <li key={member.user_id}>{member.user_name}、</li>
-              )
-            )}
-          </ul>
-          {inviteUrl && (
-            <div>
-              <label htmlFor="invite_url">招待URL:</label>
-              <input id="invite_url" type="text" value={inviteUrl} readOnly />
-              <Button
-                type="button"
-                content={copyStatus === 'copying' ? 'コピー中...' : copyStatus === 'success' ? 'コピー済み' : 'コピー'}
-                onClick={() => inviteUrlHandler(inviteUrl)}
-                disabled={copyStatus === 'copying'}
-              />
-              {copyStatus === 'success' && <p>コピーしました</p>}
-              {copyStatus === 'error' && <p>コピーに失敗しました</p>}
-            </div>
-          )}
+          <GroupName content={groupInfoResult.group_name} />
+          <CreatedBy content={groupInfoResult.created_by_name} />
+          <Member groupInfoResult={groupInfoResult} />
+          <InviteButton
+            inviteUrl={inviteUrl}
+            setInviteUrl={setInviteUrl}
+            copyStatus={copyStatus}
+            setCopyStatus={setCopyStatus}
+          />
+
           <SubTitle subTitle="貸し借りの登録" />
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <label htmlFor="debtor_id">借りる人:</label>
-              <select id="debtor_id" {...register('debtor_id')} disabled={members.length === 0}>
+            <div className={styles.inputWrapper}>
+              <label htmlFor="debtor_id" className={styles.label}>
+                借りる人
+              </label>
+              <select
+                className={styles.input}
+                id="debtor_id"
+                {...register('debtor_id')}
+                disabled={members.length === 0}
+              >
                 <option value="">{members.length === 0 ? 'メンバー取得中…' : '選択してください'}</option>
                 {members
                   // 貸す人に選んだメンバーは除外
@@ -199,12 +200,23 @@ const GroupDetail: FC = () => {
                     </option>
                   ))}
               </select>
-              <ErrorMessage errors={errors} name="debtor_id" />
+              <ErrorMessage
+                errors={errors}
+                name="debtor_id"
+                render={({ message }) => <p className={styles.error}>{message}</p>}
+              />
             </div>
 
-            <div>
-              <label htmlFor="creditor_id">貸す人:</label>
-              <select id="creditor_id" {...register('creditor_id')} disabled={members.length === 0}>
+            <div className={styles.inputWrapper}>
+              <label htmlFor="creditor_id" className={styles.label}>
+                貸す人
+              </label>
+              <select
+                className={styles.input}
+                id="creditor_id"
+                {...register('creditor_id')}
+                disabled={members.length === 0}
+              >
                 <option value="">{members.length === 0 ? 'メンバー取得中…' : '選択してください'}</option>
                 {members
                   // 借りる人に選んだメンバーは除外
@@ -215,86 +227,67 @@ const GroupDetail: FC = () => {
                     </option>
                   ))}
               </select>
-              <ErrorMessage errors={errors} name="creditor_id" />
+              <ErrorMessage
+                errors={errors}
+                name="creditor_id"
+                render={({ message }) => <p className={styles.error}>{message}</p>}
+              />
             </div>
 
-            <div>
-              <label htmlFor="amount">金額:</label>
-              <input id="amount" type="number" {...register('amount', { valueAsNumber: true })} />
-              <ErrorMessage errors={errors} name="amount" />
+            <div className={styles.inputWrapper}>
+              <label htmlFor="amount" className={styles.label}>
+                金額
+              </label>
+              <input
+                id="amount"
+                type="number"
+                {...register('amount', { valueAsNumber: true })}
+                className={styles.input}
+              />
+              <ErrorMessage
+                errors={errors}
+                name="amount"
+                render={({ message }) => <p className={styles.error}>{message}</p>}
+              />
             </div>
 
-            <div>
-              <label htmlFor="description">詳細:</label>
-              <textarea id="description" {...register('description')} />
-              <ErrorMessage errors={errors} name="description" />
+            <div className={styles.inputWrapper}>
+              <label htmlFor="description" className={styles.label}>
+                詳細
+              </label>
+              <textarea className={styles.textarea} id="description" {...register('description')} />
+              <ErrorMessage
+                errors={errors}
+                name="description"
+                render={({ message }) => <p className={styles.error}>{message}</p>}
+              />
             </div>
 
-            <div>
-              <label htmlFor="occurred_at">発生日時:</label>
-              <input id="occurred_at" type="date" {...register('occurred_at')} />
-              <ErrorMessage errors={errors} name="occurred_at" />
+            <div className={styles.inputWrapper}>
+              <label htmlFor="occurred_at" className={styles.label}>
+                発生日時
+              </label>
+              <input className={styles.input} id="occurred_at" type="date" {...register('occurred_at')} />
+              <ErrorMessage
+                errors={errors}
+                name="occurred_at"
+                render={({ message }) => <p className={styles.error}>{message}</p>}
+              />
             </div>
 
             <FormButton content="登録" onClick={handleSubmit(onSubmit)} disabled={debtRegisterMutation.isPending} />
-            <p>
-              {debtRegisterMutation.isPending
-                ? '貸し借りの登録中...'
-                : debtRegisterMutation.isError
-                  ? `貸し借りの登録に失敗しました: ${debtRegisterMutation.error.message}`
-                  : debtRegisterMutation.isSuccess
-                    ? '貸し借りの登録に成功しました'
-                    : null}
-            </p>
           </form>
         </>
       )}
-      <SubTitle subTitle="貸し借りの履歴" />
-      {debtHistoryMutation.isPending && <p>貸し借りの履歴を取得中...</p>}
-      {debtHistoryMutation.isError && <p>貸し借りの履歴の取得に失敗しました。再度お試しください。</p>}
-      {debtHistoryMutation.isSuccess && debtHistoryResult && (
-        <ul className={styles.moneyUl}>
-          {debtHistoryResult.debts.map((debt, index) => (
-            <li className={styles.moneyLi} key={index}>
-              <div className={styles.moneyInfo}>
-                <p>
-                  {debt.debtor_name} さんが {debt.creditor_name} さんに {debt.amount} 円を借りています。
-                </p>
-                <p className={styles.moneyMetaInfo}>[発生日]&nbsp;{debt.occurred_at}</p>
-                {!detail.has(debt.debt_id) && (
-                  <button
-                    className={styles.detailButton}
-                    type="button"
-                    onClick={() => detailExpandHandler(debt.debt_id)}
-                  >
-                    さらに表示
-                  </button>
-                )}
-                {detail.has(debt.debt_id) && (
-                  <>
-                    <p className={styles.moneyDetail}>{debt.description || '未記入...'}</p>
-                    <button
-                      className={styles.detailButton}
-                      type="button"
-                      onClick={() => detailShrinkHandler(debt.debt_id)}
-                    >
-                      閉じる
-                    </button>
-                  </>
-                )}
-              </div>
-              <button
-                className={styles.moneyButton}
-                type="button"
-                onClick={() => deleteGroupDebtHandler(debt.debt_id)}
-                disabled={deleteGroupDebtMutation.isPending}
-              >
-                {deleteGroupDebtMutation.isPending ? '処理中...' : '完済'}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+
+      <History
+        debtHistoryMutationIsPending={debtHistoryMutation.isPending}
+        debtHistoryMutationIsError={debtHistoryMutation.isError}
+        debtHistoryMutationIsSuccess={debtHistoryMutation.isSuccess}
+        debtHistoryResult={debtHistoryResult}
+        deleteGroupDebtHandler={deleteGroupDebtHandler}
+        fullPaymentButtonDisabled={deleteGroupDebtMutation.isPending}
+      />
     </>
   );
 };

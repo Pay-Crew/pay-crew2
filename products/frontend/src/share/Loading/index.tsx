@@ -7,7 +7,18 @@ type Props = {
 };
 
 const Loading: FC<Props> = (props: Props) => {
-  return <h1 className={styles.title}>{props.content}</h1>;
+  return (
+    <div className={styles.container}>
+      <div className={styles.loader}>
+        <span className={styles.box}></span>
+        <span className={styles.box}></span>
+        <span className={styles.box}></span>
+        <span className={styles.box}></span>
+        <span className={styles.box}></span>
+      </div>
+      <p className={styles.content}>{props.content}</p>
+    </div>
+  );
 };
 
 export default Loading;

@@ -6,6 +6,8 @@ import { Title } from '../../share';
 import { FaDiscord, FaGoogle } from 'react-icons/fa6';
 // css
 import styles from './index.module.css';
+// components
+import { LoginButton } from './components';
 
 const Login: FC = () => {
   // OAuth signin handlers
@@ -24,21 +26,11 @@ const Login: FC = () => {
 
   return (
     <div>
-      <Title title="登録 / ログイン" />
-      <p className={styles.description}>Discord または Google アカウントを使用して登録 / ログインしてください。</p>
+      <Title title="ログイン" />
+      <p className={styles.description}>Discord または Google アカウントを使用してログインしてください。</p>
       <div className={styles.container}>
-        <div>
-          <button type="button" className={styles.button} onClick={handleDiscordSignin}>
-            <FaDiscord className={styles.icon} />
-          </button>
-          <p className={styles.label}>Discord</p>
-        </div>
-        <div>
-          <button type="button" className={styles.button} onClick={googleSignIn}>
-            <FaGoogle className={styles.icon} />
-          </button>
-          <p className={styles.label}>Google</p>
-        </div>
+        <LoginButton onClick={handleDiscordSignin} Icon={FaDiscord} label="Discord" />
+        <LoginButton onClick={googleSignIn} Icon={FaGoogle} label="Google" />
       </div>
     </div>
   );

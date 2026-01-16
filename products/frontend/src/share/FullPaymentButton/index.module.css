@@ -1,8 +1,14 @@
 .button {
-  font-size: var(--text-lg);
+  flex: 0 0 80px;
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
   color: var(--background-color-base);
   background-color: var(--color-base);
-  padding: 0 var(--space-sm);
   border: 6px double var(--background-color-base);
   cursor: pointer;
+}
+.button:disabled {
+  background-color: var(--color-disabled);
+  cursor: not-allowed;
 }

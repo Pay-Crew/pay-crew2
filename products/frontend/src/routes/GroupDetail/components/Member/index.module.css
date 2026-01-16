@@ -1,0 +1,11 @@
+.memberTitle {
+  text-align: center;
+  font-size: var(--text-xl);
+  margin: var(--space-base) 0 var(--space-sm) 0;
+}
+.memberNames {
+  word-wrap: break-word;
+  min-width: 0;
+  max-width: 900px;
+  margin: 0 auto var(--space-xl) auto;
+}

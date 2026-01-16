@@ -20,21 +20,13 @@ const Header: FC = () => {
 
   return (
     <header className={styles.header}>
-      <div className={styles.titleContainer}>
-        <Link to="/" className={styles.title}>
-          Pay Crew2
-        </Link>
-      </div>
-      <div className={styles.navContainer}>
-        <>
-          {sessionCheckMutation.isError && <Link to="/login">ログイン</Link>}
-          {sessionCheckMutation.isSuccess && <p>{sessionCheckMutation.data.user_name}</p>}
-        </>
-        <nav className={styles.nav}>
-          <NavLink to="/">トップ</NavLink>
-          <NavLink to="/gen-group">グループ作成</NavLink>
-        </nav>
-      </div>
+      <Link to="/" className={styles.title}>
+        Pay Crew2
+      </Link>
+      <nav className={styles.nav}>
+        <NavLink to="/">トップ</NavLink>
+        <NavLink to="/gen-group">グループ作成</NavLink>
+      </nav>
     </header>
   );
 };
