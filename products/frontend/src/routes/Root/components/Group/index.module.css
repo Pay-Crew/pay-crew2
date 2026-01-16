@@ -2,6 +2,8 @@
   list-style: none;
   margin: 0 auto;
   max-width: 900px;
+  max-height: 400px;
+  overflow-y: scroll;
 }
 .li {
   border-radius: var(--space-xs);
@@ -28,6 +30,7 @@
   background-color: var(--color-base);
   padding: 0 var(--space-sm);
   word-wrap: break-word;
+  white-space: normal;
   min-width: 0;
 }
 .icon {
@@ -50,6 +53,7 @@
 .createdBy {
   font-size: var(--text-sm);
   word-wrap: break-word;
+  white-space: normal;
   min-width: 0;
 }
 
@@ -62,5 +66,6 @@
 }
 .memberNames {
   word-wrap: break-word;
+  white-space: normal;
   min-width: 0;
 }

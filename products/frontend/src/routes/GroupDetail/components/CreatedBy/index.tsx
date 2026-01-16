@@ -8,9 +8,11 @@ type Props = {
 
 const CreatedBy: FC<Props> = (props: Props) => {
   return (
-    <div className={styles.createdByWrapper}>
-      <small className={styles.createdByLabel}>created by&thinsp;:&nbsp;</small>
-      <small className={styles.createdBy}>{props.content}</small>
+    <div className={styles.createdByOuter}>
+      <div className={styles.createdByWrapper}>
+        <small className={styles.label}>created by&thinsp;:&nbsp;</small>
+        <small className={styles.text}>{props.content}</small>
+      </div>
     </div>
   );
 };

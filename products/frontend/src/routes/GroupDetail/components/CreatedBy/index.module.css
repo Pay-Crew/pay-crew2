@@ -1,16 +1,23 @@
+.createdByOuter {
+  display: flex;
+  justify-content: center;
+}
 .createdByWrapper {
   width: fit-content;
-  display: flex;
-  min-width: 0;
   max-width: 900px;
+  min-width: 0;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
 }
-.createdByLabel {
+.label {
   font-size: var(--text-sm);
   white-space: nowrap;
 }
-.createdBy {
+
+.text {
   font-size: var(--text-sm);
+  overflow-wrap: break-word;
   word-wrap: break-word;
   min-width: 0;
 }

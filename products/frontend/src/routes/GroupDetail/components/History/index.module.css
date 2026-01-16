@@ -1,35 +1,47 @@
-.moneyUl {
+.ul {
   width: fit-content;
   max-width: 900px;
   margin: 0 auto;
   list-style: none;
 }
-.moneyLi {
-  display: flex;
+.li {
   border-radius: var(--space-xs);
   border: solid 1px var(--color-base);
   margin: var(--space-base) 0;
   padding: var(--space-sm);
+  display: flex;
+  align-items: center;
 }
-.moneyInfo {
+
+.info {
   flex: 1 1 auto;
   min-width: 0;
 }
-.moneyMetaInfo {
+
+/* section 1 */
+.summary {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+  min-width: 0;
+}
+/* section 2 */
+.date {
   font-size: var(--text-base);
 }
-.moneySummary {
-  word-wrap: break-word;
+/* section 3 */
+.detail {
+  font-size: var(--text-base);
+  margin: var(--space-sm) 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+  min-width: 0;
 }
-.detailButton {
+.button {
   font-size: var(--text-base);
   background-color: var(--background-color-base);
   border: none;
   text-decoration: underline;
   cursor: pointer;
-}
-.moneyDetail {
-  font-size: var(--text-base);
-  margin: var(--space-sm) 0;
-  word-wrap: break-word;
 }

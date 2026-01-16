@@ -44,31 +44,29 @@ const History: FC<Props> = (props: Props) => {
       {props.debtHistoryMutationIsPending && <Loading content="貸し借りの履歴を取得中..." />}
       {props.debtHistoryMutationIsError && <Error content="貸し借りの履歴の取得に失敗しました。" />}
       {props.debtHistoryMutationIsSuccess && props.debtHistoryResult && (
-        <ul className={styles.moneyUl}>
+        <ul className={styles.ul}>
           {props.debtHistoryResult.debts.map((debt, index) => (
-            <li className={styles.moneyLi} key={index}>
-              <div className={styles.moneyInfo}>
-                <p className={styles.moneySummary}>
+            <li className={styles.li} key={index}>
+              <div className={styles.info}>
+                {/* section 1 */}
+                <p className={styles.summary}>
                   {debt.debtor_name} さんが {debt.creditor_name} さんに {debt.amount} 円を借りています。
                 </p>
-                <p className={styles.moneyMetaInfo}>[発生日]&nbsp;{debt.occurred_at}</p>
+                {/* section 2 */}
+                <p className={styles.date}>
+                  <span>[発生日]&nbsp;</span>
+                  <span> {debt.occurred_at}</span>
+                </p>
+                {/* section 3 */}
                 {!detail.has(debt.debt_id) && (
-                  <button
-                    className={styles.detailButton}
-                    type="button"
-                    onClick={() => detailExpandHandler(debt.debt_id)}
-                  >
+                  <button className={styles.button} type="button" onClick={() => detailExpandHandler(debt.debt_id)}>
                     さらに表示
                   </button>
                 )}
                 {detail.has(debt.debt_id) && (
                   <>
-                    <p className={styles.moneyDetail}>{debt.description || '詳細情報は、未記入のようです。'}</p>
-                    <button
-                      className={styles.detailButton}
-                      type="button"
-                      onClick={() => detailShrinkHandler(debt.debt_id)}
-                    >
+                    <p className={styles.detail}>{debt.description || '詳細情報は、未記入のようです。'}</p>
+                    <button className={styles.button} type="button" onClick={() => detailShrinkHandler(debt.debt_id)}>
                       閉じる
                     </button>
                   </>

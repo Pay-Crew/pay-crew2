@@ -6,6 +6,7 @@
   color: var(--background-color-base);
   background-color: var(--color-base);
   border: 6px double var(--background-color-base);
+  cursor: pointer;
 }
 .button:disabled {
   background-color: var(--color-disabled);

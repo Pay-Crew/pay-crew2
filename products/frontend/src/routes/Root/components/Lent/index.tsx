@@ -1,28 +1,36 @@
-import type { FC } from 'react';
+import { type FC } from 'react';
 // components
-import { SubTitle } from '../../../../share';
+import { FullPaymentButton, SubTitle } from '../../../../share';
 // css
 import styles from './index.module.css';
 
 type Props = {
-  paybacks: {
+  receivables: {
     counterparty_id: string;
     counterparty_name: string;
     amount: number;
   }[];
+  handleDeleteDebtHandler: (counterpartyId: string) => void;
+  fullPaymentButtonDisabled: boolean;
 };
 
 const Lent: FC<Props> = (props: Props) => {
   return (
     <>
-      <SubTitle subTitle="返す金額 一覧" />
-      {props.paybacks.length === 0 ? (
-        <p className={styles.message}>返すお金はありません</p>
+      <SubTitle subTitle="受け取る金額 一覧" />
+      {props.receivables.length === 0 ? (
+        <p className={styles.message}>受け取るお金はありません</p>
       ) : (
         <ul className={styles.ul}>
-          {props.paybacks.map((t) => (
-            <li key={t.counterparty_id}>
-              {t.counterparty_name} に {t.amount}円
+          {props.receivables.map((t) => (
+            <li className={styles.li} key={t.counterparty_id}>
+              <p className={styles.text}>
+                {t.counterparty_name} から {Math.abs(t.amount)}円
+              </p>
+              <FullPaymentButton
+                onClick={() => props.handleDeleteDebtHandler(t.counterparty_id)}
+                disabled={props.fullPaymentButtonDisabled}
+              />
             </li>
           ))}
         </ul>

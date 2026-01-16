@@ -5,7 +5,7 @@ import { $api } from '../../api/fetchClient';
 import toast from 'react-hot-toast';
 // components
 import { Loading, Error } from '../../share';
-import { Borrowed, Description, Group, Lent, Logo, Menu } from './components';
+import { Borrow, Description, Group, Lent, Logo, Menu } from './components';
 
 const Root: FC = () => {
   // loginUserの所属グループ情報を取得
@@ -56,11 +56,11 @@ const Root: FC = () => {
           <Menu />
 
           <Group groups={infoAboutGroupsTheUserBelongsToQuery.data.groups} />
-          <Lent paybacks={paybacks} />
-          <Borrowed
+          <Borrow paybacks={paybacks} />
+          <Lent
             receivables={receivables}
-            onClick={() => handleDeleteDebtHandler}
-            disabled={deleteGroupDebtMutation.isPending}
+            handleDeleteDebtHandler={handleDeleteDebtHandler}
+            fullPaymentButtonDisabled={deleteGroupDebtMutation.isPending}
           />
         </>
       )}
