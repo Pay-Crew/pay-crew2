@@ -84,6 +84,7 @@
     "@hookform/resolvers": "catalog:frontend",
     "@scalar/hono-api-reference": "catalog:backend",
     "@tanstack/react-query": "^5.90.5",
+    "@teapotlabs/identeapots": "catalog:frontend",
     "@types/pg": "catalog:backend",
     "@types/react": "catalog:frontend",
     "@types/react-dom": "catalog:frontend",

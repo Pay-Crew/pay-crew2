@@ -81,6 +81,9 @@ catalogs:
     '@tanstack/react-query':
       specifier: ^5.90.5
       version: 5.90.5
+    '@teapotlabs/identeapots':
+      specifier: ^1.1.1
+      version: 1.1.1
     '@types/react':
       specifier: ^19.2.2
       version: 19.2.2
@@ -191,6 +194,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.90.5
         version: 5.90.5(react@19.2.0)
+      '@teapotlabs/identeapots':
+        specifier: catalog:frontend
+        version: 1.1.1
       '@types/pg':
         specifier: catalog:backend
         version: 8.15.6
@@ -397,6 +403,9 @@ importers:
       '@hookform/resolvers':
         specifier: catalog:frontend
         version: 5.2.2(react-hook-form@7.65.0(react@19.2.0))
+      '@teapotlabs/identeapots':
+        specifier: catalog:frontend
+        version: 1.1.1
       better-auth:
         specifier: 'catalog:'
         version: 1.4.10(drizzle-kit@0.31.6)(drizzle-orm@0.44.7(@cloudflare/workers-types@4.20251014.0)(@types/pg@8.15.6)(kysely@0.28.9)(pg@8.16.3))(pg@8.16.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(vitest@4.0.5)
@@ -1833,6 +1842,9 @@ packages:
     resolution: {integrity: sha512-pN+8UWpxZkEJ/Rnnj2v2Sxpx1WFlaa9L6a4UO89p6tTQbeo+m0MS8oYDjbggrR8QcTyjKoYWKS3xJQGr3ExT8Q==}
     peerDependencies:
       react: ^18 || ^19
+
+  '@teapotlabs/identeapots@1.1.1':
+    resolution: {integrity: sha512-QJTUPvlECFiPppPOQJkVPEw2l4t5HuQtGnp2ykhn1IfTBrdY0n3bF1W6ZyjgaARPf4l1N1j/G/NrkE9aYjqflg==}
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
@@ -5383,6 +5395,8 @@ snapshots:
     dependencies:
       '@tanstack/query-core': 5.90.5
       react: 19.2.0
+
+  '@teapotlabs/identeapots@1.1.1': {}
 
   '@types/chai@5.2.3':
     dependencies:

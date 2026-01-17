@@ -15,6 +15,7 @@
     "ui": "vitest run --ui --typecheck"
   },
   "dependencies": {
+    "@teapotlabs/identeapots": "catalog:frontend",
     "@hookform/error-message": "catalog:frontend",
     "@hookform/resolvers": "catalog:frontend",
     "better-auth": "catalog:",

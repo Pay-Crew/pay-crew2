@@ -30,6 +30,8 @@ export interface paths {
                         "application/json": {
                             user_id: string;
                             user_name: string;
+                            /** Format: uri */
+                            user_avatar_url: string | null;
                         };
                     };
                 };

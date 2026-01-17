@@ -33,6 +33,7 @@ catalogs:
     '@hookform/error-message': ^2.0.1
     '@hookform/resolvers': ^5.2.2
     '@tanstack/react-query': ^5.90.5
+    "@teapotlabs/identeapots": ^1.1.1
     '@types/react': ^19.2.2
     '@types/react-dom': ^19.2.2
     '@vitejs/plugin-react-swc': ^4.2.0
