@@ -19,6 +19,7 @@ const main = () => {
     const frontendDotenvData = `VITE_API_URL=${envConfig.frontendConfig.viteApiUrl}
 VITE_CLIENT_URL=${envConfig.frontendConfig.viteClientUrl}
 VITE_REDIRECT_URL=${envConfig.frontendConfig.viteRedirectUrl}
+VITE_IDENTEAPOT_SALT=${envConfig.frontendConfig.viteIdenteapotSalt}
 `;
     fileWriter('./products/frontend/.env', frontendDotenvData);
   }

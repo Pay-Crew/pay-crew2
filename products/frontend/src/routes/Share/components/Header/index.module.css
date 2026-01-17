@@ -15,11 +15,18 @@
 
 .nav {
   display: flex;
+  align-items: center;
   gap: var(--space-base);
 }
 
-@media screen and (max-width: 499px) {
-  .nav {
+.identicon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+@media screen and (max-width: 599px) {
+  .navLink {
     display: none;
   }
 }
