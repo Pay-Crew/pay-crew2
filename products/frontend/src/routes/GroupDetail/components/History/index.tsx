@@ -65,9 +65,9 @@ const History: FC<Props> = (props: Props) => {
               : '※ 完済済み履歴は非表示になっています。表示するには、上のボタンをクリックしてください。'}
           </p>
           <ul className={styles.ul}>
-            {props.debtHistoryResult.debts.map((debt, index) =>
+            {props.debtHistoryResult.debts.map((debt) =>
               debt.deleted_at === null ? (
-                <li className={styles.li} key={index}>
+                <li className={styles.li} key={debt.debt_id}>
                   <div className={styles.info}>
                     {/* section 1 */}
                     <p className={styles.summary}>
@@ -104,7 +104,7 @@ const History: FC<Props> = (props: Props) => {
                 </li>
               ) : (
                 showCompleted && (
-                  <li className={styles.completedLi} key={index}>
+                  <li className={styles.completedLi} key={debt.debt_id}>
                     <div className={styles.info}>
                       {/* section 1 */}
                       <p className={styles.completedSummary}>

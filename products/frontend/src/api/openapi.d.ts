@@ -427,7 +427,6 @@ export interface paths {
                                 amount: number;
                                 description: string;
                                 occurred_at: string;
-                                isDeleted: boolean;
                                 deleted_at: string | null;
                                 deleted_by_id: string | null;
                                 deleted_by_name: string | null;
