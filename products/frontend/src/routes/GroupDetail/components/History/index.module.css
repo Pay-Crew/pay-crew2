@@ -1,3 +1,22 @@
+/*** 表示 / 非表示切り換え ***/
+.toggleButton {
+  display: block;
+  margin: var(--space-base) auto;
+  background-color: var(--background-color-base);
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.note {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto var(--space-xl) auto;
+  text-align: center;
+  font-size: var(--text-base);
+}
+
+/*** 履歴一覧 (未完済) ***/
+/* これが基準のデザイン */
 .ul {
   width: fit-content;
   max-width: 900px;
@@ -25,13 +44,14 @@
   white-space: normal;
   min-width: 0;
 }
+
 /* section 2 */
-.date {
-  font-size: var(--text-base);
+.label {
+  font-size: var(--text-sm);
 }
+
 /* section 3 */
 .detail {
-  font-size: var(--text-base);
   margin: var(--space-sm) 0;
   overflow-wrap: anywhere;
   word-break: break-word;
@@ -44,4 +64,50 @@
   border: none;
   text-decoration: underline;
   cursor: pointer;
+}
+
+/*** 履歴一覧 (完済) ***/
+/* 未完済のデザインとの差分だけ記述する */
+.completedLi {
+  border-radius: var(--space-xs);
+  border: solid 1px var(--color-disabled);
+  margin: var(--space-base) 0;
+  padding: var(--space-sm);
+  display: flex;
+  align-items: center;
+}
+
+/* section 1 */
+.completedSummary {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+  min-width: 0;
+  color: var(--color-disabled);
+}
+
+/* section 2 */
+.completedLabel {
+  font-size: var(--text-sm);
+  color: var(--color-disabled);
+}
+.completedValue {
+  color: var(--color-disabled);
+}
+
+/* section 3 */
+.completedButtonWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.completedDetailWrapper {
+  margin: var(--space-sm) 0 0 0;
+}
+.completedDetail {
+  margin: var(--space-xs) 0 var(--space-sm) 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+  min-width: 0;
+  color: var(--color-disabled);
 }

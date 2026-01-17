@@ -6,3 +6,4 @@ export { default as Loading } from './Loading';
 export { default as FullPaymentButton } from './FullPaymentButton';
 export { default as Error } from './Error';
 export { default as InviteButton } from './InviteButton';
+export { default as WarningMessage } from './WarningMessage';

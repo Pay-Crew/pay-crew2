@@ -42,6 +42,7 @@ export { getGroupInfoRequestSchema, type GetGroupInfoRequestSchemaType } from '.
 export { getGroupDebtHistoryRequestSchema, type GetGroupDebtHistoryRequestSchemaType } from './request/group';
 export { registerGroupDebtRequestSchema, type RegisterGroupDebtRequestSchemaType } from './request/group';
 export { deleteGroupDebtRequestSchema, type DeleteGroupDebtRequestSchemaType } from './request/group';
+export { cancelGroupDebtRequestSchema, type CancelGroupDebtRequestSchemaType } from './request/group';
 // group response schema
 export { createGroupResponseSchema, type CreateGroupResponseSchemaType } from './response/group';
 export { joinGroupResponseSchema, type JoinGroupResponseSchemaType } from './response/group';
