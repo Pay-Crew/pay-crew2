@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -146,7 +146,10 @@
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -164,16 +167,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -194,7 +198,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -242,6 +248,7 @@ export const dotenvLoader = <span class="cstat-no" title="statement not covered"
   const viteApiUrl = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.VITE_API_URL);</span>
   const viteClientUrl = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.VITE_CLIENT_URL);</span>
   const viteRedirectUrl = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.VITE_REDIRECT_URL);</span>
+  const viteIdenteapotSalt = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.VITE_IDENTEAPOT_SALT);</span>
   const postgresUser = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.POSTGRES_USER);</span>
   const postgresPassword = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.POSTGRES_PASSWORD);</span>
   const postgresDb = <span class="cstat-no" title="statement not covered" >caster.castString(process.env.POSTGRES_DB);</span>
@@ -264,6 +271,7 @@ export const dotenvLoader = <span class="cstat-no" title="statement not covered"
     VITE_API_URL: viteApiUrl,
     VITE_CLIENT_URL: viteClientUrl,
     VITE_REDIRECT_URL: viteRedirectUrl,
+    VITE_IDENTEAPOT_SALT: viteIdenteapotSalt ? '*****' : '',
     POSTGRES_USER: postgresUser,
     POSTGRES_PASSWORD: postgresPassword ? '*****' : '',
     POSTGRES_DB: postgresDb,
@@ -281,6 +289,7 @@ export const dotenvLoader = <span class="cstat-no" title="statement not covered"
     viteApiUrl,
     viteClientUrl,
     viteRedirectUrl,
+    viteIdenteapotSalt,
   };
   const backendConfig: BackendConfig = <span class="cstat-no" title="statement not covered" >{</span>
     postgresUser,
@@ -319,7 +328,7 @@ export const fileWriter = <span class="cstat-no" title="statement not covered" >
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-17T07:37:32.280Z
+                at 2026-01-17T08:51:43.956Z
             </div>
         <script src="prettify.js"></script>
         <script>
