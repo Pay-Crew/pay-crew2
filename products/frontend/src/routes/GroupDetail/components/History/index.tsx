@@ -117,7 +117,7 @@ const History: FC<Props> = (props: Props) => {
                       </p>
                       {/* section 3 */}
                       <div className={styles.completedButtonWrapper}>
-                        {!detail.has(debt.debt_id) && (
+                        {!detail.has(debt.debt_id) ? (
                           <button
                             className={styles.button}
                             type="button"
@@ -125,6 +125,8 @@ const History: FC<Props> = (props: Props) => {
                           >
                             さらに表示
                           </button>
+                        ) : (
+                          <div>{/* 完済取り消しボタンの一を固定するための、ダミーのDOM */}</div>
                         )}
                         <button
                           className={styles.button}

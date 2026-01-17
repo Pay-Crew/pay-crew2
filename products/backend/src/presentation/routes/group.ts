@@ -451,7 +451,15 @@ hono.openapi(getGroupDebtHistorySchema, async (c) => {
       amount: debtEntry.amount,
       description: debtEntry.description === null ? '' : debtEntry.description,
       occurred_at: debtEntry.occurredAt,
-      deleted_at: debtEntry.deletedAt?.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo' }) || null,
+      deleted_at:
+        debtEntry.deletedAt
+          ?.toLocaleDateString('ja-JP', {
+            timeZone: 'Asia/Tokyo',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          })
+          .replace(/\//g, '-') || null,
       deleted_by_id: debtEntry.deletedBy,
       deleted_by_name:
         debtEntry.deletedBy && deletedByNameInfo
