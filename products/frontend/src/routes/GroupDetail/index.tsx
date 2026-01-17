@@ -162,6 +162,28 @@ const GroupDetail: FC = () => {
     deleteGroupDebtMutation.mutate({ body: { group_id: groupId, debt_id: debtId }, credentials: 'include' });
   };
 
+  // 貸し借り削除取り消し処理
+  const cancelGroupDebtMutation = $api.useMutation('post', '/api/group/debt/cancel', {
+    onSuccess: (_data, result) => {
+      const debtId = result.body.debt_id;
+      debtHistoryMutation.mutate({ body: { group_id: groupId }, credentials: 'include' });
+      toast.success('貸し借りの削除取り消しに成功しました', { id: `group-detail-cancel-debt-${debtId}` });
+    },
+    onError: (_error, result) => {
+      const debtId = result.body.debt_id;
+      toast.error('貸し借りの削除取り消しに失敗しました', { id: `group-detail-cancel-debt-${debtId}` });
+    },
+    onMutate: (result) => {
+      const debtId = result.body.debt_id;
+      toast.loading('貸し借りの削除取り消し中...', { id: `group-detail-cancel-debt-${debtId}` });
+    },
+  });
+
+  // 貸し借り削除取り消しハンドラ
+  const cancelGroupDebtHandler = (debtId: string) => {
+    cancelGroupDebtMutation.mutate({ body: { group_id: groupId, debt_id: debtId }, credentials: 'include' });
+  };
+
   return (
     <>
       {groupInfoMutation.isPending && <Loading content="グループ情報を取得中..." />}
@@ -287,6 +309,8 @@ const GroupDetail: FC = () => {
         debtHistoryResult={debtHistoryResult}
         deleteGroupDebtHandler={deleteGroupDebtHandler}
         fullPaymentButtonDisabled={deleteGroupDebtMutation.isPending}
+        cancelGroupDebtHandler={cancelGroupDebtHandler}
+        cancelButtonDisabled={cancelGroupDebtMutation.isPending}
       />
     </>
   );

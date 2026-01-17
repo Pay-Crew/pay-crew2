@@ -41,3 +41,10 @@ export const deleteGroupDebtRequestSchema = z.object({
 });
 
 export type DeleteGroupDebtRequestSchemaType = z.infer<typeof deleteGroupDebtRequestSchema>;
+
+export const cancelGroupDebtRequestSchema = z.object({
+  group_id: z.string().min(1),
+  debt_id: z.string().min(1),
+});
+
+export type CancelGroupDebtRequestSchemaType = z.infer<typeof cancelGroupDebtRequestSchema>;
