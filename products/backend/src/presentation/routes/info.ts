@@ -291,6 +291,7 @@ hono.openapi(infoUserRepaymentSchema, async (c) => {
   // データベース接続
   const db = drizzle({ connection: c.env.HYPERDRIVE });
 
+  // 現在時刻の取得 (UTC)
   const now = new Date();
   // loginUser <-> counterparty_id 間の取引履歴を削除（deletedAt, deletedBy をセット）
   await db

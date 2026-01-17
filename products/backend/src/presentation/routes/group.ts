@@ -564,7 +564,7 @@ hono.openapi(deleteGroupDebtSchema, async (c) => {
   const loginUser = c.get('user');
   const body = c.req.valid('json');
 
-  // 現在時刻の取得
+  // 現在時刻の取得 (UTC)
   const now = new Date();
 
   // データベース接続

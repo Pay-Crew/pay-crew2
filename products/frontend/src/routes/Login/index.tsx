@@ -1,14 +1,13 @@
 import type { FC } from 'react';
 // better-auth
 import { authClient } from '../../lib/auth';
-import { Title } from '../../share';
 // icons
 import { FaDiscord, FaGoogle } from 'react-icons/fa6';
 // css
 import styles from './index.module.css';
 // components
 import { LoginButton } from './components';
-import { Error } from '../../share';
+import { Title, WarningMessage } from '../../share';
 
 const Login: FC = () => {
   // OAuth signin handlers
@@ -28,7 +27,7 @@ const Login: FC = () => {
   return (
     <div>
       <Title title="ログイン" />
-      <Error content="Pay Crew2は、まだ開発中です。そのため、予告なくデータが消失する可能性があります。また、サービスの仕様が変更されることがあります。これらを含む「Pay Crew2」の利用について、一切の責任を負いかねますのでご了承ください。" />
+      <WarningMessage />
       <p className={styles.description}>Discord または Google アカウントを使用してログインしてください。</p>
       <div className={styles.container}>
         <LoginButton onClick={handleDiscordSignin} Icon={FaDiscord} label="Discord" />

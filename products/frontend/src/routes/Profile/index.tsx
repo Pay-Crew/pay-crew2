@@ -17,7 +17,7 @@ const Profile: FC = () => {
   const userProfileQuery = $api.useQuery('get', '/api/profile', {
     credentials: 'include',
     onError: () => {
-      toast.error('情報の取得に失敗しました', { id: 'profile-user-info' });
+      toast.error('プロフィール情報の取得に失敗しました', { id: 'profile-user-info' });
     },
   });
 
@@ -25,13 +25,13 @@ const Profile: FC = () => {
   const userProfileMutation = $api.useMutation('patch', `/api/profile`, {
     onSuccess: () => {
       userProfileQuery.refetch();
-      toast.success('更新に成功しました', { id: 'profile-update-user-info' });
+      toast.success('プロフィール情報の更新に成功しました', { id: 'profile-update-user-info' });
     },
     onError: () => {
-      toast.error('更新に失敗しました', { id: 'profile-update-user-info' });
+      toast.error('プロフィール情報の更新に失敗しました', { id: 'profile-update-user-info' });
     },
     onMutate: () => {
-      toast.loading('更新中...', { id: 'profile-update-user-info' });
+      toast.loading('プロフィール情報を更新中...', { id: 'profile-update-user-info' });
     },
   });
 
