@@ -31,7 +31,7 @@ const Header: FC = () => {
 
   useEffect(() => {
     sessionCheckMutation.mutate({ credentials: 'include' });
-  }, [sessionCheckMutation]);
+  }, []);
 
   return (
     <header className={styles.header}>
@@ -39,9 +39,17 @@ const Header: FC = () => {
         Pay Crew2
       </Link>
       <nav className={styles.nav}>
-        <NavLink to="/">トップ</NavLink>
-        <NavLink to="/gen-group">グループ作成</NavLink>
-        {identicon && <img className={styles.identicon} src={identicon} alt="User Identicon" />}
+        <NavLink className={styles.navLink} to="/">
+          トップ
+        </NavLink>
+        <NavLink className={styles.navLink} to="/gen-group">
+          グループ作成
+        </NavLink>
+        {sessionCheckMutation.isSuccess ? (
+          <>{identicon && <img className={styles.identicon} src={identicon} alt="User Identicon" />}</>
+        ) : (
+          <NavLink to="/login"> ログイン</NavLink>
+        )}
       </nav>
     </header>
   );

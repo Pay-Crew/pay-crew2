@@ -25,8 +25,8 @@
   border-radius: 50%;
 }
 
-@media screen and (max-width: 499px) {
-  .nav {
+@media screen and (max-width: 599px) {
+  .navLink {
     display: none;
   }
 }
