@@ -15,7 +15,14 @@
 
 .nav {
   display: flex;
+  align-items: center;
   gap: var(--space-base);
+}
+
+.identicon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 @media screen and (max-width: 499px) {
