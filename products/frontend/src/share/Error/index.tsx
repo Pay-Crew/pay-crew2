@@ -16,7 +16,12 @@ const Error: FC<Props> = (props: Props) => {
         <span className={styles.box}></span>
         <span className={styles.box}></span>
       </div>
-      <p className={styles.content} role="alert">
+      <p
+        className={styles.content}
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
         {props.content}
       </p>
     </div>
