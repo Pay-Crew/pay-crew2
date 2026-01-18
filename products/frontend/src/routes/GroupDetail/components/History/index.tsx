@@ -126,7 +126,7 @@ const History: FC<Props> = (props: Props) => {
                             さらに表示
                           </button>
                         ) : (
-                          <div>{/* 完済取り消しボタンの一を固定するための、ダミーのDOM */}</div>
+                          <div role="none">{/* 完済取り消しボタンの一を固定するための、ダミーのDOM */}</div>
                         )}
                         <button
                           className={styles.button}
