@@ -16,7 +16,7 @@ const Loading: FC<Props> = (props: Props) => {
         <span className={styles.box}></span>
         <span className={styles.box}></span>
       </div>
-      <p className={styles.content} role="note">
+      <p className={styles.content} role="status" aria-live="polite">
         {props.content}
       </p>
     </div>
