@@ -7,3 +7,4 @@ export { default as FullPaymentButton } from './FullPaymentButton';
 export { default as Error } from './Error';
 export { default as InviteButton } from './InviteButton';
 export { default as WarningMessage } from './WarningMessage';
+export { default as Date } from './Date';

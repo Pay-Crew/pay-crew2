@@ -1,11 +1,7 @@
 import type { FC } from 'react';
-import { MarkdownContent, Title } from '../../share';
+import { MarkdownContent, Date, Title } from '../../share';
 
 const privacy = `
-# プライバシーポリシー
-
-最終更新日：2026年1月21日
-
 ## 第1条（目的）
 本プライバシーポリシーは、そぽたん商店（以下「当開発チーム」といいます。）が提供する「Pay Crew2」（以下「本サービス」といいます。）において、当開発チームが取得する個人情報の取扱いについて定めるものです。当開発チームは、個人情報の保護を重要な責務と考え、関連法令を遵守し、お客様の個人情報を適切に管理いたします。
 
@@ -55,6 +51,7 @@ const Privacy: FC = () => {
   return (
     <>
       <Title title="プライバシーポリシー" />
+      <Date content="最終更新日：2026年1月21日" />
       <MarkdownContent content={privacy} />
     </>
   );

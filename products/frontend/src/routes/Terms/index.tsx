@@ -1,11 +1,7 @@
 import type { FC } from 'react';
-import { MarkdownContent, Title } from '../../share';
+import { MarkdownContent, Date, Title } from '../../share';
 
 const terms = `
-# 利用規約
-
-最終更新日：2026年1月21日
-
 ## 第1条（目的）
 本規約は、そぽたん商店（以下「当開発チーム」といいます。）が提供する「Pay Crew2」という名称のサービス（以下「本サービス」といいます。）の利用条件を定めるものです。本サービスは、個人間またはグループ間での貸借の記録、管理、および合算を目的として提供されます。
 
@@ -90,6 +86,7 @@ const Terms: FC = () => {
   return (
     <>
       <Title title="利用規約" />
+      <Date content="最終更新日：2026年1月21日" />
       <MarkdownContent content={terms} />
     </>
   );
