@@ -9,14 +9,16 @@ type Props = {
 const Loading: FC<Props> = (props: Props) => {
   return (
     <div className={styles.container}>
-      <div className={styles.loader}>
+      <div className={styles.loader} aria-hidden="true">
         <span className={styles.box}></span>
         <span className={styles.box}></span>
         <span className={styles.box}></span>
         <span className={styles.box}></span>
         <span className={styles.box}></span>
       </div>
-      <p className={styles.content}>{props.content}</p>
+      <p className={styles.content} role="status" aria-live="polite">
+        {props.content}
+      </p>
     </div>
   );
 };
