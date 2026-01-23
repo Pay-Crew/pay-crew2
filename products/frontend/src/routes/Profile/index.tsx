@@ -9,6 +9,8 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { FormButton, Loading, Error, Title } from '../../share';
 // toast
 import { toast } from 'react-hot-toast';
+// components
+import { SocialLink } from './components';
 // css
 import styles from './index.module.css';
 
@@ -91,6 +93,7 @@ const Profile: FC = () => {
 
             <FormButton content="更新" onClick={handleSubmit(onSubmit)} disabled={userProfileMutation.isPending} />
           </form>
+          <SocialLink />
         </>
       )}
     </>
