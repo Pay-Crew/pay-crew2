@@ -7,6 +7,9 @@ import styles from './index.module.css';
 const Footer: FC = () => {
   return (
     <footer className={styles.footer}>
+      <Link to="/" className={styles.title}>
+        Pay Crew2
+      </Link>
       <p className={styles.copyright}>&copy; {new Date().getFullYear()} Pay Crew2. All rights reserved.</p>
       <nav className={styles.nav}>
         <Link className={styles.link} to="/privacy">
