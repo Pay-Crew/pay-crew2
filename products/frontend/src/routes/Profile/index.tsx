@@ -46,7 +46,6 @@ const Profile: FC = () => {
     defaultValues: {
       display_name: undefined,
       avatar_url: undefined,
-      bio: undefined,
     } satisfies UpdateUserProfileRequestSchemaType,
   });
 
@@ -56,7 +55,6 @@ const Profile: FC = () => {
       reset({
         display_name: userProfileQuery.data.display_name ?? undefined,
         avatar_url: userProfileQuery.data.avatar_url ?? undefined,
-        bio: userProfileQuery.data.bio ?? undefined,
       });
     }
   }, [userProfileQuery.data, reset]);
@@ -108,24 +106,6 @@ const Profile: FC = () => {
               <ErrorMessage
                 errors={errors}
                 name="avatar_url"
-                render={({ message }) => <div className={styles.error}>{message}</div>}
-              />
-            </div>
-
-            <div className={styles.inputWrapper}>
-              <label className={styles.label} htmlFor="bio">
-                自己紹介
-              </label>
-              <textarea
-                className={styles.textarea}
-                id="bio"
-                {...register('bio', {
-                  setValueAs: (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
-                })}
-              />
-              <ErrorMessage
-                errors={errors}
-                name="bio"
                 render={({ message }) => <div className={styles.error}>{message}</div>}
               />
             </div>

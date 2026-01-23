@@ -4,6 +4,15 @@
   border-top: 4px double var(--color-base);
 }
 
+.title {
+  display: block;
+  font-size: var(--text-2xl);
+  font-family: 'Limelight', sans-serif;
+  text-decoration: none;
+  text-align: center;
+  margin: 0 0 var(--space-base) 0;
+}
+
 .copyright {
   text-align: center;
   font-size: var(--text-sm);

@@ -30,8 +30,6 @@ export interface paths {
                         "application/json": {
                             user_id: string;
                             user_name: string;
-                            /** Format: uri */
-                            user_avatar_url: string | null;
                         };
                     };
                 };
@@ -1072,7 +1070,6 @@ export interface paths {
                             display_name: string;
                             /** Format: uri */
                             avatar_url: string;
-                            bio: string;
                         };
                     };
                 };
@@ -1137,7 +1134,6 @@ export interface paths {
                         display_name?: string;
                         /** Format: uri */
                         avatar_url?: string;
-                        bio?: string;
                     };
                 };
             };

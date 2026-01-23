@@ -11548,15 +11548,11 @@
                     "avatar_url": {
                       "type": "string",
                       "format": "uri"
-                    },
-                    "bio": {
-                      "type": "string"
                     }
                   },
                   "required": [
                     "display_name",
-                    "avatar_url",
-                    "bio"
+                    "avatar_url"
                   ]
                 }
               }
@@ -12360,9 +12356,6 @@
                   "avatar_url": {
                     "type": "string",
                     "format": "uri"
-                  },
-                  "bio": {
-                    "type": "string"
                   }
                 }
               }
