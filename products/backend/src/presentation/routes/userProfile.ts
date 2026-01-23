@@ -45,7 +45,7 @@ hono.openapi(getUserProfile, async (c) => {
 
   //* ユーザ情報を取得 (user table) *//
   const userData = await db
-    .select({ display_name: user.displayName, avatar_url: user.avatarUrl })
+    .select({ display_name: user.displayName })
     .from(user)
     .where(eq(user.id, loginUser.id))
     .limit(1);
@@ -54,7 +54,6 @@ hono.openapi(getUserProfile, async (c) => {
   return c.json(
     {
       display_name: userData[0].display_name === null ? '' : userData[0].display_name,
-      avatar_url: userData[0].avatar_url === null ? '' : userData[0].avatar_url,
     } satisfies GetUserProfileResponseSchemaType,
     200
   );
@@ -98,7 +97,6 @@ hono.openapi(updateUserProfile, async (c) => {
     .update(user)
     .set({
       displayName: typeof body.display_name === 'undefined' ? null : body.display_name,
-      avatarUrl: typeof body.avatar_url === 'undefined' ? null : body.avatar_url,
     })
     .where(eq(user.id, loginUser.id));
 

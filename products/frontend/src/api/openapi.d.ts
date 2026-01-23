@@ -1068,8 +1068,6 @@ export interface paths {
                     content: {
                         "application/json": {
                             display_name: string;
-                            /** Format: uri */
-                            avatar_url: string;
                         };
                     };
                 };
@@ -1132,8 +1130,6 @@ export interface paths {
                 content: {
                     "application/json": {
                         display_name?: string;
-                        /** Format: uri */
-                        avatar_url?: string;
                     };
                 };
             };
