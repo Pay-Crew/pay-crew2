@@ -15,8 +15,6 @@ export const user = pgTable(
       .notNull(),
     // 追加のプロフィール情報
     displayName: text('display_name'),
-    avatarUrl: text('avatar_url'),
-    bio: text('bio'),
   },
   (table) => [
     // display_name に対する二次索引を作成

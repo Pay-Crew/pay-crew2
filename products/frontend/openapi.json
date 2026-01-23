@@ -11544,19 +11544,10 @@
                     "display_name": {
                       "type": "string",
                       "minLength": 1
-                    },
-                    "avatar_url": {
-                      "type": "string",
-                      "format": "uri"
-                    },
-                    "bio": {
-                      "type": "string"
                     }
                   },
                   "required": [
-                    "display_name",
-                    "avatar_url",
-                    "bio"
+                    "display_name"
                   ]
                 }
               }
@@ -12355,13 +12346,6 @@
                 "type": "object",
                 "properties": {
                   "display_name": {
-                    "type": "string"
-                  },
-                  "avatar_url": {
-                    "type": "string",
-                    "format": "uri"
-                  },
-                  "bio": {
                     "type": "string"
                   }
                 }
