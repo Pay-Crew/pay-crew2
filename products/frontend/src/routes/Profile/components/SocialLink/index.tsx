@@ -5,6 +5,7 @@ import { authClient } from '../../../../lib/auth';
 import { FaDiscord, FaGoogle } from 'react-icons/fa6';
 // css
 import styles from './index.module.css';
+import { SubTitle } from '..';
 
 type Provider = 'discord' | 'google';
 type LinkedSocialAccount = {
@@ -47,7 +48,7 @@ const SocialLink: FC = () => {
 
   return (
     <>
-      <h2 className={styles.title}>アカウント連携</h2>
+      <SubTitle subTitle="ソーシャルアカウント連携" />
       <div className={styles.accountContainer}>
         <div className={styles.iconWrapper}>
           <FaDiscord className={styles.icon} />

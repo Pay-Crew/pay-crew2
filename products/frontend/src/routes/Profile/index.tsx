@@ -10,7 +10,7 @@ import { FormButton, Loading, Error, Title } from '../../share';
 // toast
 import { toast } from 'react-hot-toast';
 // components
-import { SocialLink } from './components';
+import { SocialLink, SubTitle } from './components';
 // css
 import styles from './index.module.css';
 
@@ -66,7 +66,8 @@ const Profile: FC = () => {
 
   return (
     <>
-      <Title title="プロフィールの編集" />
+      <Title title="アカウントの設定" />
+      <SubTitle subTitle="プロフィール情報の編集" />
       {userProfileQuery.isLoading && <Loading content="データの取得中..." />}
       {userProfileQuery.isError && <Error content="データの取得に失敗しました。" />}
       {userProfileQuery.isSuccess && (
