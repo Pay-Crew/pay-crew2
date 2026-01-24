@@ -7,8 +7,8 @@ import styles from './index.module.css';
 const Menu: FC = () => {
   return (
     <div className={styles.welcomeBox}>
-      <Link to="/profile">プロフィール編集へ</Link>
-      <Link to="/gen-group">グループ作成へ</Link>
+      <Link to="/profile">アカウント設定</Link>
+      <Link to="/gen-group">グループ作成</Link>
     </div>
   );
 };

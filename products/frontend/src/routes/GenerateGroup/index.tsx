@@ -88,12 +88,7 @@ const GenerateGroup: FC = () => {
       )}
       {isSuccess && result && (
         <>
-          <InviteButton
-            copyStatus={copyStatus}
-            setCopyStatus={setCopyStatus}
-            inviteUrl={inviteUrl}
-            setInviteUrl={setInviteUrl}
-          />
+          <InviteButton copyStatus={copyStatus} setCopyStatus={setCopyStatus} inviteUrl={inviteUrl} />
           <Link className={styles.groupLink} to={`/group/${result.group_id}`}>
             グループページへ移動
           </Link>
