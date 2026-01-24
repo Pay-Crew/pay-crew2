@@ -8,7 +8,6 @@ type Props = {
   copyStatus: 'idle' | 'copying' | 'success';
   setCopyStatus: Dispatch<SetStateAction<'idle' | 'copying' | 'success'>>;
   inviteUrl: string | null;
-  setInviteUrl: Dispatch<SetStateAction<string | null>>;
 };
 
 const InviteButton: FC<Props> = (props: Props) => {
