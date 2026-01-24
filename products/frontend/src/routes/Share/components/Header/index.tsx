@@ -45,10 +45,8 @@ const Header: FC = () => {
         <NavLink className={styles.navLink} to="/gen-group">
           グループ作成
         </NavLink>
-        {sessionCheckMutation.isSuccess ? (
-          <>{identicon && <img className={styles.identicon} src={identicon} alt="User Identicon" />}</>
-        ) : (
-          <NavLink to="/login"> ログイン</NavLink>
+        {sessionCheckMutation.isSuccess && identicon && (
+          <img className={styles.identicon} src={identicon} alt="User Identicon" />
         )}
       </nav>
     </header>

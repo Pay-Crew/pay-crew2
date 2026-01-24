@@ -1,4 +1,4 @@
-import { useState, useEffect, type FC } from 'react';
+import { type FC } from 'react';
 // @tanstack/react-query
 import { $api } from '../../api/fetchClient';
 // toast
@@ -9,18 +9,12 @@ import { Borrow, Description, Group, Lent, Logo, Menu, WelcomeMessage } from './
 
 const Root: FC = () => {
   // ユーザ名の取得
-  const [userName, setUserName] = useState<string>('');
-  const sessionCheckMutation = $api.useMutation('get', '/api/session', {
-    onSuccess: async (data) => {
-      setUserName(data.user_name);
-    },
+  const loginUserInfoQuery = $api.useQuery('get', '/api/session', {
+    credentials: 'include',
     onError: () => {
       toast.error('ユーザ名の取得に失敗しました。', { id: 'root-username' });
     },
   });
-  useEffect(() => {
-    sessionCheckMutation.mutate({ credentials: 'include' });
-  }, []);
 
   // loginUserの所属グループ情報を取得
   const infoAboutGroupsTheUserBelongsToQuery = $api.useQuery('get', '/api/info/group', {
@@ -57,9 +51,9 @@ const Root: FC = () => {
   return (
     <>
       <Logo content="Pay Crew2" />
-      <WelcomeMessage user_name={userName} />
+      <WelcomeMessage user_name={loginUserInfoQuery.data?.user_name ?? ''} />
       <WarningMessage />
-      <Description content="Pay Crew2は、友人や家族と簡単に割り勘やお金の貸し借りを管理できるアプリケーションです。" />
+      <Description content="Pay Crew2は、友人や家族と簡単にお金の貸し借りを管理できるアプリケーションです。" />
       {(infoAboutGroupsTheUserBelongsToQuery.isPending || infoAboutUserTransactionsQuery.isPending) && (
         <Loading content="データを取得中..." />
       )}
