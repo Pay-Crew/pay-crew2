@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState, type FC } from 'react';
 import { useParams } from 'react-router';
 // @tanstack/react-query
+import { useQueryClient } from '@tanstack/react-query';
 import { $api } from '../../api/fetchClient';
 import {
+  type GetGroupDebtHistoryResponseElementSchemaType,
   type GetGroupDebtHistoryResponseSchemaType,
-  type GetGroupInfoResponseSchemaType,
   RegisterGroupDebtFormSchema,
   type RegisterGroupDebtFormSchemaType,
 } from 'validator';
@@ -31,53 +32,91 @@ const GroupDetail: FC = () => {
   // コピー状態管理
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copying' | 'success'>('idle');
   const [inviteUrl, setInviteUrl] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   // グループ情報の取得
-  const [groupInfoResult, setGroupInfoResult] = useState<GetGroupInfoResponseSchemaType | null>(null);
-  const groupInfoMutation = $api.useMutation('post', `/api/group/info`, {
+  const groupInfoQueryInit = useMemo(
+    () => ({ body: { group_id: groupId }, credentials: 'include' }),
+    [groupId],
+  );
+  const groupInfoQueryKey = useMemo(
+    () => $api.queryOptions('post', '/api/group/info', groupInfoQueryInit).queryKey,
+    [groupInfoQueryInit],
+  );
+  const groupInfoQuery = $api.useQuery('post', `/api/group/info`, groupInfoQueryInit, {
+    enabled: false,
+  });
+  const groupInfoFetchMutation = $api.useMutation('post', `/api/group/info`, {
     onSuccess: (data) => {
-      setGroupInfoResult(data);
-      setInviteUrl(`${import.meta.env.VITE_CLIENT_URL}/invite/${data.invite_id}`);
-      setCopyStatus('idle');
+      queryClient.setQueryData(groupInfoQueryKey, data);
     },
     onError: () => {
-      setGroupInfoResult(null);
       setInviteUrl(null);
       setCopyStatus('idle');
       toast.error('グループ情報の取得に失敗しました', { id: 'group-detail-group-info' });
     },
-    onMutate: () => {
-      setGroupInfoResult(null);
-      setInviteUrl(null);
-      setCopyStatus('idle');
-    },
   });
 
   // グループの貸し借り履歴の取得
-  const [debtHistoryResult, setDebtHistoryResult] = useState<GetGroupDebtHistoryResponseSchemaType | null>(null);
-  const debtHistoryMutation = $api.useMutation('post', `/api/group/debt/history`, {
+  const debtHistoryQueryInit = useMemo(
+    () => ({ body: { group_id: groupId }, credentials: 'include' }),
+    [groupId],
+  );
+  const debtHistoryQueryKey = useMemo(
+    () => $api.queryOptions('post', '/api/group/debt/history', debtHistoryQueryInit).queryKey,
+    [debtHistoryQueryInit],
+  );
+  const debtHistoryQuery = $api.useQuery('post', `/api/group/debt/history`, debtHistoryQueryInit, {
+    enabled: false,
+  });
+  const debtHistoryFetchMutation = $api.useMutation('post', `/api/group/debt/history`, {
     onSuccess: (data) => {
-      setDebtHistoryResult(data);
+      queryClient.setQueryData(debtHistoryQueryKey, data);
     },
     onError: () => {
-      setDebtHistoryResult(null);
       toast.error('貸し借り情報の取得に失敗しました', { id: 'group-detail-debt-history' });
-    },
-    onMutate: () => {
-      setDebtHistoryResult(null);
     },
   });
 
-  // コンポーネントマウント時にグループ情報と貸し借り履歴を取得
+  const sessionQuery = $api.useQuery('get', '/api/session', { credentials: 'include' });
+
   useEffect(() => {
-    groupInfoMutation.mutate({ body: { group_id: groupId }, credentials: 'include' });
-    debtHistoryMutation.mutate({ body: { group_id: groupId }, credentials: 'include' });
-  }, []);
+    groupInfoFetchMutation.mutate(groupInfoQueryInit);
+    debtHistoryFetchMutation.mutate(debtHistoryQueryInit);
+  }, [debtHistoryFetchMutation, debtHistoryQueryInit, groupInfoFetchMutation, groupInfoQueryInit]);
+
+  useEffect(() => {
+    if (groupInfoQuery.data) {
+      setInviteUrl(`${import.meta.env.VITE_CLIENT_URL}/invite/${groupInfoQuery.data.invite_id}`);
+      setCopyStatus('idle');
+    }
+  }, [groupInfoQuery.data]);
 
   // 貸し借り登録処理
   const debtRegisterMutation = $api.useMutation('post', `/api/group/debt/register`, {
-    onSuccess: () => {
-      debtHistoryMutation.mutate({ body: { group_id: groupId }, credentials: 'include' });
+    onSuccess: (_data, variables) => {
+      const body = variables.body;
+      const debtorName = members.find((member) => member.user_id === body.debtor_id)?.user_name ?? '';
+      const creditorName = members.find((member) => member.user_id === body.creditor_id)?.user_name ?? '';
+      const tempDebt: GetGroupDebtHistoryResponseElementSchemaType = {
+        debt_id: `temp-${crypto.randomUUID?.() ?? Date.now()}`,
+        debtor_id: body.debtor_id,
+        debtor_name: debtorName,
+        creditor_id: body.creditor_id,
+        creditor_name: creditorName,
+        amount: body.amount,
+        description: body.description ?? '',
+        occurred_at: body.occurred_at,
+        deleted_at: null,
+        deleted_by_id: null,
+        deleted_by_name: null,
+      };
+      queryClient.setQueryData<GetGroupDebtHistoryResponseSchemaType | null>(debtHistoryQueryKey, (current) => {
+        if (!current) {
+          return { debts: [tempDebt] };
+        }
+        return { debts: [tempDebt, ...current.debts] };
+      });
       toast.success('貸し借りの登録に成功しました', { id: 'group-detail-debt-register' });
     },
     onError: () => {
@@ -113,9 +152,20 @@ const GroupDetail: FC = () => {
   // メンバー 一覧の取得
   // membersのnullを除外して<select>の候補を作る
   const members = useMemo(() => {
-    const raw = groupInfoResult?.members ?? [];
+    const raw = groupInfoQuery.data?.members ?? [];
     return raw.filter((m): m is NonNullable<(typeof raw)[number]> => Boolean(m));
-  }, [groupInfoResult]);
+  }, [groupInfoQuery.data]);
+
+  const updateDebtHistoryCache = (updater: (current: GetGroupDebtHistoryResponseSchemaType) => {
+    debts: GetGroupDebtHistoryResponseElementSchemaType[];
+  }) => {
+    queryClient.setQueryData<GetGroupDebtHistoryResponseSchemaType | null>(debtHistoryQueryKey, (current) => {
+      if (!current) {
+        return current;
+      }
+      return updater(current);
+    });
+  };
 
   // debtorIdとcreditorIdが同じ場合、片方を空にする
   useEffect(() => {
@@ -144,7 +194,21 @@ const GroupDetail: FC = () => {
   const deleteGroupDebtMutation = $api.useMutation('delete', '/api/group/debt/delete', {
     onSuccess: (_data, result) => {
       const debtId = result.body.debt_id;
-      debtHistoryMutation.mutate({ body: { group_id: groupId }, credentials: 'include' });
+      const deletedAt = toDateInputValue(new Date());
+      const deletedById = sessionQuery.data?.user_id ?? null;
+      const deletedByName = sessionQuery.data?.user_name ?? null;
+      updateDebtHistoryCache((current) => ({
+        debts: current.debts.map((debt) =>
+          debt.debt_id === debtId
+            ? {
+                ...debt,
+                deleted_at: deletedAt,
+                deleted_by_id: deletedById,
+                deleted_by_name: deletedByName,
+              }
+            : debt,
+        ),
+      }));
       toast.success('貸し借りの削除に成功しました', { id: `group-detail-delete-debt-${debtId}` });
     },
     onError: (_error, result) => {
@@ -166,7 +230,18 @@ const GroupDetail: FC = () => {
   const cancelGroupDebtMutation = $api.useMutation('post', '/api/group/debt/cancel', {
     onSuccess: (_data, result) => {
       const debtId = result.body.debt_id;
-      debtHistoryMutation.mutate({ body: { group_id: groupId }, credentials: 'include' });
+      updateDebtHistoryCache((current) => ({
+        debts: current.debts.map((debt) =>
+          debt.debt_id === debtId
+            ? {
+                ...debt,
+                deleted_at: null,
+                deleted_by_id: null,
+                deleted_by_name: null,
+              }
+            : debt,
+        ),
+      }));
       toast.success('貸し借りの削除取り消しに成功しました', { id: `group-detail-cancel-debt-${debtId}` });
     },
     onError: (_error, result) => {
@@ -186,13 +261,13 @@ const GroupDetail: FC = () => {
 
   return (
     <>
-      {groupInfoMutation.isPending && <Loading content="グループ情報を取得中..." />}
-      {groupInfoMutation.isError && <Error content="グループ情報の取得に失敗しました。" />}
-      {groupInfoMutation.isSuccess && groupInfoResult && (
+      {groupInfoFetchMutation.isPending && <Loading content="グループ情報を取得中..." />}
+      {groupInfoFetchMutation.isError && <Error content="グループ情報の取得に失敗しました。" />}
+      {groupInfoQuery.data && (
         <>
-          <GroupName content={groupInfoResult.group_name} />
-          <CreatedBy content={groupInfoResult.created_by_name} />
-          <Member groupInfoResult={groupInfoResult} />
+          <GroupName content={groupInfoQuery.data.group_name} />
+          <CreatedBy content={groupInfoQuery.data.created_by_name} />
+          <Member groupInfoResult={groupInfoQuery.data} />
           <InviteButton
             inviteUrl={inviteUrl}
             setInviteUrl={setInviteUrl}
@@ -303,10 +378,10 @@ const GroupDetail: FC = () => {
       )}
 
       <History
-        debtHistoryMutationIsPending={debtHistoryMutation.isPending}
-        debtHistoryMutationIsError={debtHistoryMutation.isError}
-        debtHistoryMutationIsSuccess={debtHistoryMutation.isSuccess}
-        debtHistoryResult={debtHistoryResult}
+        debtHistoryMutationIsPending={debtHistoryFetchMutation.isPending}
+        debtHistoryMutationIsError={debtHistoryFetchMutation.isError}
+        debtHistoryMutationIsSuccess={debtHistoryQuery.data !== undefined}
+        debtHistoryResult={debtHistoryQuery.data ?? null}
         deleteGroupDebtHandler={deleteGroupDebtHandler}
         fullPaymentButtonDisabled={deleteGroupDebtMutation.isPending}
         cancelGroupDebtHandler={cancelGroupDebtHandler}
