@@ -17,7 +17,8 @@ const SessionCheck: FC = () => {
     onError: () => {
       // sessionが無効な場合、ログインページへリダイレクト
       // その際、現在のパスをredirectクエリパラメータとして渡す
-      navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
+      const currentPath = `${location.pathname}${location.search}${location.hash}`;
+      navigate(`/login?redirect=${encodeURIComponent(currentPath)}`, { replace: true });
     },
   });
 
