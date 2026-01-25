@@ -27,6 +27,7 @@
   max-width: calc(100% - var(--space-sm) * 2);
   font-size: var(--text-xl);
   color: var(--background-color-base);
+  border: 6px double var(--background-color-base);
   background-color: var(--color-base);
   padding: 0 var(--space-sm);
   word-wrap: break-word;
