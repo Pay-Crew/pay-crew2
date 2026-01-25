@@ -36,13 +36,13 @@ const SocialLink: FC = () => {
   const handleDiscordLinkSocial = async () => {
     await authClient.linkSocial({
       provider: 'discord',
-      callbackURL: `${import.meta.env.VITE_REDIRECT_URL satisfies string}profile`,
+      callbackURL: `${import.meta.env.VITE_CLIENT_URL satisfies string}/profile`,
     });
   };
   const handleGoogleLinkSocial = async () => {
     await authClient.linkSocial({
       provider: 'google',
-      callbackURL: `${import.meta.env.VITE_REDIRECT_URL satisfies string}profile`,
+      callbackURL: `${import.meta.env.VITE_CLIENT_URL satisfies string}/profile`,
     });
   };
 
