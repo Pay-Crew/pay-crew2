@@ -2,18 +2,20 @@ import { useEffect, useState, type FC } from 'react';
 // @tanstack/react-query
 import { $api } from '../../../../api/fetchClient';
 // react-router
-import { Link, NavLink, useNavigate } from 'react-router';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router';
 // icons
 import { generateIdenteapot } from '@teapotlabs/identeapots';
 // toast
 import { toast } from 'react-hot-toast';
 // css
 import styles from './index.module.css';
+import { buildLoginRedirectUrl } from '../../../../lib/redirect';
 
 const Header: FC = () => {
   const [identicon, setIdenticon] = useState<string>('');
   // sessionのチェック
   const navigate = useNavigate();
+  const location = useLocation();
   const sessionCheckMutation = $api.useMutation('get', '/api/session', {
     onSuccess: async (data) => {
       try {
@@ -25,7 +27,12 @@ const Header: FC = () => {
       }
     },
     onError: () => {
-      navigate('/login', { replace: true });
+      if (location.pathname === '/login') {
+        return;
+      }
+
+      const currentPath = `${location.pathname}${location.search}${location.hash}`;
+      navigate(buildLoginRedirectUrl(currentPath), { replace: true });
     },
   });
 

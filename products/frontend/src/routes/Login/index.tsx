@@ -1,4 +1,6 @@
 import type { FC } from 'react';
+// react-router
+import { useLocation } from 'react-router';
 // better-auth
 import { authClient } from '../../lib/auth';
 // icons
@@ -8,19 +10,24 @@ import styles from './index.module.css';
 // components
 import { LoginButton } from './components';
 import { Title, WarningMessage } from '../../share';
+import { buildCallbackURL, getRedirectPath } from '../../lib/redirect';
 
 const Login: FC = () => {
+  const location = useLocation();
+  const redirectPath = getRedirectPath(location.search);
+  const callbackURL = buildCallbackURL(redirectPath);
+
   // OAuth signin handlers
   const handleDiscordSignin = async () => {
     await authClient.signIn.social({
       provider: 'discord',
-      callbackURL: import.meta.env.VITE_REDIRECT_URL satisfies string,
+      callbackURL,
     });
   };
   const googleSignIn = async () => {
     await authClient.signIn.social({
       provider: 'google',
-      callbackURL: import.meta.env.VITE_REDIRECT_URL satisfies string,
+      callbackURL,
     });
   };
 
