@@ -4,8 +4,8 @@ export const getRedirectPath = (search: string): string | null => {
   const redirectParam = params.get('redirect');
 
   // 有効なパスかどうかを検証
-  if (!redirectParam?.startsWith('/')) {
-    // スラッシュで始まらないパスは無効とする
+  if (!redirectParam) return null;
+  if (!redirectParam.startsWith('/') || redirectParam.startsWith('//')) {
     return null;
   }
   return redirectParam;
