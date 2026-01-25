@@ -17,7 +17,7 @@ type Props = {
 const Lent: FC<Props> = (props: Props) => {
   return (
     <>
-      <SubTitle subTitle="受け取る金額 一覧" />
+      <SubTitle subTitle="受け取る合計金額 一覧" />
       {props.receivables.length === 0 ? (
         <p className={styles.message}>受け取るお金はありません</p>
       ) : (
