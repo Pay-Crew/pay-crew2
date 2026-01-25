@@ -27,7 +27,6 @@ jobs:
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_CLIENT_URL: ${{ secrets.VITE_CLIENT_URL }}
-          VITE_REDIRECT_URL: ${{ secrets.VITE_REDIRECT_URL }}
           VITE_IDENTEAPOT_SALT: ${{ secrets.VITE_IDENTEAPOT_SALT }}
         run: nix develop --command bash -c "pnpm i && pnpm run frontend:build"
       # Deploy Preview to Cloudflare Workers

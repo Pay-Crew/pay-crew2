@@ -13,9 +13,19 @@ import { Title, WarningMessage } from '../../share';
 import { buildCallbackURL, getRedirectPath } from '../../lib/redirect';
 
 const Login: FC = () => {
+  // callbackURLを構築
+  // 1. 現在のURLを取得
+  // status: https://pay-crew2.yukiosada.work/login?redirect=/some/safe/path
   const location = useLocation();
+  console.log('Login Location:', location.search);
+  // 2. redirectクエリパラメータを取得
+  // status: /some/safe/path
   const redirectPath = getRedirectPath(location.search);
+  console.log('Login Redirect Path:', redirectPath);
+  // 3. callbackURLを構築
+  // status: import.meta.env.VITE_CLIENT_URL + /some/safe/path
   const callbackURL = buildCallbackURL(redirectPath);
+  console.log('Login Callback URL:', callbackURL);
 
   // OAuth signin handlers
   const handleDiscordSignin = async () => {
