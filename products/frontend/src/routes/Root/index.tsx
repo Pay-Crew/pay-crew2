@@ -53,7 +53,7 @@ const Root: FC = () => {
       <Logo content="Pay Crew2" />
       <WelcomeMessage user_name={loginUserInfoQuery.data?.user_name ?? ''} />
       <WarningMessage />
-      <Description content="Pay Crew2は、友人や家族と簡単にお金の貸し借りを管理できるアプリケーションです。" />
+      <Description />
       {(infoAboutGroupsTheUserBelongsToQuery.isPending || infoAboutUserTransactionsQuery.isPending) && (
         <Loading content="データを取得中..." />
       )}
