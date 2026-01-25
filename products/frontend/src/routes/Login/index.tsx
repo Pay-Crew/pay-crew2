@@ -27,12 +27,12 @@ const Login: FC = () => {
   return (
     <div>
       <Title title="ログイン" />
-      <WarningMessage />
       <p className={styles.description}>Discord または Google アカウントを使用してログインしてください。</p>
       <div className={styles.container}>
         <LoginButton onClick={handleDiscordSignin} Icon={FaDiscord} label="Discord" />
         <LoginButton onClick={googleSignIn} Icon={FaGoogle} label="Google" />
       </div>
+      <WarningMessage />
     </div>
   );
 };
