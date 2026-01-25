@@ -12,10 +12,10 @@ import styles from './index.module.css';
 import { buildLoginRedirectUrl } from '../../../../lib/redirect';
 
 const Header: FC = () => {
-  const [identicon, setIdenticon] = useState<string>('');
-  // sessionのチェック
   const navigate = useNavigate();
   const location = useLocation();
+  // sessionのチェック
+  const [identicon, setIdenticon] = useState<string>('');
   const sessionCheckMutation = $api.useMutation('get', '/api/session', {
     onSuccess: async (data) => {
       try {
@@ -27,12 +27,15 @@ const Header: FC = () => {
       }
     },
     onError: () => {
-      if (location.pathname === '/login') {
-        return;
-      }
+      // 未ログインの場合、ログインページへリダイレクト
 
-      const currentPath = `${location.pathname}${location.search}${location.hash}`;
-      navigate(buildLoginRedirectUrl(currentPath), { replace: true });
+      if (location.pathname === '/login') {
+        // ログインページの場合は何もしない
+        return;
+      } else {
+        const currentPath = `${location.pathname}${location.search}${location.hash}`;
+        navigate(buildLoginRedirectUrl(currentPath), { replace: true });
+      }
     },
   });
 

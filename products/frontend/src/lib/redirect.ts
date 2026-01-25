@@ -19,11 +19,8 @@ export const buildLoginRedirectUrl = (path: string): string => {
 
 export const buildCallbackURL = (redirectPath: string | null): string => {
   const baseRedirectURL = import.meta.env.VITE_REDIRECT_URL satisfies string;
-
   if (!redirectPath) {
     return baseRedirectURL;
   }
-
-  const separator = baseRedirectURL.includes('?') ? '&' : '?';
-  return `${baseRedirectURL}${separator}redirect=${encodeURIComponent(redirectPath)}`;
+  return `${baseRedirectURL}?redirect=${encodeURIComponent(redirectPath)}`;
 };
