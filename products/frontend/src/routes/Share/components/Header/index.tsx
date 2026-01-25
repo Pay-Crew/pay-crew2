@@ -2,20 +2,17 @@ import { useEffect, useState, type FC } from 'react';
 // @tanstack/react-query
 import { $api } from '../../../../api/fetchClient';
 // react-router
-import { Link, NavLink, useLocation, useNavigate } from 'react-router';
+import { Link, NavLink } from 'react-router';
 // icons
 import { generateIdenteapot } from '@teapotlabs/identeapots';
 // toast
 import { toast } from 'react-hot-toast';
 // css
 import styles from './index.module.css';
-import { buildLoginRedirectUrl } from '../../../../lib/redirect';
 
 const Header: FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  // sessionのチェック
   const [identicon, setIdenticon] = useState<string>('');
+  // sessionのチェック
   const sessionCheckMutation = $api.useMutation('get', '/api/session', {
     onSuccess: async (data) => {
       try {
@@ -24,17 +21,6 @@ const Header: FC = () => {
         setIdenticon(icon);
       } catch {
         toast.error('アイコンの生成に失敗しました。');
-      }
-    },
-    onError: () => {
-      // 未ログインの場合、ログインページへリダイレクト
-
-      if (location.pathname === '/login') {
-        // ログインページの場合は何もしない
-        return;
-      } else {
-        const currentPath = `${location.pathname}${location.search}${location.hash}`;
-        navigate(buildLoginRedirectUrl(currentPath), { replace: true });
       }
     },
   });
@@ -55,8 +41,12 @@ const Header: FC = () => {
         <NavLink className={styles.navLink} to="/gen-group">
           グループ作成
         </NavLink>
-        {sessionCheckMutation.isSuccess && identicon && (
+        {sessionCheckMutation.isSuccess && identicon ? (
           <img className={styles.identicon} src={identicon} alt="User Identicon" />
+        ) : (
+          <NavLink className={styles.navLink} to="/login">
+            ログイン
+          </NavLink>
         )}
       </nav>
     </header>
