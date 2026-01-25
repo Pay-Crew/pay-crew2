@@ -2,7 +2,7 @@ import { useEffect, useState, type FC } from 'react';
 // @tanstack/react-query
 import { $api } from '../../../../api/fetchClient';
 // react-router
-import { Link, NavLink, useNavigate } from 'react-router';
+import { Link, NavLink } from 'react-router';
 // icons
 import { generateIdenteapot } from '@teapotlabs/identeapots';
 // toast
@@ -13,7 +13,6 @@ import styles from './index.module.css';
 const Header: FC = () => {
   const [identicon, setIdenticon] = useState<string>('');
   // sessionのチェック
-  const navigate = useNavigate();
   const sessionCheckMutation = $api.useMutation('get', '/api/session', {
     onSuccess: async (data) => {
       try {
@@ -23,9 +22,6 @@ const Header: FC = () => {
       } catch {
         toast.error('アイコンの生成に失敗しました。');
       }
-    },
-    onError: () => {
-      navigate('/login', { replace: true });
     },
   });
 
@@ -45,8 +41,12 @@ const Header: FC = () => {
         <NavLink className={styles.navLink} to="/gen-group">
           グループ作成
         </NavLink>
-        {sessionCheckMutation.isSuccess && identicon && (
+        {sessionCheckMutation.isSuccess && identicon ? (
           <img className={styles.identicon} src={identicon} alt="User Identicon" />
+        ) : (
+          <NavLink className={styles.navLink} to="/login">
+            ログイン
+          </NavLink>
         )}
       </nav>
     </header>
