@@ -15,7 +15,7 @@ type Props = {
 const Borrow: FC<Props> = (props: Props) => {
   return (
     <>
-      <SubTitle subTitle="返す金額 一覧" />
+      <SubTitle subTitle="返す合計金額 一覧" />
       {props.paybacks.length === 0 ? (
         <p className={styles.message}>返すお金はありません</p>
       ) : (
