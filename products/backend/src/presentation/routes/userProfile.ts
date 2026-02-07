@@ -8,15 +8,12 @@ import {
 } from 'validator';
 // error schema
 import { route } from '../share/error';
-// drizzle
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { eq } from 'drizzle-orm';
-import { user } from '../../db/auth-schema';
+import { getUserProfile, updateUserProfile } from '../../application/userProfile';
 
 const hono = honoFactory();
 
 //TODO: userProfileの取得
-const getUserProfile = route.createSchema(
+const getUserProfileSchema = route.createSchema(
   {
     path: '/api/profile',
     method: 'get',
@@ -37,30 +34,17 @@ const getUserProfile = route.createSchema(
   [401, 500] as const
 );
 
-hono.openapi(getUserProfile, async (c) => {
+hono.openapi(getUserProfileSchema, async (c) => {
   const loginUser = c.get('user');
 
-  // データベース接続
-  const db = drizzle({ connection: c.env.HYPERDRIVE });
-
-  //* ユーザ情報を取得 (user table) *//
-  const userData = await db
-    .select({ display_name: user.displayName })
-    .from(user)
-    .where(eq(user.id, loginUser.id))
-    .limit(1);
+  const profile = await getUserProfile(c.env, loginUser.id);
 
   // レスポンス
-  return c.json(
-    {
-      display_name: userData[0].display_name === null ? '' : userData[0].display_name,
-    } satisfies GetUserProfileResponseSchemaType,
-    200
-  );
+  return c.json(profile satisfies GetUserProfileResponseSchemaType, 200);
 });
 
 //TODO: userProfileの更新
-const updateUserProfile = route.createSchema(
+const updateUserProfileSchema = route.createSchema(
   {
     path: '/api/profile',
     method: 'patch',
@@ -85,20 +69,11 @@ const updateUserProfile = route.createSchema(
   [401, 500] as const
 );
 
-hono.openapi(updateUserProfile, async (c) => {
+hono.openapi(updateUserProfileSchema, async (c) => {
   const loginUser = c.get('user');
   const body = c.req.valid('json');
 
-  // データベース接続
-  const db = drizzle({ connection: c.env.HYPERDRIVE });
-
-  //* ユーザ情報を更新 (user table) *//
-  await db
-    .update(user)
-    .set({
-      displayName: typeof body.display_name === 'undefined' ? null : body.display_name,
-    })
-    .where(eq(user.id, loginUser.id));
+  await updateUserProfile(c.env, loginUser.id, body.display_name);
 
   // レスポンス
   return c.body(null, 204);
