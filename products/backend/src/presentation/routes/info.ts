@@ -104,7 +104,7 @@ const deleteInfoUserRepaymentSchema = route.createSchema(
       },
     },
   },
-  [401, 500] as const
+  [400, 401, 500] as const
 );
 
 hono.openapi(deleteInfoUserRepaymentSchema, async (c) => {
