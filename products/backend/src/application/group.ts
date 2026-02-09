@@ -14,7 +14,7 @@ import { createDbConnection } from './utils/db';
 import { eq, and, isNull, isNotNull } from 'drizzle-orm';
 import { debt, group, groupMembership } from '../db/schema';
 // utils
-import { getGroupMembers, ensureNotGroupMembership } from './utils/group';
+import { validateIsGroupMember, getGroupMembers } from './utils/group';
 import { getUserInfo, getUserNameMap } from './utils/user';
 
 export const createGroupUseCase = async (
@@ -118,7 +118,7 @@ export const getGroupInfoUseCase = async (
   const db = createDbConnection(env);
 
   // loginUser が グループのメンバーであることを確認
-  await getGroupMembers(db, groupId, loginUserId);
+  await validateIsGroupMember(db, groupId, loginUserId);
 
   //* body.group_id のグループ情報を取得 *//
   const groupData = await db
@@ -136,7 +136,7 @@ export const getGroupInfoUseCase = async (
   const createdByUserInfo = await getUserInfo(db, groupData[0].createdBy);
 
   // グループのメンバー情報を取得
-  const members = (await ensureNotGroupMembership(db, groupId)).map((member) => ({
+  const members = (await getGroupMembers(db, groupId)).map((member) => ({
     user_id: member.id,
     user_name: member.name,
   }));
@@ -160,7 +160,7 @@ export const getGroupDebtHistoryUseCase = async (
   const db = createDbConnection(env);
 
   // loginUser がグループのメンバーであることを確認
-  await getGroupMembers(db, groupId, loginUserId);
+  await validateIsGroupMember(db, groupId, loginUserId);
 
   //* グループの貸し借り履歴を取得 *//
   // body.group_id の貸し借り履歴を取得 (debt table)
@@ -181,14 +181,16 @@ export const getGroupDebtHistoryUseCase = async (
   const userIds = rawDebtData.flatMap((debtEntry) =>
     [debtEntry.debtorId, debtEntry.creditorId, debtEntry.deletedBy].filter((id): id is string => id !== null)
   );
+
+  // ユーザ名の取得
   const uniqueUserIds = Array.from(new Set(userIds));
-  const nameMap = await getUserNameMap(db, uniqueUserIds);
+  const userNameMap = await getUserNameMap(db, uniqueUserIds);
 
   // 貸し借り履歴データを配列に追加
   const debtData: GetGroupDebtHistoryResponseElementSchemaType[] = rawDebtData.map((debtEntry) => {
     // debt_name, creditor_name を取得
-    const debtorName = nameMap.get(debtEntry.debtorId);
-    const creditorName = nameMap.get(debtEntry.creditorId);
+    const debtorName = userNameMap.get(debtEntry.debtorId);
+    const creditorName = userNameMap.get(debtEntry.creditorId);
     if (debtorName === undefined || creditorName === undefined) {
       throw new HTTPException(500, { message: 'Internal Server Error' });
     }
@@ -197,7 +199,7 @@ export const getGroupDebtHistoryUseCase = async (
     let deletedByName = null;
     if (debtEntry.deletedBy !== null) {
       // deletedByが存在する場合のみ名前を取得
-      const name = nameMap.get(debtEntry.deletedBy);
+      const name = userNameMap.get(debtEntry.deletedBy);
       if (name === undefined) {
         throw new HTTPException(500, { message: 'Internal Server Error' });
       }
@@ -247,7 +249,7 @@ export const registerGroupDebtUseCase = async (
   const db = createDbConnection(env);
 
   // loginUser が グループのメンバーであることを確認
-  await getGroupMembers(db, groupId, loginUserId);
+  await validateIsGroupMember(db, groupId, loginUserId);
 
   // body.group_id に貸し借り履歴を追加 (debt table)
   await db.insert(debt).values({
@@ -271,7 +273,7 @@ export const deleteGroupDebtUseCase = async (
   const db = createDbConnection(env);
 
   // loginUser が グループのメンバーであることを確認
-  await getGroupMembers(db, groupId, loginUserId);
+  await validateIsGroupMember(db, groupId, loginUserId);
 
   //* body.debt_id の貸し借りの履歴の削除 (論理削除) *//
   await db
@@ -293,7 +295,7 @@ export const cancelGroupDebtUseCase = async (
   const db = createDbConnection(env);
 
   // loginUser が グループのメンバーであることを確認
-  await getGroupMembers(db, groupId, loginUserId);
+  await validateIsGroupMember(db, groupId, loginUserId);
 
   //* body.debt_id の貸し借りの履歴の削除の取り消し (論理削除の取り消し) *//
   await db

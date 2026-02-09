@@ -8,7 +8,7 @@ import { DatabaseType, UserInfoType } from './types';
 // utils
 import { getUserNameMap } from './user';
 
-export const getGroupMembers = async (db: DatabaseType, groupId: string, loginUserId: string): Promise<void> => {
+export const validateIsGroupMember = async (db: DatabaseType, groupId: string, loginUserId: string): Promise<void> => {
   // loginUser が body.group_id のグループのメンバーであることを確認
   const me = await db
     .select({
@@ -24,7 +24,7 @@ export const getGroupMembers = async (db: DatabaseType, groupId: string, loginUs
   }
 };
 
-export const ensureNotGroupMembership = async (db: DatabaseType, groupId: string): Promise<UserInfoType[]> => {
+export const getGroupMembers = async (db: DatabaseType, groupId: string): Promise<UserInfoType[]> => {
   // グループに所属しているユーザIDを取得
   const memberUserIds = await db
     .select({ userId: groupMembership.userId })

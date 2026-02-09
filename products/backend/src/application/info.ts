@@ -1,4 +1,5 @@
 // hono
+import { HTTPException } from 'hono/http-exception';
 import { Bindings } from '../types';
 // validator
 import {
@@ -11,11 +12,13 @@ import {
 // drizzle
 import { createDbConnection } from './utils/db';
 import { eq, and, isNull, inArray, or } from 'drizzle-orm';
-import { user } from '../db/auth-schema';
 import { debt, group, groupMembership } from '../db/schema';
+// types
 import { TransactionType } from './utils/types';
+// utils
+import { getUserNameMap } from './utils/user';
+import { getGroupMembers } from './utils/group';
 
-// TODO: 共通化
 export const infoAboutGroupsTheUserBelongsToUseCase = async (
   env: Bindings,
   loginUserId: string
@@ -23,11 +26,8 @@ export const infoAboutGroupsTheUserBelongsToUseCase = async (
   // データベース接続
   const db = createDbConnection(env);
 
-  // グループ情報格納用配列
-  let groupInfo: InfoAboutGroupsTheUserBelongsToResponseGroupElementSchemaType[] = [];
-
   //* ユーザが参加しているグループ情報を取得 (group table) *//
-  const groupsData = await db
+  const groupData = await db
     .select({
       id: group.id,
       name: group.name,
@@ -44,67 +44,36 @@ export const infoAboutGroupsTheUserBelongsToUseCase = async (
       )
     );
 
-  for (const groupData of groupsData) {
-    //* body.group_id のグループ作成者情報を取得 *//
-    // NOTE: 共通化できそう
-    // ユーザ名を取得 (user table)
-    const createdByUserNameInfo = await db
-      .select({
-        name: user.name,
-        displayName: user.displayName,
-      })
-      .from(user)
-      .where(eq(user.id, groupData.createdBy))
-      .limit(1);
+  // createdByのユーザ名の取得
+  const uniqueCreatedByIds = Array.from(new Set(groupData.map((group) => group.createdBy)));
+  const createdByNameMap = await getUserNameMap(db, uniqueCreatedByIds);
 
-    // NOTE: --- 共通化開始 ---
-    //* groupData.id のメンバー情報を取得 *//
-    // グループメンバーのユーザーIDを取得 (group_membership table)
-    const memberUserIds = await db
-      .select({
-        userId: groupMembership.userId,
-      })
-      .from(groupMembership)
-      .where(eq(groupMembership.groupId, groupData.id));
+  // グループ情報の整形
+  const groupInfo: InfoAboutGroupsTheUserBelongsToResponseGroupElementSchemaType[] = await Promise.all(
+    groupData.map(async (groupData) => {
+      // createdByのユーザ名取得
+      const createdByName = createdByNameMap.get(groupData.createdBy);
+      if (createdByName === undefined) {
+        throw new HTTPException(500, { message: 'Internal Server Error' });
+      }
 
-    // メンバー情報を格納する配列
-    const members: InfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType[] = [];
-
-    for (const memberUserId of memberUserIds) {
-      // NOTE: 共通化できそう
-      // ユーザ名を取得 (user table)
-      const userNameInfo = await db
-        .select({
-          name: user.name,
-          displayName: user.displayName,
-        })
-        .from(user)
-        .where(eq(user.id, memberUserId.userId))
-        .limit(1);
-
-      // メンバー情報を配列に追加
-      members.push({
-        user_id: memberUserId.userId,
-        user_name:
-          userNameInfo[0].displayName !== null && userNameInfo[0].displayName.length > 0
-            ? userNameInfo[0].displayName
-            : userNameInfo[0].name,
+      // グループメンバーの取得
+      const members = (await getGroupMembers(db, groupData.id)).map((member) => {
+        return {
+          user_id: member.id,
+          user_name: member.name,
+        } as InfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType;
       });
-    }
-    // NOTE: --- 共通化終了 ---
 
-    // グループ情報を配列に追加
-    groupInfo.push({
-      group_id: groupData.id,
-      group_name: groupData.name,
-      created_by_id: groupData.createdBy,
-      created_by_name:
-        createdByUserNameInfo[0].displayName !== null && createdByUserNameInfo[0].displayName.length > 0
-          ? createdByUserNameInfo[0].displayName
-          : createdByUserNameInfo[0].name,
-      members: members,
-    });
-  }
+      return {
+        group_id: groupData.id,
+        group_name: groupData.name,
+        created_by_id: groupData.createdBy,
+        created_by_name: createdByName,
+        members: members,
+      };
+    })
+  );
 
   // レスポンス
   return {
@@ -112,7 +81,6 @@ export const infoAboutGroupsTheUserBelongsToUseCase = async (
   } satisfies InfoAboutGroupsTheUserBelongsToResponseSchemaType;
 };
 
-// TODO: 共通化
 export const infoAboutUserTransactionsUseCase = async (
   env: Bindings,
   loginUserId: string
@@ -167,39 +135,36 @@ export const infoAboutUserTransactionsUseCase = async (
     existing.borrowed_amount += amount;
   }
 
-  // 集計結果を格納する配列
-  const aggregatedTransactions: InfoAboutUserTransactionsResponseTransactionElementSchemaType[] = [];
+  // ユーザ名の取得
+  const userIds = Array.from(transactions.keys());
+  const userNameMap = await getUserNameMap(db, userIds);
 
   // 貸し借りの合算
-  for (const transaction of transactions.values()) {
-    // 合算結果: netAmount = borrowed_amount - lent_amount
-    const netAmount = transaction.borrowed_amount - transaction.lent_amount;
+  const aggregatedTransactions: InfoAboutUserTransactionsResponseTransactionElementSchemaType[] = Array.from(
+    transactions.values().map((transaction) => {
+      // 合算結果: netAmount = borrowed_amount - lent_amount
+      const netAmount = transaction.borrowed_amount - transaction.lent_amount;
 
-    // NOTE: 共通化できそう
-    // ユーザ名を取得 (user table)
-    const userNameInfo = await db
-      .select({
-        name: user.name,
-        displayName: user.displayName,
-      })
-      .from(user)
-      .where(eq(user.id, transaction.user_id))
-      .limit(1);
+      // netAmount が 0 の場合はスキップ
+      if (netAmount === 0) {
+        return null;
+      }
 
-    // netAmount が 0 でない場合のみ配列に追加
-    if (netAmount !== 0) {
-      aggregatedTransactions.push({
+      // ユーザ名の取得
+      const counterpartyName = userNameMap.get(transaction.user_id);
+      if (counterpartyName === undefined) {
+        throw new HTTPException(500, { message: 'Internal Server Error' });
+      }
+
+      return {
         counterparty_id: transaction.user_id,
-        counterparty_name:
-          userNameInfo[0].displayName !== null && userNameInfo[0].displayName.length > 0
-            ? userNameInfo[0].displayName
-            : userNameInfo[0].name,
+        counterparty_name: counterpartyName,
         amount: netAmount,
-      });
-    }
-  }
+      } as InfoAboutUserTransactionsResponseTransactionElementSchemaType;
+    })
+  ).filter((item): item is InfoAboutUserTransactionsResponseTransactionElementSchemaType => item !== null);
 
-  // return response
+  // レスポンス
   return {
     transactions: aggregatedTransactions,
   } satisfies InfoAboutUserTransactionsResponseSchemaType;
