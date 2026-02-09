@@ -28,7 +28,7 @@ const getUserProfileSchema = route.createSchema(
       },
     },
   },
-  [401, 500] as const
+  [401, 404, 500] as const
 );
 
 hono.openapi(getUserProfileSchema, async (c) => {
