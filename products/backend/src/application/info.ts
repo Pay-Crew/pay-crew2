@@ -50,17 +50,21 @@ export const getInfoAboutGroupsTheUserBelongsToUseCase = async (
 
   // グループメンバーのユーザ名の取得
   const uniqueGroupIds = Array.from(new Set(groupData.map((group) => group.id)));
-  const groupMembersMap: Map<string, GetInfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType[]> = new Map();
-  for (const groupId of uniqueGroupIds) {
-    const members = await getGroupMembers(db, groupId);
-    const formattedMembers = members.map((member) => {
-      return {
-        user_id: member.id,
-        user_name: member.name,
-      } as GetInfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType;
-    });
-    groupMembersMap.set(groupId, formattedMembers);
-  }
+  const groupMembersEntries = await Promise.all(
+    uniqueGroupIds.map(async (groupId) => {
+      const members = await getGroupMembers(db, groupId);
+      const formattedMembers = members.map((member) => {
+        return {
+          user_id: member.id,
+          user_name: member.name,
+        } as GetInfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType;
+      });
+      return [groupId, formattedMembers] as const;
+    })
+  );
+  const groupMembersMap: Map<string, GetInfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType[]> = new Map(
+    groupMembersEntries
+  );
 
   // グループ情報の整形
   const groupInfo: GetInfoAboutGroupsTheUserBelongsToResponseGroupElementSchemaType[] = await Promise.all(
