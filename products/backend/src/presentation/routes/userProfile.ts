@@ -64,7 +64,7 @@ const updateUserProfileSchema = route.createSchema(
       },
     },
   },
-  [401, 500] as const
+  [400, 401, 500] as const
 );
 
 hono.openapi(updateUserProfileSchema, async (c) => {
