@@ -5,7 +5,7 @@ import honoFactory from './factory/hono';
 // better-auth object factory
 import { AuthFactoryType } from './factory/auth';
 // routes
-import check from './routes/check';
+import session from './routes/session';
 import group from './routes/group';
 import info from './routes/info';
 import userProfile from './routes/userProfile';
@@ -31,7 +31,7 @@ const apiProtected = (auth: AuthFactoryType) => {
   });
 
   //* endpoint registration *//
-  app.route('/', check);
+  app.route('/', session);
   app.route('/', group);
   app.route('/', info);
   app.route('/', userProfile);
