@@ -6,6 +6,7 @@ import { type GetUserProfileResponseSchemaType } from 'validator';
 import { createDbConnection } from './utils/db';
 import { eq } from 'drizzle-orm';
 import { user } from '../db/auth-schema';
+import { HTTPException } from 'hono/http-exception';
 
 export const getUserProfileUseCase = async (
   env: Bindings,
@@ -20,6 +21,11 @@ export const getUserProfileUseCase = async (
     .from(user)
     .where(eq(user.id, loginUserId))
     .limit(1);
+
+  // ユーザが存在しない場合は例外をスロー
+  if (userData.length === 0) {
+    throw new HTTPException(404, { message: 'User not found' });
+  }
 
   // レスポンス
   return {

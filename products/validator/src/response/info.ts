@@ -32,7 +32,7 @@ export type GetInfoAboutGroupsTheUserBelongsToResponseSchemaType = z.infer<
 export const getInfoAboutUserTransactionsResponseTransactionElementSchema = z.object({
   counterparty_id: z.string().min(1),
   counterparty_name: z.string().min(1),
-  amount: z.number().min(0),
+  amount: z.number(),
 });
 
 export const getInfoAboutUserTransactionsResponseSchema = z.object({

@@ -131,6 +131,11 @@ export const getGroupInfoUseCase = async (
     .where(eq(group.id, groupId))
     .limit(1);
 
+  // group が存在しない場合は例外をスロー
+  if (groupData.length === 0) {
+    throw new HTTPException(404, { message: 'Group not found' });
+  }
+
   //* body.group_id のグループ作成者情報を取得 *//
   // ユーザ情報を取得
   const createdByUserInfo = await getUserInfo(db, groupData[0].createdBy);
