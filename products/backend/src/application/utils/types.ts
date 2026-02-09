@@ -21,13 +21,3 @@ export type UserInfoType = {
   id: string;
   name: string;
 };
-
-export type FormattedUserTableType = {
-  id: string;
-  name: string;
-  email: string;
-  emailVerified: boolean;
-  image: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-};

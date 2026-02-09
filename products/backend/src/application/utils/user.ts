@@ -1,39 +1,35 @@
 // drizzle
-import { eq, inArray } from 'drizzle-orm/sql/expressions/conditions';
+import { eq, inArray } from 'drizzle-orm';
 import { user } from '../../db/schema';
 // types
-import { DatabaseType, FormattedUserTableType, UserNameType } from './types';
+import { DatabaseType, UserInfoType, UserNameType } from './types';
+import { HTTPException } from 'hono/http-exception';
 
 export const formatUserName = (userName: UserNameType): string => {
   return userName.displayName !== null && userName.displayName.length > 0 ? userName.displayName : userName.name;
 };
 
-export const getUserInfo = async (db: DatabaseType, userId: string): Promise<FormattedUserTableType> => {
+export const getUserInfo = async (db: DatabaseType, userId: string): Promise<UserInfoType> => {
   // user table からユーザ名を取得
   const userNameInfo = await db
     .select({
       id: user.id,
       name: user.name,
-      email: user.email,
-      emailVerified: user.emailVerified,
-      image: user.image,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
       displayName: user.displayName,
     })
     .from(user)
     .where(eq(user.id, userId))
     .limit(1);
 
+  // ユーザが存在しない場合はエラー
+  if (userNameInfo.length === 0) {
+    throw new HTTPException(500, { message: 'Internal Server Error' });
+  }
+
   return {
     id: userNameInfo[0].id,
     // ユーザ名をフォーマット
     name: formatUserName({ name: userNameInfo[0].name, displayName: userNameInfo[0].displayName }),
-    email: userNameInfo[0].email,
-    emailVerified: userNameInfo[0].emailVerified,
-    image: userNameInfo[0].image,
-    createdAt: userNameInfo[0].createdAt,
-    updatedAt: userNameInfo[0].updatedAt,
   };
 };
 

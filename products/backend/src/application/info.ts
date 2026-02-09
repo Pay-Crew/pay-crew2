@@ -48,6 +48,20 @@ export const getInfoAboutGroupsTheUserBelongsToUseCase = async (
   const uniqueCreatedByIds = Array.from(new Set(groupData.map((group) => group.createdBy)));
   const createdByNameMap = await getUserNameMap(db, uniqueCreatedByIds);
 
+  // グループメンバーのユーザ名の取得
+  const uniqueGroupIds = Array.from(new Set(groupData.map((group) => group.id)));
+  const groupMembersMap: Map<string, GetInfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType[]> = new Map();
+  for (const groupId of uniqueGroupIds) {
+    const members = await getGroupMembers(db, groupId);
+    const formattedMembers = members.map((member) => {
+      return {
+        user_id: member.id,
+        user_name: member.name,
+      } as GetInfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType;
+    });
+    groupMembersMap.set(groupId, formattedMembers);
+  }
+
   // グループ情報の整形
   const groupInfo: GetInfoAboutGroupsTheUserBelongsToResponseGroupElementSchemaType[] = await Promise.all(
     groupData.map(async (groupData) => {
@@ -58,12 +72,10 @@ export const getInfoAboutGroupsTheUserBelongsToUseCase = async (
       }
 
       // グループメンバーの取得
-      const members = (await getGroupMembers(db, groupData.id)).map((member) => {
-        return {
-          user_id: member.id,
-          user_name: member.name,
-        } as GetInfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType;
-      });
+      const members = groupMembersMap.get(groupData.id);
+      if (members === undefined) {
+        throw new HTTPException(500, { message: 'Internal Server Error' });
+      }
 
       return {
         group_id: groupData.id,
@@ -141,7 +153,9 @@ export const getInfoAboutUserTransactionsUseCase = async (
 
   // 貸し借りの合算
   const aggregatedTransactions: GetInfoAboutUserTransactionsResponseTransactionElementSchemaType[] = Array.from(
-    transactions.values().map((transaction) => {
+    transactions.values()
+  )
+    .map((transaction) => {
       // 合算結果: netAmount = borrowed_amount - lent_amount
       const netAmount = transaction.borrowed_amount - transaction.lent_amount;
 
@@ -162,7 +176,7 @@ export const getInfoAboutUserTransactionsUseCase = async (
         amount: netAmount,
       } as GetInfoAboutUserTransactionsResponseTransactionElementSchemaType;
     })
-  ).filter((item): item is GetInfoAboutUserTransactionsResponseTransactionElementSchemaType => item !== null);
+    .filter((item): item is GetInfoAboutUserTransactionsResponseTransactionElementSchemaType => item !== null);
 
   // レスポンス
   return {
