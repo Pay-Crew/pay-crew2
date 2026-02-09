@@ -8,24 +8,24 @@ export {
 } from './request/info';
 // info response schema
 export {
-  infoAboutGroupsTheUserBelongsToResponseMemberElementSchema,
-  type InfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType,
+  getInfoAboutGroupsTheUserBelongsToResponseMemberElementSchema,
+  type GetInfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType,
 } from './response/info';
 export {
-  infoAboutGroupsTheUserBelongsToResponseGroupElementSchema,
-  type InfoAboutGroupsTheUserBelongsToResponseGroupElementSchemaType,
+  getInfoAboutGroupsTheUserBelongsToResponseGroupElementSchema,
+  type GetInfoAboutGroupsTheUserBelongsToResponseGroupElementSchemaType,
 } from './response/info';
 export {
-  infoAboutGroupsTheUserBelongsToResponseSchema,
-  type InfoAboutGroupsTheUserBelongsToResponseSchemaType,
+  getInfoAboutGroupsTheUserBelongsToResponseSchema,
+  type GetInfoAboutGroupsTheUserBelongsToResponseSchemaType,
 } from './response/info';
 export {
-  infoAboutUserTransactionsResponseTransactionElementSchema,
-  type InfoAboutUserTransactionsResponseTransactionElementSchemaType,
+  getInfoAboutUserTransactionsResponseTransactionElementSchema,
+  type GetInfoAboutUserTransactionsResponseTransactionElementSchemaType,
 } from './response/info';
 export {
-  infoAboutUserTransactionsResponseSchema,
-  type InfoAboutUserTransactionsResponseSchemaType,
+  getInfoAboutUserTransactionsResponseSchema,
+  type GetInfoAboutUserTransactionsResponseSchemaType,
 } from './response/info';
 
 // userProfile request schema
