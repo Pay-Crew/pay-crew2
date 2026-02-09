@@ -3,11 +3,11 @@ import { HTTPException } from 'hono/http-exception';
 import { Bindings } from '../types';
 // validator
 import {
-  type InfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType,
-  type InfoAboutGroupsTheUserBelongsToResponseGroupElementSchemaType,
-  type InfoAboutGroupsTheUserBelongsToResponseSchemaType,
-  type InfoAboutUserTransactionsResponseSchemaType,
-  type InfoAboutUserTransactionsResponseTransactionElementSchemaType,
+  type GetInfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType,
+  type GetInfoAboutGroupsTheUserBelongsToResponseGroupElementSchemaType,
+  type GetInfoAboutGroupsTheUserBelongsToResponseSchemaType,
+  type GetInfoAboutUserTransactionsResponseSchemaType,
+  type GetInfoAboutUserTransactionsResponseTransactionElementSchemaType,
 } from 'validator';
 // drizzle
 import { createDbConnection } from './utils/db';
@@ -19,10 +19,10 @@ import { TransactionType } from './utils/types';
 import { getUserNameMap } from './utils/user';
 import { getGroupMembers } from './utils/group';
 
-export const infoAboutGroupsTheUserBelongsToUseCase = async (
+export const getInfoAboutGroupsTheUserBelongsToUseCase = async (
   env: Bindings,
   loginUserId: string
-): Promise<InfoAboutGroupsTheUserBelongsToResponseSchemaType> => {
+): Promise<GetInfoAboutGroupsTheUserBelongsToResponseSchemaType> => {
   // データベース接続
   const db = createDbConnection(env);
 
@@ -49,7 +49,7 @@ export const infoAboutGroupsTheUserBelongsToUseCase = async (
   const createdByNameMap = await getUserNameMap(db, uniqueCreatedByIds);
 
   // グループ情報の整形
-  const groupInfo: InfoAboutGroupsTheUserBelongsToResponseGroupElementSchemaType[] = await Promise.all(
+  const groupInfo: GetInfoAboutGroupsTheUserBelongsToResponseGroupElementSchemaType[] = await Promise.all(
     groupData.map(async (groupData) => {
       // createdByのユーザ名取得
       const createdByName = createdByNameMap.get(groupData.createdBy);
@@ -62,7 +62,7 @@ export const infoAboutGroupsTheUserBelongsToUseCase = async (
         return {
           user_id: member.id,
           user_name: member.name,
-        } as InfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType;
+        } as GetInfoAboutGroupsTheUserBelongsToResponseMemberElementSchemaType;
       });
 
       return {
@@ -78,13 +78,13 @@ export const infoAboutGroupsTheUserBelongsToUseCase = async (
   // レスポンス
   return {
     groups: groupInfo,
-  } satisfies InfoAboutGroupsTheUserBelongsToResponseSchemaType;
+  } satisfies GetInfoAboutGroupsTheUserBelongsToResponseSchemaType;
 };
 
-export const infoAboutUserTransactionsUseCase = async (
+export const getInfoAboutUserTransactionsUseCase = async (
   env: Bindings,
   loginUserId: string
-): Promise<InfoAboutUserTransactionsResponseSchemaType> => {
+): Promise<GetInfoAboutUserTransactionsResponseSchemaType> => {
   // データベース接続
   const db = createDbConnection(env);
 
@@ -140,7 +140,7 @@ export const infoAboutUserTransactionsUseCase = async (
   const userNameMap = await getUserNameMap(db, userIds);
 
   // 貸し借りの合算
-  const aggregatedTransactions: InfoAboutUserTransactionsResponseTransactionElementSchemaType[] = Array.from(
+  const aggregatedTransactions: GetInfoAboutUserTransactionsResponseTransactionElementSchemaType[] = Array.from(
     transactions.values().map((transaction) => {
       // 合算結果: netAmount = borrowed_amount - lent_amount
       const netAmount = transaction.borrowed_amount - transaction.lent_amount;
@@ -160,17 +160,17 @@ export const infoAboutUserTransactionsUseCase = async (
         counterparty_id: transaction.user_id,
         counterparty_name: counterpartyName,
         amount: netAmount,
-      } as InfoAboutUserTransactionsResponseTransactionElementSchemaType;
+      } as GetInfoAboutUserTransactionsResponseTransactionElementSchemaType;
     })
-  ).filter((item): item is InfoAboutUserTransactionsResponseTransactionElementSchemaType => item !== null);
+  ).filter((item): item is GetInfoAboutUserTransactionsResponseTransactionElementSchemaType => item !== null);
 
   // レスポンス
   return {
     transactions: aggregatedTransactions,
-  } satisfies InfoAboutUserTransactionsResponseSchemaType;
+  } satisfies GetInfoAboutUserTransactionsResponseSchemaType;
 };
 
-export const infoUserRepaymentUseCase = async (
+export const deleteInfoUserRepaymentUseCase = async (
   env: Bindings,
   loginUserId: string,
   counterpartyId: string

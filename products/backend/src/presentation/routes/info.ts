@@ -2,23 +2,23 @@
 import honoFactory from '../factory/hono';
 // validator
 import {
-  infoAboutUserTransactionsResponseSchema,
-  infoAboutGroupsTheUserBelongsToResponseSchema,
+  getInfoAboutUserTransactionsResponseSchema,
+  getInfoAboutGroupsTheUserBelongsToResponseSchema,
   deleteInfoAboutUserRepaymentRequestSchema,
 } from 'validator';
 // error schema
 import { route } from '../share/error';
 // types
 import {
-  infoAboutGroupsTheUserBelongsToUseCase,
-  infoAboutUserTransactionsUseCase,
-  infoUserRepaymentUseCase,
+  getInfoAboutGroupsTheUserBelongsToUseCase,
+  getInfoAboutUserTransactionsUseCase,
+  deleteInfoUserRepaymentUseCase,
 } from '../../application/info';
 
 const hono = honoFactory();
 
 // NOTE: ユーザが参加しているグループ一覧を返す
-const infoAboutGroupsTheUserBelongsToSchema = route.createSchema(
+const getInfoAboutGroupsTheUserBelongsToSchema = route.createSchema(
   {
     path: '/api/info/group',
     method: 'get',
@@ -30,7 +30,7 @@ const infoAboutGroupsTheUserBelongsToSchema = route.createSchema(
         description: 'OK',
         content: {
           'application/json': {
-            schema: infoAboutGroupsTheUserBelongsToResponseSchema,
+            schema: getInfoAboutGroupsTheUserBelongsToResponseSchema,
           },
         },
       },
@@ -39,18 +39,18 @@ const infoAboutGroupsTheUserBelongsToSchema = route.createSchema(
   [401, 500] as const
 );
 
-hono.openapi(infoAboutGroupsTheUserBelongsToSchema, async (c) => {
+hono.openapi(getInfoAboutGroupsTheUserBelongsToSchema, async (c) => {
   const loginUser = c.get('user');
 
   // ビジネスロジック呼び出し
-  const response = await infoAboutGroupsTheUserBelongsToUseCase(c.env, loginUser.id);
+  const response = await getInfoAboutGroupsTheUserBelongsToUseCase(c.env, loginUser.id);
 
   // レスポンス
   return c.json(response, 200);
 });
 
 // NOTE: ユーザの貸し借りの履歴を返す
-const infoAboutUserTransactionsSchema = route.createSchema(
+const getInfoAboutUserTransactionsSchema = route.createSchema(
   {
     path: '/api/info/transaction',
     method: 'get',
@@ -62,7 +62,7 @@ const infoAboutUserTransactionsSchema = route.createSchema(
         description: 'OK',
         content: {
           'application/json': {
-            schema: infoAboutUserTransactionsResponseSchema,
+            schema: getInfoAboutUserTransactionsResponseSchema,
           },
         },
       },
@@ -71,18 +71,18 @@ const infoAboutUserTransactionsSchema = route.createSchema(
   [401, 500] as const
 );
 
-hono.openapi(infoAboutUserTransactionsSchema, async (c) => {
+hono.openapi(getInfoAboutUserTransactionsSchema, async (c) => {
   const loginUser = c.get('user');
 
   // ビジネスロジック呼び出し
-  const response = await infoAboutUserTransactionsUseCase(c.env, loginUser.id);
+  const response = await getInfoAboutUserTransactionsUseCase(c.env, loginUser.id);
 
   // レスポンス
   return c.json(response, 200);
 });
 
 // NOTE: ユーザの返済処理を行う
-const infoUserRepaymentSchema = route.createSchema(
+const deleteInfoUserRepaymentSchema = route.createSchema(
   {
     path: '/api/info/transaction',
     method: 'delete',
@@ -107,12 +107,12 @@ const infoUserRepaymentSchema = route.createSchema(
   [401, 500] as const
 );
 
-hono.openapi(infoUserRepaymentSchema, async (c) => {
+hono.openapi(deleteInfoUserRepaymentSchema, async (c) => {
   const loginUser = c.get('user');
   const body = c.req.valid('json');
 
   // ビジネスロジック呼び出し
-  await infoUserRepaymentUseCase(c.env, loginUser.id, body.counterparty_id);
+  await deleteInfoUserRepaymentUseCase(c.env, loginUser.id, body.counterparty_id);
 
   // レスポンス
   return c.body(null, 204);
