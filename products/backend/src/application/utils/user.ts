@@ -1,8 +1,8 @@
 // drizzle
 import { eq, inArray } from 'drizzle-orm/sql/expressions/conditions';
-import { groupMembership, user } from '../../db/schema';
+import { user } from '../../db/schema';
 // types
-import { DatabaseType, FormattedUserTableType, UserInfoType, UserNameType } from './types';
+import { DatabaseType, FormattedUserTableType, UserNameType } from './types';
 
 export const formatUserName = (userName: UserNameType): string => {
   return userName.displayName !== null && userName.displayName.length > 0 ? userName.displayName : userName.name;

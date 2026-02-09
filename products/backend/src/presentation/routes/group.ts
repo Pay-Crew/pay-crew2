@@ -29,7 +29,7 @@ import {
 
 const hono = honoFactory();
 
-//TODO: グループ作成エンドポイントの登録
+// NOTE: グループ作成エンドポイントの登録
 const createGroupSchema = route.createSchema(
   {
     path: '/api/group/create',
@@ -71,7 +71,7 @@ hono.openapi(createGroupSchema, async (c) => {
   return c.json(response, 201);
 });
 
-//TODO: メンバー登録のエンドポイントの登録
+// NOTE: メンバー登録のエンドポイントの登録
 const joinGroupSchema = route.createSchema(
   {
     path: '/api/group/join',
@@ -113,7 +113,7 @@ hono.openapi(joinGroupSchema, async (c) => {
   return c.json(response, 201);
 });
 
-//TODO: 各グループ情報取得エンドポイントの登録
+// NOTE: 各グループ情報取得エンドポイントの登録
 const getGroupInfoSchema = route.createSchema(
   {
     path: '/api/group/info',
@@ -155,7 +155,7 @@ hono.openapi(getGroupInfoSchema, async (c) => {
   return c.json(response, 201);
 });
 
-// TODO: 各グループの貸し借り履歴取得エンドポイントの登録
+//  NOTE: 各グループの貸し借り履歴取得エンドポイントの登録
 const getGroupDebtHistorySchema = route.createSchema(
   {
     path: '/api/group/debt/history',
@@ -197,7 +197,7 @@ hono.openapi(getGroupDebtHistorySchema, async (c) => {
   return c.json(response, 201);
 });
 
-// TODO: 貸し借りの履歴の追加エンドポイントの登録
+//  NOTE: 貸し借りの履歴の追加エンドポイントの登録
 const registerGroupDebtSchema = route.createSchema(
   {
     path: '/api/group/debt/register',
@@ -243,7 +243,7 @@ hono.openapi(registerGroupDebtSchema, async (c) => {
   return c.body(null, 204);
 });
 
-// TODO: 貸し借りの履歴の削除エンドポイントの登録
+//  NOTE: 貸し借りの履歴の削除エンドポイントの登録
 const deleteGroupDebtSchema = route.createSchema(
   {
     path: '/api/group/debt/delete',
@@ -280,7 +280,7 @@ hono.openapi(deleteGroupDebtSchema, async (c) => {
   return c.body(null, 204);
 });
 
-// TODO: 貸し借り履歴の削除の取り消しエンドポイントの登録
+//  NOTE: 貸し借り履歴の削除の取り消しエンドポイントの登録
 const cancelGroupDebtSchema = route.createSchema(
   {
     path: '/api/group/debt/cancel',

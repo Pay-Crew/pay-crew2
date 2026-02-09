@@ -9,7 +9,7 @@ import { getUserProfileUseCase, updateUserProfileUseCase } from '../../applicati
 
 const hono = honoFactory();
 
-//TODO: userProfileの取得
+// NOTE: userProfileの取得
 const getUserProfileSchema = route.createSchema(
   {
     path: '/api/profile',
@@ -41,7 +41,7 @@ hono.openapi(getUserProfileSchema, async (c) => {
   return c.json(response, 200);
 });
 
-//TODO: userProfileの更新
+// NOTE: userProfileの更新
 const updateUserProfileSchema = route.createSchema(
   {
     path: '/api/profile',

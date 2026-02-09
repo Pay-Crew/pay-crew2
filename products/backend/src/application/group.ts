@@ -5,7 +5,6 @@ import { Bindings } from '../types';
 import {
   type JoinGroupResponseSchemaType,
   type CreateGroupResponseSchemaType,
-  type GetGroupInfoResponseMemberElementSchemaType,
   type GetGroupInfoResponseSchemaType,
   type GetGroupDebtHistoryResponseSchemaType,
   type GetGroupDebtHistoryResponseElementSchemaType,
@@ -13,7 +12,7 @@ import {
 // drizzle
 import { createDbConnection } from './utils/db';
 import { eq, and, isNull, isNotNull } from 'drizzle-orm';
-import { debt, group, groupMembership, user } from '../db/schema';
+import { debt, group, groupMembership } from '../db/schema';
 // utils
 import { ensureGroupMembership, ensureNotGroupMembership } from './utils/group';
 import { getUserInfo, getUserNameMap } from './utils/user';

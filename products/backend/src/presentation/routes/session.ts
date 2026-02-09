@@ -1,7 +1,7 @@
 // hono instance
 import honoFactory from '../factory/hono';
 // validator
-import { sessionCheckResponseSchema, type SessionCheckResponseSchemaType } from 'validator';
+import { sessionCheckResponseSchema } from 'validator';
 // error schema
 import { route } from '../share/error';
 // application
@@ -9,7 +9,7 @@ import { getSessionCheckUseCase } from '../../application/session';
 
 const hono = honoFactory();
 
-//TODO: userProfileの取得
+// NOTE: セッションが有効か確認するエンドポイントのスキーマ定義
 const getSessionCheckSchema = route.createSchema(
   {
     path: '/api/session',

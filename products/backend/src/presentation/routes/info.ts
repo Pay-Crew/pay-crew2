@@ -17,7 +17,7 @@ import {
 
 const hono = honoFactory();
 
-//TODO: ユーザが参加しているグループ一覧を返す
+// NOTE: ユーザが参加しているグループ一覧を返す
 const infoAboutGroupsTheUserBelongsToSchema = route.createSchema(
   {
     path: '/api/info/group',
@@ -49,7 +49,7 @@ hono.openapi(infoAboutGroupsTheUserBelongsToSchema, async (c) => {
   return c.json(response, 200);
 });
 
-//TODO: ユーザの貸し借りの履歴を返す
+// NOTE: ユーザの貸し借りの履歴を返す
 const infoAboutUserTransactionsSchema = route.createSchema(
   {
     path: '/api/info/transaction',
@@ -81,7 +81,7 @@ hono.openapi(infoAboutUserTransactionsSchema, async (c) => {
   return c.json(response, 200);
 });
 
-//TODO: ユーザの返済処理を行う
+// NOTE: ユーザの返済処理を行う
 const infoUserRepaymentSchema = route.createSchema(
   {
     path: '/api/info/transaction',
