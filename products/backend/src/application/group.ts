@@ -14,7 +14,7 @@ import { createDbConnection } from './utils/db';
 import { eq, and, isNull, isNotNull } from 'drizzle-orm';
 import { debt, group, groupMembership } from '../db/schema';
 // utils
-import { ensureGroupMembership, ensureNotGroupMembership } from './utils/group';
+import { getGroupMembers, ensureNotGroupMembership } from './utils/group';
 import { getUserInfo, getUserNameMap } from './utils/user';
 
 export const createGroupUseCase = async (
@@ -118,7 +118,7 @@ export const getGroupInfoUseCase = async (
   const db = createDbConnection(env);
 
   // loginUser が グループのメンバーであることを確認
-  await ensureGroupMembership(db, groupId, loginUserId);
+  await getGroupMembers(db, groupId, loginUserId);
 
   //* body.group_id のグループ情報を取得 *//
   const groupData = await db
@@ -160,7 +160,7 @@ export const getGroupDebtHistoryUseCase = async (
   const db = createDbConnection(env);
 
   // loginUser がグループのメンバーであることを確認
-  await ensureGroupMembership(db, groupId, loginUserId);
+  await getGroupMembers(db, groupId, loginUserId);
 
   //* グループの貸し借り履歴を取得 *//
   // body.group_id の貸し借り履歴を取得 (debt table)
@@ -247,7 +247,7 @@ export const registerGroupDebtUseCase = async (
   const db = createDbConnection(env);
 
   // loginUser が グループのメンバーであることを確認
-  await ensureGroupMembership(db, groupId, loginUserId);
+  await getGroupMembers(db, groupId, loginUserId);
 
   // body.group_id に貸し借り履歴を追加 (debt table)
   await db.insert(debt).values({
@@ -271,7 +271,7 @@ export const deleteGroupDebtUseCase = async (
   const db = createDbConnection(env);
 
   // loginUser が グループのメンバーであることを確認
-  await ensureGroupMembership(db, groupId, loginUserId);
+  await getGroupMembers(db, groupId, loginUserId);
 
   //* body.debt_id の貸し借りの履歴の削除 (論理削除) *//
   await db
@@ -293,7 +293,7 @@ export const cancelGroupDebtUseCase = async (
   const db = createDbConnection(env);
 
   // loginUser が グループのメンバーであることを確認
-  await ensureGroupMembership(db, groupId, loginUserId);
+  await getGroupMembers(db, groupId, loginUserId);
 
   //* body.debt_id の貸し借りの履歴の削除の取り消し (論理削除の取り消し) *//
   await db

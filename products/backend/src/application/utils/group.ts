@@ -8,7 +8,7 @@ import { DatabaseType, UserInfoType } from './types';
 // utils
 import { getUserNameMap } from './user';
 
-export const ensureGroupMembership = async (db: DatabaseType, groupId: string, loginUserId: string): Promise<void> => {
+export const getGroupMembers = async (db: DatabaseType, groupId: string, loginUserId: string): Promise<void> => {
   // loginUser が body.group_id のグループのメンバーであることを確認
   const me = await db
     .select({
@@ -35,8 +35,15 @@ export const ensureNotGroupMembership = async (db: DatabaseType, groupId: string
   const userIds = memberUserIds.map((member) => member.userId);
   const nameMap = await getUserNameMap(db, userIds);
 
-  return memberUserIds.map((member) => ({
-    id: member.userId,
-    name: nameMap.get(member.userId) ?? '',
-  }));
+  return memberUserIds.map((member) => {
+    const name = nameMap.get(member.userId);
+    if (typeof name === 'undefined') {
+      // データ整合性の問題として扱い、サーバエラーを返す
+      throw new HTTPException(500, { message: 'Internal Server Error' });
+    }
+    return {
+      id: member.userId,
+      name: name,
+    };
+  });
 };
