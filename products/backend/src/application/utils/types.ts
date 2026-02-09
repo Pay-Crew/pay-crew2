@@ -1,6 +1,6 @@
 // drizzle
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
+import { type Pool } from 'pg';
 
 export type DatabaseType = NodePgDatabase<Record<string, never>> & {
   $client: Pool;
