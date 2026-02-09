@@ -4,7 +4,7 @@ import honoFactory from '../factory/hono';
 import { getUserProfileResponseSchema, updateUserProfileRequestSchema } from 'validator';
 // error schema
 import { route } from '../share/error';
-// drizzle
+// application layer use cases
 import { getUserProfileUseCase, updateUserProfileUseCase } from '../../application/userProfile';
 
 const hono = honoFactory();
