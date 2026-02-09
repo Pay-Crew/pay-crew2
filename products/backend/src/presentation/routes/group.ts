@@ -141,7 +141,7 @@ const getGroupInfoSchema = route.createSchema(
       },
     },
   },
-  [400, 401, 500] as const
+  [400, 401, 404, 500] as const
 );
 
 hono.openapi(getGroupInfoSchema, async (c) => {
