@@ -8,7 +8,7 @@ import {
 } from 'validator';
 // error schema
 import { route } from '../share/error';
-// types
+// application
 import {
   getInfoAboutGroupsTheUserBelongsToUseCase,
   getInfoAboutUserTransactionsUseCase,
